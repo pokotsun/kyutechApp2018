@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
-import kotlinx.android.synthetic.main.tab_layout.view.*
 
 /**
  * Created by pokotsun on 18/03/10.

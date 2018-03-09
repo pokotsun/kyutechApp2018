@@ -48,22 +48,24 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         tab_layout.setupWithViewPager(view_pager)
 
         // Custom Layoutにする
-        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val tab1 = tab_layout.getTabAt(0)
-        tab1?.text = "Home"
+//        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+
+        for(i in 0 until tab_layout.tabCount) {
+            val tab = tab_layout.getTabAt(i)
+            tab?.text = "Home"
 
 //        val tab1View: View = inflater.inflate(R.layout.tab_layout, null)
-        val tab1View = CustomTab(this)
-        tab1View.setText("なんじゃそりゃ")
-        tab1?.customView = tab1View
-//        tab_text.text = "こらんばんだ"
-
-        val tab2 = tab_layout.getTabAt(2)
-//        tab1?.text = "こりゃなんだ"
-
-        val tab2View = CustomTab(this)
-        tab2View.setText("わかんまべ")
-        tab2?.customView = tab2View
+            val tabView = CustomTab(this)
+            tabView.setText("タブス$i")
+            tab?.customView = tabView
+        }
+//
+//        val tab2 = tab_layout.getTabAt(2)
+////        tab1?.text = "こりゃなんだ"
+//
+//        val tab2View = CustomTab(this)
+//        tab2View.setText("わかんまべ")
+//        tab2?.customView = tab2View
 //
 //        val tab2View: View = inflater.inflate(R.layout.tab_layout, null)
 //        tab2?.customView = tab2View
