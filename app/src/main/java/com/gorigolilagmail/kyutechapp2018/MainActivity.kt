@@ -1,5 +1,6 @@
 package com.gorigolilagmail.kyutechapp2018
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -11,6 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.tab_layout.*
 
 class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
 
@@ -44,6 +46,28 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         view_pager.adapter = adapter
         view_pager.addOnPageChangeListener(this)
         tab_layout.setupWithViewPager(view_pager)
+
+        // Custom Layoutにする
+        val inflater: LayoutInflater = getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val tab1 = tab_layout.getTabAt(0)
+        tab1?.text = "Home"
+
+//        val tab1View: View = inflater.inflate(R.layout.tab_layout, null)
+        val tab1View = CustomTab(this)
+        tab1View.setText("なんじゃそりゃ")
+        tab1?.customView = tab1View
+//        tab_text.text = "こらんばんだ"
+
+        val tab2 = tab_layout.getTabAt(2)
+//        tab1?.text = "こりゃなんだ"
+
+        val tab2View = CustomTab(this)
+        tab2View.setText("わかんまべ")
+        tab2?.customView = tab2View
+//
+//        val tab2View: View = inflater.inflate(R.layout.tab_layout, null)
+//        tab2?.customView = tab2View
+//        tab_text.text = "なんだば"
     }
 
     override fun onPageScrollStateChanged(state: Int) {
