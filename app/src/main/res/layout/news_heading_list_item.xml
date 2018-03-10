@@ -11,12 +11,14 @@
         android:text="呼"
         android:textColor="@android:color/white"
         android:textSize="20dp"
+        android:fontFamily="@font/san_francisco_display_regular"
         android:gravity="center"
         android:layout_margin="4dp"/>
     <TextView
         android:id="@+id/news_heading"
         android:text="学生呼び出し"
         android:textSize="20dp"
+        android:fontFamily="@font/san_francisco_display_regular"
         android:textColor="@android:color/black"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
@@ -28,6 +30,7 @@
         android:text="2018/3/10 18:00"
         android:textColor="@android:color/black"
         android:textSize="10dp"
+        android:fontFamily="@font/san_francisco_display_regular"
         android:layout_width="50dp"
         android:textAlignment="textEnd"
         android:layout_height="wrap_content"
