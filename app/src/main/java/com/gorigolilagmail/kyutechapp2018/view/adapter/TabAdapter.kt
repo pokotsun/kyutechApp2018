@@ -3,7 +3,6 @@ package com.gorigolilagmail.kyutechapp2018.view.adapter
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
-import com.gorigolilagmail.kyutechapp2018.TestFragment
 
 /**
  * Created by pokotsun on 18/03/10.

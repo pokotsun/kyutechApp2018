@@ -1,4 +1,4 @@
-package com.gorigolilagmail.kyutechapp2018
+package com.gorigolilagmail.kyutechapp2018.view.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -11,8 +11,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
-import com.gorigolilagmail.kyutechapp2018.view.customView.CircularTextView
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         selectedTab = tab_layout.getTabAt(tab_layout.selectedTabPosition)
 
         for(i in 0 until tab_layout.tabCount) {
-            val tab: TabLayout.Tab = tab_layout.getTabAt(i)?: throw NullPointerException("タブをうまく取ってこれなかった")
+            val tab: TabLayout.Tab = tab_layout.getTabAt(i)?: throw NullPointerException("can't get Tab")
             tab.icon = ContextCompat.getDrawable(this, tabIcons[tab.position])
         }
     }
@@ -103,8 +103,7 @@ class TestFragment : Fragment() {
         val page = arguments.getInt("page", 0)
         val view = inflater!!.inflate(R.layout.fragment_test, container, false)
         view.findViewById<TextView>(R.id.page_text).text = "Page$page"
-        view.findViewById<CircularTextView>(R.id.circularTextView).setSolidColor("#05dd5b")
-//        view.findViewById<CircularTextView>(R.id.circularTextView).setStrokeColor("#04dd5b")
+//        view.findViewById<CircularTextView>(R.id.circularTextView).solidColor = ContextCompat.getColor(context, R.color.newsTopic1)
         return view
     }
 

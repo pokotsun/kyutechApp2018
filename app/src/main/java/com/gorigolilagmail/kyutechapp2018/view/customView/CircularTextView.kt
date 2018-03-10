@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.Paint
 import android.util.AttributeSet
 import android.widget.TextView
+import com.gorigolilagmail.kyutechapp2018.extensions.toDip
 
 /**
  * Created by pokotsun on 18/03/10.
@@ -16,18 +17,18 @@ class CircularTextView @JvmOverloads constructor(context: Context,
                                                 defStyleAttr: Int = 0)
     : TextView(context, attrs, defStyleAttr) {
 
-    private val strokeWidth: Float = 0.toFloat()
-    private var strokeColor = 0
-    private var solidedColor = 0
+    private var strokeWidth: Float = 1.toFloat().toDip(context)
+    private var circleBackgroundColor: Int = Color.WHITE
+    private var circleStrokeColor: Int = Color.BLACK
 
 
     override fun draw(canvas: Canvas?) {
-        val circlePaint: Paint = Paint()
-        circlePaint.color = solidedColor
+        val circlePaint = Paint()
+        circlePaint.color = circleBackgroundColor
         circlePaint.flags = Paint.ANTI_ALIAS_FLAG
 
         val strokePaint = Paint()
-        strokePaint.color = strokeColor
+        strokePaint.color = circleStrokeColor
         strokePaint.flags = Paint.ANTI_ALIAS_FLAG
 
         val h: Int = height
@@ -45,11 +46,15 @@ class CircularTextView @JvmOverloads constructor(context: Context,
         super.draw(canvas)
     }
 
-    fun setStrokeColor(color: String) {
-        strokeColor = Color.parseColor(color)
+    fun setStrokeWidth(dp: Float) {
+        strokeWidth = dp.toDip(context)
     }
 
-    fun setSolidColor(color: String) {
-        solidedColor = Color.parseColor(color)
+    fun setCircleBackgroundColor(color: Int) {
+        circleBackgroundColor = color
+    }
+
+    fun setCircleStrokeColor(color: Int) {
+        circleStrokeColor = color
     }
 }
