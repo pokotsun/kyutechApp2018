@@ -61,6 +61,21 @@ data class NewsHeading(
                                 ContextCompat.getColor(context, R.color.newsTopic9),
                                 "留", "留学・国際関連",
                                 "2018/2/14"
+                        ),
+                        NewsHeading(
+                                ContextCompat.getColor(context, R.color.newsTopic10),
+                                "手", "学部生",
+                                "2018/2/14"
+                        ),
+                        NewsHeading(
+                                ContextCompat.getColor(context, R.color.newsTopic11),
+                                "学", "大学院生",
+                                "2018/2/14"
+                        ),
+                        NewsHeading(
+                                ContextCompat.getColor(context, R.color.newsTopic12),
+                                "院", "各種手続き",
+                                "2018/2/14"
                         )
                 )
     }

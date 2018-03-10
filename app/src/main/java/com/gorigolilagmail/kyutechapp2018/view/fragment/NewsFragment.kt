@@ -28,9 +28,8 @@ class NewsFragment: Fragment() {
         super.onResume()
 
         val adapter = NewsHeadingListAdapter(context)
-        Log.d("newsHeadings", "$newsHeadings")
         adapter.items = newsHeadings
-        news_list.adapter = NewsHeadingListAdapter(context)
+        news_list.adapter = adapter
     }
 
     companion object {

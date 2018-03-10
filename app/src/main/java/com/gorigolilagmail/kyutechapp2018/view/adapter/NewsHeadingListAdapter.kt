@@ -12,7 +12,7 @@ import com.gorigolilagmail.kyutechapp2018.view.customView.ItemListNewsHeading
  */
 
 class NewsHeadingListAdapter(private val context: Context): BaseAdapter() {
-    var items: List<NewsHeading> = NewsHeading.getList(context)
+    var items: List<NewsHeading> = emptyList()
 
     override fun getCount(): Int = items.size
 
