@@ -59,17 +59,6 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
             tabView.setText("タブス$i")
             tab?.customView = tabView
         }
-//
-//        val tab2 = tab_layout.getTabAt(2)
-////        tab1?.text = "こりゃなんだ"
-//
-//        val tab2View = CustomTab(this)
-//        tab2View.setText("わかんまべ")
-//        tab2?.customView = tab2View
-//
-//        val tab2View: View = inflater.inflate(R.layout.tab_layout, null)
-//        tab2?.customView = tab2View
-//        tab_text.text = "なんだば"
     }
 
     override fun onPageScrollStateChanged(state: Int) {
