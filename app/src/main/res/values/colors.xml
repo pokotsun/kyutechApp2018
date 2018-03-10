@@ -3,4 +3,24 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <!--Kyutech Color-->
+    <color name="kyutechMainColor">#00BCD4</color>
+    <color name="newsHeading">#707070</color>
+    <color name="newsTopic1">#EB5757</color>
+    <color name="newsTopic2">#5F9EA0</color>
+    <color name="newsTopic3">#219653</color>
+    <color name="newsTopic4">#6495ED</color>
+    <color name="newsTopic5">#EF924E</color>
+    <color name="newsTopic6">#FA8072</color>
+    <color name="newsTopic7">#FFD700</color>
+    <color name="newsTopic8">#87CEEB</color>
+    <color name="newsTopic9">#D2691E</color>
+    <color name="newsTopic10">#AA1F19</color>
+    <color name="newsTopic11">#FF69B4</color>
+    <color name="newsTopic12">#4682B4</color>
+
+
+
+
 </resources>
