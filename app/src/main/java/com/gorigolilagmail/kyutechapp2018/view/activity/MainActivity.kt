@@ -9,13 +9,14 @@ import android.support.v4.view.ViewPager
 import android.util.Log
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
+import com.gorigolilagmail.kyutechapp2018.view.fragment.NewsFragment
 import com.gorigolilagmail.kyutechapp2018.view.fragment.TestFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
 
     private val fragments: Array<Fragment> = arrayOf(
-            TestFragment.newInstance(0), TestFragment.newInstance(1),
+            NewsFragment.newInstance(0), TestFragment.newInstance(1),
             TestFragment.newInstance(2), TestFragment.newInstance(3)
     )
 
