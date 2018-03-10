@@ -20,12 +20,10 @@ class CustomTab @JvmOverloads constructor(context: Context,
 
 
     init {
-//        view = View.inflate(context, R.layout.tab_layout, null)
         view = LayoutInflater.from(context).inflate(R.layout.tab_layout, this)
     }
 
     fun setText(text: String) {
-//        tab_text.text = text
         view?.findViewById<TextView>(R.id.tab_text)?.text = text
     }
 }
