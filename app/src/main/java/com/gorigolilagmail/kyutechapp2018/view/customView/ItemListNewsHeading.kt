@@ -29,6 +29,7 @@ class ItemListNewsHeading @JvmOverloads constructor(context: Context,
         Log.d("setItemNews", "$item")
         circular_news_heading.text = item.headingCharacter
         circular_news_heading.setCircleBackgroundColor(item.color)
+        circular_news_heading.setStrokeWidth(0.toFloat())
         news_heading.text = item.headingName
         updated_date.text = item.updatedDate
     }
