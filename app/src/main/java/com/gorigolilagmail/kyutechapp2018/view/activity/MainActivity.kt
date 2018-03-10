@@ -42,7 +42,12 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         view_pager.addOnPageChangeListener(this)
         tab_layout.setupWithViewPager(view_pager)
 
-        initializeTabIcons()
+        initializeTabIcons() // タブアイコンの初期化処理
+
+        // toolbarの設定
+        tool_bar.title = ""
+        toolbar_title.text = "お知らせ"
+        setSupportActionBar(tool_bar)
 
         tab_layout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
