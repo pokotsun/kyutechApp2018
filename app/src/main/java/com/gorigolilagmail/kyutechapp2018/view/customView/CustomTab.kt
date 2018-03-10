@@ -1,4 +1,4 @@
-package com.gorigolilagmail.kyutechapp2018
+package com.gorigolilagmail.kyutechapp2018.view.customView
 
 import android.content.Context
 import android.util.AttributeSet
@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.gorigolilagmail.kyutechapp2018.R
 
 /**
  * Created by pokotsun on 18/03/10.
