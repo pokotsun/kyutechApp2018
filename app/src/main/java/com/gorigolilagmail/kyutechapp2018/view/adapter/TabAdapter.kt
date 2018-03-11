@@ -14,5 +14,5 @@ class TabAdapter(fm: FragmentManager, private val fragments: Array<Fragment>): F
 
     override fun getCount(): Int = fragments.count()
 
-    override fun getPageTitle(position: Int): CharSequence = ""
+    override fun getPageTitle(position: Int): CharSequence = "Tab Title"
 }

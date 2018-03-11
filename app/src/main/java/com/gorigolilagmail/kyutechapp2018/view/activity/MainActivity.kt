@@ -3,7 +3,6 @@ package com.gorigolilagmail.kyutechapp2018.view.activity
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
-import android.support.v4.app.Fragment
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.util.Log
@@ -12,8 +11,6 @@ import com.gorigolilagmail.kyutechapp2018.model.ITabItems
 import com.gorigolilagmail.kyutechapp2018.model.TabItems
 import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
-import com.gorigolilagmail.kyutechapp2018.view.fragment.NewsFragment
-import com.gorigolilagmail.kyutechapp2018.view.fragment.TestFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
