@@ -25,12 +25,11 @@ class NewsHeadingListAdapter(private val context: Context): BaseAdapter() {
     override fun getView(position: Int,
                          convertView: View?,
                          parent: ViewGroup?): View =
-//            ((convertView as? ItemListNewsHeading) ?:
-//            ItemListNewsHeading(context)).apply {
-//                setItem(items[position])
-//            }
+
             ((convertView as? ItemListNewsHeadingUi)?:
             ItemListNewsHeadingUi(context).apply {
                 createView(context.UI {})
-            })
+            }).apply {
+                setItem(items[position])
+            }
 }
