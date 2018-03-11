@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
                 tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
                 tabItems.selectedTab?.text = "TAB TITLE"
                 tab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[tab!!.position])
-                tab?.text = "SELECTED TAB"
+                tab?.text = "SELECTED"
                 tabItems.selectedTab = tab
             }
 
@@ -76,6 +76,10 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
             val tab: TabLayout.Tab = tab_layout.getTabAt(i)?: throw NullPointerException("can't get Tab")
             tab.icon = ContextCompat.getDrawable(this, tabItems.icons[tab.position])
         }
+
+        // 選択されているタブは選択されているように表示する
+        tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[tabItems.selectedTab!!.position])
+        tabItems.selectedTab?.text = "SELECTED"
     }
 }
 
