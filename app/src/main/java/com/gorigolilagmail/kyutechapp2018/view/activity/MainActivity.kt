@@ -39,7 +39,9 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
         tab_layout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
+                tabItems.selectedTab?.text = "TAB TITLE"
                 tab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[tab!!.position])
+                tab?.text = "SELECTED TAB"
                 tabItems.selectedTab = tab
             }
 
