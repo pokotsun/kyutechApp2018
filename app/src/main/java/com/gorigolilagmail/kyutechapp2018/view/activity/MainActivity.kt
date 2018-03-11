@@ -8,35 +8,25 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.util.Log
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.model.ITabItems
+import com.gorigolilagmail.kyutechapp2018.model.TabItems
+import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
 import com.gorigolilagmail.kyutechapp2018.view.fragment.NewsFragment
 import com.gorigolilagmail.kyutechapp2018.view.fragment.TestFragment
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
+class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
 
-    private val fragments: Array<Fragment> = arrayOf(
-            NewsFragment.newInstance(0), TestFragment.newInstance(1),
-            TestFragment.newInstance(2), TestFragment.newInstance(3)
-    )
+    private val presenter: MainActivityPresenter = MainActivityPresenter()
 
-    private val tabIcons: Array<Int> = arrayOf(
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher_round,
-            R.mipmap.ic_launcher, R.mipmap.ic_launcher_round
-    )
-
-    private val tabIconsSelected: Array<Int> = arrayOf(
-            R.mipmap.ic_launcher_round, R.mipmap.ic_launcher,
-            R.mipmap.ic_launcher_round, R.mipmap.ic_launcher
-    )
-
-    private var selectedTab: TabLayout.Tab? = null
+    private val tabItems: ITabItems = TabItems()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val adapter = TabAdapter(supportFragmentManager, fragments)
+        val adapter = TabAdapter(supportFragmentManager, tabItems.fragments)
 
         view_pager.adapter = adapter
         view_pager.addOnPageChangeListener(this)
@@ -51,9 +41,9 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
 
         tab_layout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
-                selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabIcons[selectedTab!!.position])
-                tab?.icon = ContextCompat.getDrawable(this@MainActivity, tabIconsSelected[tab!!.position])
-                selectedTab = tab
+                tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
+                tab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[tab!!.position])
+                tabItems.selectedTab = tab
             }
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -67,7 +57,6 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
     override fun onPageScrollStateChanged(state: Int) {
         Log.d("MainActivity", "onPageStateChanged() position = $state")
 
-
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
@@ -79,12 +68,14 @@ class MainActivity : AppCompatActivity(), ViewPager.OnPageChangeListener {
         Log.d("MainActivity", "onPageSelected() position = $position")
     }
 
+
+    // タブのアイコンを初期化
     private fun initializeTabIcons() {
-        selectedTab = tab_layout.getTabAt(tab_layout.selectedTabPosition)
+        tabItems.selectedTab = tab_layout.getTabAt(tab_layout.selectedTabPosition)
 
         for(i in 0 until tab_layout.tabCount) {
             val tab: TabLayout.Tab = tab_layout.getTabAt(i)?: throw NullPointerException("can't get Tab")
-            tab.icon = ContextCompat.getDrawable(this, tabIcons[tab.position])
+            tab.icon = ContextCompat.getDrawable(this, tabItems.icons[tab.position])
         }
     }
 }
