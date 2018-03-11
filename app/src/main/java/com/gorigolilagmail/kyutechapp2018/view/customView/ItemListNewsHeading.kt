@@ -43,7 +43,7 @@ class ItemListNewsHeading @JvmOverloads constructor(context: Context,
         circularNewsHeading.setCircleBackgroundColor(item.color)
         circularNewsHeading.setStrokeWidth(0.toFloat())
         newsHeading.text = item.headingName
-        updatedDate.text = item.updatedDate
+        updatedDate.text = item.updatedDate + " 18:00"
     }
 
 
