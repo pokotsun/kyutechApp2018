@@ -5,22 +5,25 @@ import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ListView
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsHeadingListAdapter
-import kotlinx.android.synthetic.main.fragment_news.*
+import org.jetbrains.anko.*
 
 /**
  * Created by pokotsun on 18/03/10.
  */
 class NewsFragment: Fragment() {
 
+    private val ui = NewsFragmentUi()
+
     private val newsHeadings: List<NewsHeading> by lazy {
         NewsHeading.getList(activity.applicationContext)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return inflater!!.inflate(R.layout.fragment_news, container, false)
+        return ui.createView(AnkoContext.create(context, this))
     }
 
     override fun onResume() {
@@ -28,7 +31,18 @@ class NewsFragment: Fragment() {
 
         val adapter = NewsHeadingListAdapter(context)
         adapter.items = newsHeadings
-        news_list.adapter = adapter
+        ui.newsList!!.adapter = adapter
+
+    }
+
+    private class NewsFragmentUi: AnkoComponent<NewsFragment> {
+        var newsList: ListView? = null
+        override fun createView(ui: AnkoContext<NewsFragment>): View = ui.run {
+            verticalLayout {
+                newsList = listView {
+                }.lparams(width = matchParent, height = wrapContent)
+            }
+        }
     }
 
     companion object {
