@@ -6,7 +6,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
-import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsHeadingListAdapter
 import org.jetbrains.anko.*
