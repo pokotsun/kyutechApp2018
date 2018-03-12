@@ -20,6 +20,19 @@
     <color name="newsTopic11">#FF69B4</color>
     <color name="newsTopic12">#4682B4</color>
 
+    <color name="transParent05">#8000000</color>
+    <color name="transParent10">#16000000</color>
+    <color name="transParent20">#32000000</color>
+    <color name="transParent30">#48000000</color>
+    <color name="transParent40">#64000000</color>
+    <color name="transParent50">#80000000</color>
+    <color name="transParent60">#96000000</color>
+    <color name="transParent70">#112000000</color>
+    <color name="transParent80">#128000000</color>
+    <color name="transParent90">#144000000</color>
+
+
+
 
 
 
