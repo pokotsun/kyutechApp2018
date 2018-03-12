@@ -93,13 +93,14 @@
             android:layout_weight="1"
             android:gravity="center"/>
     </LinearLayout>
-    <GridView
+    <com.gorigolilagmail.kyutechapp2018.view.customView.CustomGridView
         android:id="@+id/class_grid"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:verticalSpacing="4dp"
+        android:horizontalSpacing="4dp"
+        android:numColumns="5"
+        android:stretchMode="columnWidth"
         android:layout_below="@+id/week_name_container"
-        android:layout_toRightOf="@+id/class_time_container">
-
-    </GridView>
-
+        android:layout_toRightOf="@+id/class_time_container"/>
 </RelativeLayout>

@@ -7,6 +7,8 @@ import android.view.View
 import android.view.ViewGroup
 
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.view.adapter.ClassGridAdapter
+import kotlinx.android.synthetic.main.fragment_schedule.*
 
 class ScheduleFragment : Fragment() {
 
@@ -14,6 +16,14 @@ class ScheduleFragment : Fragment() {
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_schedule, container, false)
+    }
+
+    override fun onResume() {
+        super.onResume()
+
+        val gridHeight = class_time_container.height / 6
+
+        class_grid.adapter = ClassGridAdapter(activity)
     }
 
 
