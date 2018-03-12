@@ -4,6 +4,7 @@ import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.view.fragment.NewsFragment
+import com.gorigolilagmail.kyutechapp2018.view.fragment.ScheduleFragment
 import com.gorigolilagmail.kyutechapp2018.view.fragment.TestFragment
 
 /**
@@ -19,7 +20,7 @@ interface ITabItems {
 
 class TabItems: ITabItems {
     override val fragments: Array<Fragment> = arrayOf(
-            NewsFragment.newInstance(0), TestFragment.newInstance(1),
+            NewsFragment.newInstance(0), ScheduleFragment.newInstance(1),
             TestFragment.newInstance(2), TestFragment.newInstance(3)
     )
 
