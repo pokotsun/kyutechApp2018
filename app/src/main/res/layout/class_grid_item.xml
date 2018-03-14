@@ -2,13 +2,16 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="2dp">
+    android:layout_margin="3dp"
+    android:elevation="4dp">
 
     <!--ブランク状態の時-->
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:layout_marginHorizontal="4dp"
+        android:elevation="4dp">
     </LinearLayout>
 
     <!--埋まっているコマの時-->
@@ -17,7 +20,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="center"
-        android:background="@color/newsTopic1">
+        android:background="@color/newsTopic1"
+        android:layout_marginHorizontal="4dp"
+        android:elevation="4dp">
         <TextView
             android:id="@+id/class_name"
             android:layout_width="match_parent"
@@ -26,7 +31,7 @@
             android:textSize="12dp"
             android:textColor="@android:color/white"
             android:gravity="center"/>
-            android:layout_height="wrap_content"
+
         <TextView
             android:id="@+id/class_room_name"
             android:layout_width="50dp"
