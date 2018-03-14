@@ -2,12 +2,14 @@ package com.gorigolilagmail.kyutechapp2018.view.fragment
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.GridLayout
 
 import com.gorigolilagmail.kyutechapp2018.R
-import com.gorigolilagmail.kyutechapp2018.view.adapter.ClassGridAdapter
+import com.gorigolilagmail.kyutechapp2018.view.customView.ClassGridItem
 import kotlinx.android.synthetic.main.fragment_schedule.*
 
 class ScheduleFragment : Fragment() {
@@ -21,9 +23,24 @@ class ScheduleFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        val gridHeight = class_time_container.height / 6
+        // クラスを全30コマ入れていく
+        for(i in 0 until 30) {
+            val item = ClassGridItem(context)
 
-        class_grid.adapter = ClassGridAdapter(activity)
+            val params: GridLayout.LayoutParams = GridLayout.LayoutParams()
+            Log.d("i_test: $i", "${i % 6}, ${i / 6}")
+            params.columnSpec = GridLayout.spec(i % 5, GridLayout.FILL, 1f)
+            params.rowSpec = GridLayout.spec(i % 6, GridLayout.FILL, 1f)
+
+            item.layoutParams = params
+
+            schedule_container.addView(item)
+        }
+
+    }
+
+    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
     }
 
 
