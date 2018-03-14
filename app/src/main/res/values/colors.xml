@@ -5,7 +5,7 @@
     <color name="colorAccent">#FF4081</color>
 
     <!--Kyutech Color-->
-    <color name="kyutechMainColor">#00BCD4</color>
+    <color name="kyuTechMainColor">#00BCD4</color>
     <color name="newsHeading">#707070</color>
     <color name="newsTopic1">#EB5757</color>
     <color name="newsTopic2">#5F9EA0</color>
@@ -30,10 +30,6 @@
     <color name="transParent70">#46000000</color>
     <color name="transParent80">#50000000</color>
     <color name="transParent90">#5A000000</color>
-
-
-
-
 
 
 </resources>
