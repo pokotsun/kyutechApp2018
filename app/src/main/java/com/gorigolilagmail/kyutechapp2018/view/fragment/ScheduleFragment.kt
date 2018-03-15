@@ -28,7 +28,7 @@ class ScheduleFragment : Fragment() {
             val item = ClassGridItem(context)
 
             val params: GridLayout.LayoutParams = GridLayout.LayoutParams()
-            Log.d("i_test: $i", "${i % 6}, ${i / 6}")
+            Log.d("i_test: $i", "${i % 5}, ${i % 6}")
             params.columnSpec = GridLayout.spec(i % 5, GridLayout.FILL, 1f)
             params.rowSpec = GridLayout.spec(i % 6, GridLayout.FILL, 1f)
 
