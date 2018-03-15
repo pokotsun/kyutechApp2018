@@ -23,6 +23,10 @@ class ClassGridItem @JvmOverloads constructor(context: Context,
     init {
         view = LayoutInflater.from(context).inflate(R.layout.class_grid_item, this)
         view?.find<TextView>(R.id.class_name)?.text = "離散数学"
+
+        view?.setOnClickListener {
+
+        }
     }
 
 }
