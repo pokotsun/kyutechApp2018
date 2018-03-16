@@ -98,7 +98,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:columnCount="5"
-        android:rowCount="6"
+        android:rowCount="5"
         android:layout_below="@+id/week_name_container"
         android:layout_toRightOf="@+id/class_time_container"
         android:layout_marginTop="2dp"
