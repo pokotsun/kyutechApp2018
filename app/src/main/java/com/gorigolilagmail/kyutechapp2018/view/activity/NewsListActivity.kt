@@ -26,7 +26,7 @@ class NewsListActivity : AppCompatActivity() {
         val listAdapter = NewsListAdapter(this)
         val items = mutableListOf<String>()
         for(i in 0 until 30) {
-            items.add(i, "$newsName$i")
+            items.add(i, "$newsName${i + 1}")
         }
         listAdapter.items = items
         news_list.adapter = listAdapter
