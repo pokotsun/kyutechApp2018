@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsListAdapter
 import kotlinx.android.synthetic.main.activity_news_list.*
 
 class NewsListActivity : AppCompatActivity() {
@@ -21,6 +22,15 @@ class NewsListActivity : AppCompatActivity() {
         setSupportActionBar(tool_bar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
+
+        val listAdapter = NewsListAdapter(this)
+        val items = mutableListOf<String>()
+        for(i in 0 until 30) {
+            items.add(i, "$newsName$i")
+        }
+        listAdapter.items = items
+        news_list.adapter = listAdapter
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
