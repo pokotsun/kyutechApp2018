@@ -23,18 +23,18 @@ class ScheduleFragment : Fragment() {
     override fun onResume() {
         super.onResume()
 
-        // クラスを全30コマ入れていく
-        for(i in 0 until 30) {
-            val item = ClassGridItem(context)
+        // クラスを全25コマ入れていく
+        for(i in 0 until 5) {
+            for( j in 0 until 5) {
+                val item = ClassGridItem(context)
+                val params: GridLayout.LayoutParams = GridLayout.LayoutParams()
+                Log.d("i_test: $i", "${i % 5}, ${i % 5}")
+                params.columnSpec = GridLayout.spec(i % 5, GridLayout.FILL, 1f)
+                params.rowSpec = GridLayout.spec(j % 5, GridLayout.FILL, 1f)
+                item.layoutParams = params
 
-            val params: GridLayout.LayoutParams = GridLayout.LayoutParams()
-            Log.d("i_test: $i", "${i % 5}, ${i % 6}")
-            params.columnSpec = GridLayout.spec(i % 5, GridLayout.FILL, 1f)
-            params.rowSpec = GridLayout.spec(i % 6, GridLayout.FILL, 1f)
-
-            item.layoutParams = params
-
-            schedule_container.addView(item)
+                schedule_container.addView(item)
+            }
         }
 
     }
