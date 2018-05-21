@@ -13,12 +13,12 @@ class NewsListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_list)
 
-        val newsName: String = intent.getStringExtra("news_name")
-        val newsId: Int = intent.getIntExtra("news_id", 0)
+        val newsHeadingName: String = intent.getStringExtra("newsHeadingName")
+        val newsHeadingCode: Int = intent.getIntExtra("newsHeadingCode", 0)
 
         // toolbarの設定
         tool_bar.title = ""
-        toolbar_title.text = newsName
+        toolbar_title.text = newsHeadingName
         setSupportActionBar(tool_bar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
@@ -26,7 +26,7 @@ class NewsListActivity : AppCompatActivity() {
         val listAdapter = NewsListAdapter(this)
         val items = mutableListOf<String>()
         for(i in 0 until 30) {
-            items.add(i, "$newsName${i + 1}")
+            items.add(i, "$newsHeadingName${i + 1}")
         }
         listAdapter.items = items
         news_list.adapter = listAdapter

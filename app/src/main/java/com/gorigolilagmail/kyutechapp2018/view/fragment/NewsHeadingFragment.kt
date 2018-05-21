@@ -53,7 +53,7 @@ class NewsHeadingFragment: Fragment() {
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.d("通信", "失敗: ${e.message}")
+                        Log.d("通信失敗", "${e.message}")
                     }
                     // 次のdataを呼ぶ
                     override fun onNext(response: ApiRequest<NewsHeading>) {
@@ -66,8 +66,8 @@ class NewsHeadingFragment: Fragment() {
                         ui.newsList?.setOnItemClickListener { _, _, position, _ ->
                             Intent(context, NewsListActivity::class.java).run {
                                 val item = adapter.items[position]
-                                putExtra("news_name", item.name)
-                                putExtra("news_id", position)
+                                putExtra("newsHeadingName", item.name)
+                                putExtra("newsHeadingCode", item.newsHeadingCode)
 
                                 startActivity(this)
                             }
