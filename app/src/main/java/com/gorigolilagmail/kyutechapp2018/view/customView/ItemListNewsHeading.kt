@@ -67,7 +67,7 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
         val newsHeading = find<TextView>(newsHeadingId)
         val updatedDate = find<TextView>(updatedDateId)
 
-        Log.d("アイテム", item.toString())
+//        Log.d("アイテム", item.toString())
 
         circularNewsHeading.text = item.shortName
         circularNewsHeading.setCircleBackgroundColor(Color.parseColor(item.colorCode))

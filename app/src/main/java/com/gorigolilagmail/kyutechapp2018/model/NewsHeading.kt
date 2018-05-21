@@ -14,5 +14,4 @@ data class NewsHeading(
         val shortName: String,
         val name: String,
         val colorCode: String,
-        val updatedAt: String) {
-}
+        val updatedAt: String)

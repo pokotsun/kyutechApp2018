@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import java.security.cert.CertificateException
 import java.security.cert.X509Certificate
@@ -20,6 +21,7 @@ class RetrofitServiceGenerator {
                 .baseUrl("https://ec2-18-221-237-112.us-east-2.compute.amazonaws.com/")
                 .client(getUnsafeClient())
                 .addConverterFactory(createGson())
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
                 .build()
 
         // 呼び出し対象のAPIをインスタンス化
@@ -67,6 +69,7 @@ class RetrofitServiceGenerator {
                 // Create an ssl socket factory with our all-trusting manager
                 val sslSocketFactory = sslContext.socketFactory
 
+                // Loggerを設定
                 val interceptor = HttpLoggingInterceptor()
                 interceptor.level = HttpLoggingInterceptor.Level.BODY
 
