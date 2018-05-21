@@ -2,6 +2,7 @@ package com.gorigolilagmail.kyutechapp2018.view.customView
 
 import android.content.Context
 import android.graphics.Color
+import android.util.Log
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -23,7 +24,7 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
             ui.run {
                 relativeLayout {
                     lparams(width= matchParent, height= wrapContent)
-                    padding = dip(12)
+                    padding = dip(8)
                     gravity = Gravity.CENTER_VERTICAL
 
                     circularTextView {
@@ -34,7 +35,7 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
                         gravity = Gravity.CENTER
 
                     }.lparams(width = dip(35), height = dip(35)) {
-                        margin = dip(4)
+                        margin = dip(2)
                     }
 
                     textView("学生呼び出し") {
@@ -42,7 +43,7 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
                         textSize = 20f
                         textColor = Color.BLACK
                     }.lparams(width = dip(200), height = wrapContent) {
-                        leftMargin = dip(25)
+                        leftMargin = dip(20)
                         rightOf(circularNewsHeadingId)
                         centerVertically()
                     }
@@ -52,7 +53,7 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
                         textColor = Color.BLACK
                         textSize = 9f
                         textAlignment = View.TEXT_ALIGNMENT_TEXT_END
-                    }.lparams(width = dip(50), height = wrapContent) {
+                    }.lparams(width = dip(70), height = wrapContent) {
                         rightOf(newsHeadingId)
                         centerVertically()
                         alignParentRight()
@@ -66,11 +67,13 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
         val newsHeading = find<TextView>(newsHeadingId)
         val updatedDate = find<TextView>(updatedDateId)
 
-        circularNewsHeading.text = item.headingCharacter
-        circularNewsHeading.setCircleBackgroundColor(item.color)
+        Log.d("アイテム", item.toString())
+
+        circularNewsHeading.text = item.shortName
+        circularNewsHeading.setCircleBackgroundColor(Color.parseColor(item.colorCode))
         circularNewsHeading.setStrokeWidth(0f)
 
-        newsHeading.text = item.headingName
-        updatedDate.text = "${item.updatedDate} 18:00"
+        newsHeading.text = item.name
+        updatedDate.text = item.updatedAt
     }
 }

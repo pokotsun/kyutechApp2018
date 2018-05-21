@@ -47,4 +47,12 @@ dependencies {
     // Anko SQLite
     compile "org.jetbrains.anko:anko-sqlite:$anko_version"
 
+    // Retrofit2
+    compile 'com.squareup.retrofit2:retrofit:2.3.0'
+    compile 'com.squareup.retrofit2:converter-gson:2.3.0'
+    compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
+
+    // RX
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
+
 }
