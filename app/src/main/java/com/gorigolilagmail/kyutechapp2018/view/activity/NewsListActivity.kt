@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
+import android.view.View
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.ApiClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
@@ -41,6 +42,7 @@ class NewsListActivity : AppCompatActivity() {
                 .subscribe(object: Observer<ApiRequest<News>> {
                     override fun onComplete() {
                         //すべてStreamを流しきった時に呼ばれる
+                        progress_bar.visibility = View.GONE
                         Log.d("onComplete", "完遂")
                     }
 
@@ -59,6 +61,7 @@ class NewsListActivity : AppCompatActivity() {
 
                     override fun onSubscribe(d: Disposable) {
                         // Subscribeした瞬間に呼ばれる
+                        progress_bar.visibility = View.VISIBLE
                         Log.d("OnSubscribe", "${d.isDisposed}")
                     }
                 })
