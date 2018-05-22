@@ -14,6 +14,7 @@ import com.gorigolilagmail.kyutechapp2018.view.fragment.TestFragment
 interface ITabItems {
     val fragments: Array<Fragment>
     val icons: Array<Int>
+    val titles: Array<String>
     val selectedIcons: Array<Int>
     var selectedTab: TabLayout.Tab?
 }
@@ -27,6 +28,8 @@ class TabItems: ITabItems {
     override val icons: Array<Int> = arrayOf(R.mipmap.ic_launcher, R.mipmap.ic_launcher_round,
             R.mipmap.ic_launcher, R.mipmap.ic_launcher_round
     )
+
+    override val titles: Array<String> = arrayOf("お知らせ", "時間割", "バス情報", "その他")
 
     override val selectedIcons: Array<Int> = arrayOf(
             R.mipmap.ic_launcher_round, R.mipmap.ic_launcher,
