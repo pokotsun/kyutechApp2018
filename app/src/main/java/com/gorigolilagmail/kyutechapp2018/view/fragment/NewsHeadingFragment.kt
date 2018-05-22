@@ -10,12 +10,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.ProgressBar
+import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.ApiClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
 import com.gorigolilagmail.kyutechapp2018.view.activity.NewsListActivity
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsHeadingListAdapter
+import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -33,9 +35,9 @@ class NewsHeadingFragment: Fragment() {
 //        NewsHeading.getList(activity.applicationContext)
 //    }
 
-    override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?, savedInstanceState: Bundle?): View {
-        return ui.createView(AnkoContext.create(context, this))
-    }
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View =
+        ui.createView(AnkoContext.create(context, this))
+
 
     override fun onResume() {
         super.onResume()
@@ -58,10 +60,9 @@ class NewsHeadingFragment: Fragment() {
                     override fun onError(e: Throwable) {
                         Log.d("通信失敗", "${e.message}")
                     }
-                    // 次のdataを呼ぶ
                     override fun onNext(response: ApiRequest<NewsHeading>) {
+                        // 次のdataを呼ぶ
                         val newsHeadings: List<NewsHeading> = response.results
-//                    Log.d("newsHeadings", newsHeadings.toString()) // 表示
                         adapter.items = newsHeadings
                         ui.newsList?.adapter = adapter
                         // NewsHeadingがクリックされた時の挙動
@@ -90,6 +91,7 @@ class NewsHeadingFragment: Fragment() {
             frameLayout {
                 newsList = listView {
                 }.lparams(width = matchParent, height = wrapContent)
+
                 progressBar = progressBar {
                     visibility = View.GONE
                 }.lparams {

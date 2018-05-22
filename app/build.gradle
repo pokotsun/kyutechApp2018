@@ -53,12 +53,14 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.8.1'
 
     // RX
-    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     compile 'io.reactivex.rxjava2:rxjava:2.1.0'
+    compile "io.reactivex.rxjava2:rxkotlin:2.1.0"
+    implementation 'io.reactivex.rxjava2:rxandroid:2.0.1'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
 
     // RX binding
-    implementation 'com.jakewharton.rxbinding2:rxbinding:2.1.1'
+    compile 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
+    compile 'com.jakewharton.rxbinding2:rxbinding-design-kotlin:2.0.0'
 //    implementation 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.1.1'
 
 }
