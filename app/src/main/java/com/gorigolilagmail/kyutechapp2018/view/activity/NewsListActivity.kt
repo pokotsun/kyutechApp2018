@@ -1,5 +1,6 @@
 package com.gorigolilagmail.kyutechapp2018.view.activity
 
+import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -56,6 +57,12 @@ class NewsListActivity : AppCompatActivity() {
 
                         listAdapter.items = newsList
                         news_list.adapter = listAdapter
+                        news_list.setOnItemClickListener { _, _, position, _ ->
+                            Intent(applicationContext, NewsDetailActivity::class.java).run {
+                                startActivity(this)
+                            }
+
+                        }
 
                     }
 

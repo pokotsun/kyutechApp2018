@@ -44,9 +44,10 @@
 
     <LinearLayout
         android:id="@+id/class_time_container"
-        android:layout_width="20dp"
+        android:layout_width="12dp"
         android:layout_height="match_parent"
         android:orientation="vertical"
+        android:layout_marginLeft="3dp"
         android:gravity="center"
         android:layout_below="@+id/week_name_container">
         <TextView
