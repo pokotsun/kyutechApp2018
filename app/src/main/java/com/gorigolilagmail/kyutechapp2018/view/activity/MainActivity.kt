@@ -36,7 +36,7 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
 
         initializeTabIcons() // タブアイコンの初期化処理
 
-        // TabのRXレイアウト取得
+        // Tab情報取得
         RxTabLayout.selectionEvents(tab_layout)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object: Observer<TabLayoutSelectionEvent> {
@@ -45,11 +45,18 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
                     }
 
                     override fun onError(e: Throwable) {
-                        Log.d("通信失敗", "${e.message}")
+                        Log.d("タブに関してエラー発生", "${e.message}")
                     }
 
                     override fun onNext(tabEvent: TabLayoutSelectionEvent) {
-                        toolbar_title.text = tabItems.titles[tabEvent.tab().position]
+                        val currentTab = tabEvent.tab()
+
+                        toolbar_title.text = tabItems.titles[currentTab.position]
+                        tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
+//                        tabItems.selectedTab?.text = "TAB TITLE"
+                        currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
+//                        currentTab.text = "SELECTED"
+                        tabItems.selectedTab = currentTab
                     }
 
                     override fun onSubscribe(d: Disposable) {
@@ -60,40 +67,24 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
 
         // toolbarの設定
         tool_bar.title = ""
-        toolbar_title.text = "お知らせ"
         setSupportActionBar(tool_bar)
-
-        tab_layout.addOnTabSelectedListener(object: TabLayout.OnTabSelectedListener {
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
-                tabItems.selectedTab?.text = "TAB TITLE"
-                tab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[tab!!.position])
-                tab?.text = "SELECTED"
-                tabItems.selectedTab = tab
-            }
-
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-        })
     }
 
     override fun onPageScrollStateChanged(state: Int) {
+        // スクロールし終わった時に呼ばれる
         Log.d("MainActivity", "onPageStateChanged() position = $state")
-
     }
 
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+        // ページが横にスクロールした時に動く
         Log.d("MainActivity", "onPageScrolled() position = $position")
 
     }
 
     override fun onPageSelected(position: Int) {
+        // ページがタブで選択された時に呼ばれる
         Log.d("MainActivity", "onPageSelected() position = $position")
     }
-
 
     // タブのアイコンを初期化
     private fun initializeTabIcons() {
@@ -102,10 +93,6 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
             val tab: TabLayout.Tab = tab_layout.getTabAt(i)?: throw NullPointerException("can't get Tab")
             tab.icon = ContextCompat.getDrawable(this, tabItems.icons[tab.position])
         }
-
-        // 選択されているタブは選択されているように表示する
-        tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[tabItems.selectedTab!!.position])
-//        tabItems.selectedTab?.text = "SELECTED"
     }
 }
 
