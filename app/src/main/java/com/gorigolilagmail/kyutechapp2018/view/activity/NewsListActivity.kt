@@ -2,9 +2,18 @@ package com.gorigolilagmail.kyutechapp2018.view.activity
 
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.MenuItem
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.client.ApiClient
+import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
+import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
+import com.gorigolilagmail.kyutechapp2018.model.News
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsListAdapter
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news_list.*
 
 class NewsListActivity : AppCompatActivity() {
@@ -14,7 +23,7 @@ class NewsListActivity : AppCompatActivity() {
         setContentView(R.layout.activity_news_list)
 
         val newsHeadingName: String = intent.getStringExtra("newsHeadingName")
-        val newsHeadingCode: Int = intent.getIntExtra("newsHeadingCode", 0)
+        val newsHeadingCode: Int = intent.getIntExtra("newsHeadingCode", 357)
 
         // toolbarの設定
         tool_bar.title = ""
@@ -24,13 +33,35 @@ class NewsListActivity : AppCompatActivity() {
         supportActionBar?.setHomeButtonEnabled(true)
 
         val listAdapter = NewsListAdapter(this)
-        val items = mutableListOf<String>()
-        for(i in 0 until 30) {
-            items.add(i, "$newsHeadingName${i + 1}")
-        }
-        listAdapter.items = items
-        news_list.adapter = listAdapter
 
+        val service: ApiClient = createService()
+        service.listNewsByNewsHeadingCode(newsHeadingCode)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object: Observer<ApiRequest<News>> {
+                    override fun onComplete() {
+                        //すべてStreamを流しきった時に呼ばれる
+                        Log.d("onComplete", "完遂")
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.d("通信失敗", "${e.message}")
+                    }
+
+                    override fun onNext(response: ApiRequest<News>) {
+                        val nextUrl: String = response.next?: ""
+                        val newsList = response.results
+
+                        listAdapter.items = newsList
+                        news_list.adapter = listAdapter
+
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        // Subscribeした瞬間に呼ばれる
+                        Log.d("OnSubscribe", "${d.isDisposed}")
+                    }
+                })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {

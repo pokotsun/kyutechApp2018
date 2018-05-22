@@ -4,6 +4,7 @@ import android.content.Context
 import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
+import com.gorigolilagmail.kyutechapp2018.model.News
 import com.gorigolilagmail.kyutechapp2018.view.customView.ItemListNews
 
 /**
@@ -11,7 +12,7 @@ import com.gorigolilagmail.kyutechapp2018.view.customView.ItemListNews
  */
 
 class NewsListAdapter(private val context: Context): BaseAdapter() {
-    var items: List<String> = emptyList()
+    var items: List<News> = emptyList()
 
     override fun getCount(): Int = items.size
 

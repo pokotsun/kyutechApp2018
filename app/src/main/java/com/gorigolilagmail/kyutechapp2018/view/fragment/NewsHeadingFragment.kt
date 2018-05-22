@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
+import android.widget.ProgressBar
 import com.gorigolilagmail.kyutechapp2018.client.ApiClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
@@ -49,6 +51,7 @@ class NewsHeadingFragment: Fragment() {
                 .subscribe(object: Observer<ApiRequest<NewsHeading>> {
                     override fun onComplete() {
                         //すべてStreamを流しきった時に呼ばれる
+                        ui.progressBar?.visibility = View.GONE
                         Log.d("onComplete", "完遂")
                     }
 
@@ -61,7 +64,6 @@ class NewsHeadingFragment: Fragment() {
 //                    Log.d("newsHeadings", newsHeadings.toString()) // 表示
                         adapter.items = newsHeadings
                         ui.newsList?.adapter = adapter
-
                         // NewsHeadingがクリックされた時の挙動
                         ui.newsList?.setOnItemClickListener { _, _, position, _ ->
                             Intent(context, NewsListActivity::class.java).run {
@@ -75,6 +77,7 @@ class NewsHeadingFragment: Fragment() {
                     }
                     override fun onSubscribe(d: Disposable) {
                         // Subscribeした瞬間に呼ばれる
+                        ui.progressBar?.visibility = View.VISIBLE
                         Log.d("OnSubscribe", "${d.isDisposed}")
                     }
                 })
@@ -82,10 +85,16 @@ class NewsHeadingFragment: Fragment() {
 
     private class NewsFragmentUi: AnkoComponent<NewsHeadingFragment> {
         var newsList: ListView? = null
+        var progressBar: ProgressBar? = null
         override fun createView(ui: AnkoContext<NewsHeadingFragment>): View = ui.run {
-            verticalLayout {
+            frameLayout {
                 newsList = listView {
                 }.lparams(width = matchParent, height = wrapContent)
+                progressBar = progressBar {
+                    visibility = View.GONE
+                }.lparams {
+                    gravity = Gravity.CENTER
+                }
             }
         }
     }
