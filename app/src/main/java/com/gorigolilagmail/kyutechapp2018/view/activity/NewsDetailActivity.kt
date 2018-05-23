@@ -1,5 +1,7 @@
 package com.gorigolilagmail.kyutechapp2018.view.activity
 
+import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -13,6 +15,7 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.model.News
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.themedToolbar
 import org.jetbrains.anko.design.appBarLayout
@@ -25,6 +28,9 @@ class NewsDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val news: News = intent.getParcelableExtra(NewsDetailActivity.NEWS_EXTRA)
+
+        Log.d("News情報", "$news")
         ui.setContentView(this)
         setSupportActionBar(ui.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
@@ -46,12 +52,17 @@ class NewsDetailActivity : AppCompatActivity() {
         }
     }
 
+    companion object {
+        private const val NEWS_EXTRA: String = "news"
+        fun intent(context: Context, news: News): Intent =
+                Intent(context, NewsDetailActivity::class.java)
+                        .putExtra(NEWS_EXTRA, news)
+    }
 
     private class NewsDetailActivityUI: AnkoComponent<NewsDetailActivity> {
         var toolBar: Toolbar? = null
         //        var infoContainer: LinearLayout? = null
         var infoContainer: NestedScrollView? = null
-
 
         override fun createView(ui: AnkoContext<NewsDetailActivity>): View = ui.run {
             coordinatorLayout {

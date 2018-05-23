@@ -58,12 +58,10 @@ class NewsListActivity : AppCompatActivity() {
                         listAdapter.items = newsList
                         news_list.adapter = listAdapter
                         news_list.setOnItemClickListener { _, _, position, _ ->
-                            Intent(applicationContext, NewsDetailActivity::class.java).run {
-                                startActivity(this)
-                            }
-
+                            val item: News = listAdapter.items[position]
+                            Log.d("Parce前", "$item")
+                            NewsDetailActivity.intent(this@NewsListActivity, item).let { startActivity(it) }
                         }
-
                     }
 
                     override fun onSubscribe(d: Disposable) {
