@@ -35,8 +35,8 @@ data class News(
 }
 
 data class NewsInfo(
-        val title: String?,
-        val content: String?
+        val title: String,
+        val content: String
 ): Parcelable {
     override fun describeContents(): Int = 0
     override fun writeToParcel(dest: Parcel, flags: Int) {
@@ -59,9 +59,9 @@ data class NewsInfo(
 }
 
 data class AttachmentInfo(
-        val title: String?,
-        val linkName: String?,
-        val url: String?
+        val title: String,
+        val linkName: String,
+        val url: String
 ): Parcelable {
     override fun describeContents(): Int = 0
     override fun writeToParcel(dest: Parcel, flags: Int) {

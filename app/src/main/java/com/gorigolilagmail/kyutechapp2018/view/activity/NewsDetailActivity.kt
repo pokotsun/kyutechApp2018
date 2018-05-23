@@ -15,7 +15,9 @@ import android.util.Log
 import android.view.MenuItem
 import android.view.View
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.model.AttachmentInfo
 import com.gorigolilagmail.kyutechapp2018.model.News
+import com.gorigolilagmail.kyutechapp2018.model.NewsInfo
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.themedToolbar
 import org.jetbrains.anko.design.appBarLayout
@@ -29,6 +31,9 @@ class NewsDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val news: News = intent.getParcelableExtra(NewsDetailActivity.NEWS_EXTRA)
+
+        ui.newsInfos = news.infos
+        ui.newsAttachmentInfos = news.attachmentInfos
 
         Log.d("News情報", "$news")
         ui.setContentView(this)
@@ -61,8 +66,8 @@ class NewsDetailActivity : AppCompatActivity() {
 
     private class NewsDetailActivityUI: AnkoComponent<NewsDetailActivity> {
         var toolBar: Toolbar? = null
-        //        var infoContainer: LinearLayout? = null
-        var infoContainer: NestedScrollView? = null
+        var newsInfos: List<NewsInfo>? = null
+        var newsAttachmentInfos: List<AttachmentInfo>? = null
 
         override fun createView(ui: AnkoContext<NewsDetailActivity>): View = ui.run {
             coordinatorLayout {
@@ -80,23 +85,39 @@ class NewsDetailActivity : AppCompatActivity() {
                     }
                 }.lparams(width= matchParent, height = dip(60))
 
-                infoContainer = nestedScrollView {
+                nestedScrollView {
                     verticalLayout {
-                        for(i in 0 until 30) {
+                        newsInfos?.forEach { newsInfo ->
 //                            R.style.AppTheme
-                            textView("私は犬かも") {
+                            textView(newsInfo.title) {
                                 textColor = Color.WHITE
                                 textSize = 20.toFloat()
                                 backgroundColor = Color.GRAY
                                 padding = dip(4)
                             }.lparams(width = matchParent, height = wrapContent)
 
-                            textView("やっぱ違うかも") {
+                            textView(newsInfo.content) {
 
                             }.lparams(width = matchParent, height = wrapContent) {
                                 margin = dip(16)
                             }
                         }
+
+                        newsAttachmentInfos?.forEach { attachmentInfo ->
+                            textView(attachmentInfo.title) {
+                                textColor = Color.WHITE
+                                textSize = 20.toFloat()
+                                backgroundColor = Color.GRAY
+                                padding = dip(4)
+                            }.lparams(width = matchParent, height = wrapContent)
+
+                            textView(attachmentInfo.linkName) {
+
+                            }.lparams(width = matchParent, height = wrapContent) {
+                                margin = dip(16)
+                            }
+                        }
+
                     }.lparams(width= matchParent, height = matchParent)
                 }.lparams(width=matchParent, height= matchParent) {
                     behavior = AppBarLayout.ScrollingViewBehavior()
