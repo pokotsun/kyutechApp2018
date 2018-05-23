@@ -31,6 +31,9 @@ data class News(
 
             override fun newArray(size: Int): Array<News?> = arrayOfNulls(size)
         }
+
+        fun createDummy(): News =
+                News(id = 1223, infos = listOf(NewsInfo(title="あいうえお", content="かきくけこ")), attachmentInfos =  listOf())
     }
 }
 

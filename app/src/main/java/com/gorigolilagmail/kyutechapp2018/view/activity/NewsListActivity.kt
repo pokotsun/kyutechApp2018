@@ -12,11 +12,15 @@ import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Compan
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.News
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsListAdapter
+import com.jakewharton.rxbinding2.widget.RxAbsListView
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news_list.*
+import com.jakewharton.rxbinding2.widget.AbsListViewScrollEvent
+import io.reactivex.Observable
+
 
 class NewsListActivity : AppCompatActivity() {
 
@@ -70,13 +74,35 @@ class NewsListActivity : AppCompatActivity() {
                         Log.d("OnSubscribe", "${d.isDisposed}")
                     }
                 })
+
+        // スクロールイベントを取得
+        RxAbsListView.scrollEvents(news_list)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(Schedulers.io())
+                .filter { scrollEvent ->
+                    scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount() + 3 >= scrollEvent.totalItemCount()
+                } // スクロール位置が下から3つめまでスクロールしたかを監視
+                .flatMap { scrollEvent ->
+                        Observable.fromArray(mutableListOf(
+                            News.createDummy(), News.createDummy(), News.createDummy()
+                        ))
+                } // データ取得のObservableに処理をつなげる
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe({ newsList ->
+                    listAdapter.items.plusAssign(newsList)
+                    listAdapter.notifyDataSetChanged()
+                }, { t ->
+                    Log.d("エラー", "アイテムエラー")
+                })
+
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id: Int = item?.itemId ?: android.R.id.home
 
         return when(id) {
-            // 戻るボタン
+        // 戻るボタン
             android.R.id.home -> {
                 finish()
                 true

@@ -12,7 +12,7 @@ import com.gorigolilagmail.kyutechapp2018.view.customView.ItemListNews
  */
 
 class NewsListAdapter(private val context: Context): BaseAdapter() {
-    var items: List<News> = emptyList()
+    var items: MutableList<News> = mutableListOf()
 
     override fun getCount(): Int = items.size
 
