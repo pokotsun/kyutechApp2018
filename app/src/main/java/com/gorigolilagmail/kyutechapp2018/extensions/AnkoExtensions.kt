@@ -1,5 +1,7 @@
 package com.gorigolilagmail.kyutechapp2018.extensions
 
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
 import android.view.ViewManager
 import com.gorigolilagmail.kyutechapp2018.view.customView.CircularTextView
 import org.jetbrains.anko.custom.ankoView
