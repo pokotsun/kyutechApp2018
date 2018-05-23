@@ -10,6 +10,7 @@ import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
 import android.util.Log
+import android.view.MenuItem
 import android.view.View
 import com.gorigolilagmail.kyutechapp2018.R
 import org.jetbrains.anko.*
@@ -25,9 +26,24 @@ class NewsDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         ui.setContentView(this)
-//        setContentView(R.layout.activity_news_detail)
-//        setSupportActionBar(ui.toolBar)
+        setSupportActionBar(ui.toolBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
+    }
 
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        val id: Int = item?.itemId ?: android.R.id.home
+
+        return when(id) {
+        // 戻るボタン
+            android.R.id.home -> {
+                finish()
+                true
+            }
+            else -> {
+                super.onOptionsItemSelected(item)
+            }
+        }
     }
 
 
@@ -40,16 +56,14 @@ class NewsDetailActivity : AppCompatActivity() {
         override fun createView(ui: AnkoContext<NewsDetailActivity>): View = ui.run {
             coordinatorLayout {
                 fitsSystemWindows = true
-
                 appBarLayout {
-
                     layoutParams.apply {
                         background = ContextCompat.getDrawable(context, R.color.kyuTechMainColor)
                     }
 
                     toolBar = themedToolbar(theme= R.style.ToolbarColoredBackArrow) {
-
-                        title = "はいっていないかも"
+                        title = "お知らせ詳細画面"
+                        setTitleTextColor(Color.WHITE)
                     }.lparams(width= matchParent, height= wrapContent) {
                         scrollFlags = SCROLL_FLAG_SCROLL or SCROLL_FLAG_ENTER_ALWAYS
                     }
@@ -57,7 +71,7 @@ class NewsDetailActivity : AppCompatActivity() {
 
                 infoContainer = nestedScrollView {
                     verticalLayout {
-                        for(i in 0..5) {
+                        for(i in 0 until 30) {
 //                            R.style.AppTheme
                             textView("私は犬かも") {
                                 textColor = Color.WHITE

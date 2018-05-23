@@ -15,7 +15,6 @@
         <activity
             android:name=".view.activity.MainActivity"
             android:screenOrientation="portrait">
-
         </activity>
         <activity
             android:name=".view.activity.NewsListActivity"
@@ -27,7 +26,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
     </application>
 
