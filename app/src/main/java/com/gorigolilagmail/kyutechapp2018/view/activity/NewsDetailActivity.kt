@@ -3,6 +3,8 @@ package com.gorigolilagmail.kyutechapp2018.view.activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
+import android.graphics.Paint
+import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
@@ -11,17 +13,24 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.text.Html
+import android.text.method.LinkMovementMethod
+import android.text.util.Linkify
 import android.util.Log
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
+import android.widget.TextView
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.model.AttachmentInfo
 import com.gorigolilagmail.kyutechapp2018.model.News
 import com.gorigolilagmail.kyutechapp2018.model.NewsInfo
+import com.jakewharton.rxbinding2.view.attaches
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.themedToolbar
 import org.jetbrains.anko.design.appBarLayout
 import org.jetbrains.anko.design.coordinatorLayout
+import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.support.v4.nestedScrollView
 
 class NewsDetailActivity : AppCompatActivity() {
@@ -88,7 +97,7 @@ class NewsDetailActivity : AppCompatActivity() {
                 nestedScrollView {
                     verticalLayout {
                         newsInfos?.forEach { newsInfo ->
-//                            R.style.AppTheme
+                            //                            R.style.AppTheme
                             textView(newsInfo.title) {
                                 textColor = Color.WHITE
                                 textSize = 20.toFloat()
@@ -97,12 +106,12 @@ class NewsDetailActivity : AppCompatActivity() {
                             }.lparams(width = matchParent, height = wrapContent)
 
                             textView(newsInfo.content) {
-
                             }.lparams(width = matchParent, height = wrapContent) {
                                 margin = dip(16)
                             }
                         }
 
+                        // 添付情報
                         newsAttachmentInfos?.forEach { attachmentInfo ->
                             textView(attachmentInfo.title) {
                                 textColor = Color.WHITE
@@ -112,12 +121,14 @@ class NewsDetailActivity : AppCompatActivity() {
                             }.lparams(width = matchParent, height = wrapContent)
 
                             textView(attachmentInfo.linkName) {
-
+                                textColor = ContextCompat.getColor(context, R.color.kyuTechMainColor)
+                                paintFlags = this.paintFlags or Paint.UNDERLINE_TEXT_FLAG // 下線を引く
                             }.lparams(width = matchParent, height = wrapContent) {
                                 margin = dip(16)
+
+                                onClick { browse(attachmentInfo.url) } // urlを閲覧する
                             }
                         }
-
                     }.lparams(width= matchParent, height = matchParent)
                 }.lparams(width=matchParent, height= matchParent) {
                     behavior = AppBarLayout.ScrollingViewBehavior()
