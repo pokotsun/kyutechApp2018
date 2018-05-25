@@ -77,7 +77,6 @@ class NewsListActivity : AppCompatActivity() {
                 })
 
         scrollEvent(listAdapter)
-
     }
 
     private fun scrollEvent( listAdapter: NewsListAdapter) {
@@ -112,9 +111,9 @@ class NewsListActivity : AppCompatActivity() {
                         listAdapter.notifyDataSetChanged()
 
                         if(apiRequest.next.isNullOrEmpty())
-                            Toast.makeText(this@NewsListActivity, "一番古いお知らせ100件です   ", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@NewsListActivity, "一番古いお知らせ${apiRequest.results.size}件です", Toast.LENGTH_SHORT).show()
                         else
-                            Toast.makeText(this@NewsListActivity, "次のお知らせ100件を取得しました", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(this@NewsListActivity, "次のお知らせ${apiRequest.results.size}件を取得しました", Toast.LENGTH_SHORT).show()
                     }//                .take(1)
 
 

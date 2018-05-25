@@ -4,28 +4,19 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.graphics.Paint
-import android.net.Uri
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_ENTER_ALWAYS
 import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROLL
 import android.support.v4.content.ContextCompat
-import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
-import android.text.Html
-import android.text.method.LinkMovementMethod
-import android.text.util.Linkify
-import android.util.Log
-import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
-import android.widget.TextView
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.model.AttachmentInfo
 import com.gorigolilagmail.kyutechapp2018.model.News
 import com.gorigolilagmail.kyutechapp2018.model.NewsInfo
-import com.jakewharton.rxbinding2.view.attaches
 import org.jetbrains.anko.*
 import org.jetbrains.anko.appcompat.v7.themedToolbar
 import org.jetbrains.anko.design.appBarLayout
@@ -44,8 +35,8 @@ class NewsDetailActivity : AppCompatActivity() {
         ui.newsInfos = news.infos
         ui.newsAttachmentInfos = news.attachmentInfos
 
-        Log.d("News情報", "$news")
         ui.setContentView(this)
+
         setSupportActionBar(ui.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
@@ -85,7 +76,6 @@ class NewsDetailActivity : AppCompatActivity() {
                     layoutParams.apply {
                         background = ContextCompat.getDrawable(context, R.color.kyuTechMainColor)
                     }
-
                     toolBar = themedToolbar(theme= R.style.ToolbarColoredBackArrow) {
                         title = "お知らせ詳細画面"
                         setTitleTextColor(Color.WHITE)
@@ -123,10 +113,9 @@ class NewsDetailActivity : AppCompatActivity() {
                             textView(attachmentInfo.linkName) {
                                 textColor = ContextCompat.getColor(context, R.color.kyuTechMainColor)
                                 paintFlags = this.paintFlags or Paint.UNDERLINE_TEXT_FLAG // 下線を引く
+                                onClick { browse(attachmentInfo.url) } // urlを閲覧する
                             }.lparams(width = matchParent, height = wrapContent) {
                                 margin = dip(16)
-
-                                onClick { browse(attachmentInfo.url) } // urlを閲覧する
                             }
                         }
                     }.lparams(width= matchParent, height = matchParent)

@@ -3,9 +3,12 @@ package com.gorigolilagmail.kyutechapp2018.model
 import android.os.Parcel
 import android.os.Parcelable
 import android.util.Log
+import java.util.HashMap
 
 data class News(
         val id: Int,
+        val newsHeadingCode: Int,
+        val sourceUrl: String,
         val infos: List<NewsInfo>,
         val attachmentInfos: List<AttachmentInfo>
 ): Parcelable {
@@ -14,9 +17,72 @@ data class News(
     override fun writeToParcel(dest: Parcel, flags: Int) {
         dest.run {
             writeInt(id)
+            writeInt(newsHeadingCode)
+            writeString(sourceUrl)
             writeTypedList(infos)
             writeTypedList(attachmentInfos)
         }
+    }
+
+    // 一覧で表示する情報を渡す (インターンについて   2018/12/11) など
+    fun getTitleInfos(): HashMap<String, String> {
+        var mainTitle = ""
+        var subTitle = ""
+        when(newsHeadingCode) {
+            357 -> { // おしらせ(学生向け)
+                mainTitle = infos.filter { it.title == "タイトル" }.map {it.content }.first()
+                subTitle = infos.filter { it.title == "日付" }.map { it.content }.first()
+            }
+            391 -> { // 時間割・講義室変更
+                mainTitle = infos.filter { it.title == "科目名" || it.title == "時限" }.map { it.content }.joinToString(separator = " ")
+                subTitle = infos.filter { it.title == "日付" }.map { it.content }.first()
+            }
+            361 -> { // 休講通知
+                mainTitle = infos.filter { it.title == "休講科目" || it.title == "時限" }.map { it.content }.joinToString(separator = " ")
+                subTitle = infos.filter { it.title == "日付" }.map { it.content }.first()
+
+            }
+            363 -> { // 補講通知
+                mainTitle = infos.filter { it.title == "補講科目" || it.title == "時限" }.map { it.content }.joinToString(separator = " ")
+                subTitle = infos.filter { it.title == "日付" }.map { it.content }.first()
+
+            }
+            393 -> { // 学生呼出
+                mainTitle = infos.filter { it.title == "対象学科等" }.map {it.content }.first()
+
+            }
+            364 -> { // 授業調整・期末試験
+                mainTitle = infos.filter { it.title == "タイトル" }.map {it.content }.first()
+                subTitle = infos.filter { it.title == "日付" }.map { it.content }.first()
+            }
+            373 -> { // 各種手続き
+                mainTitle = infos.filter { it.title == "件名" }.map {it.content }.first()
+
+            }
+            367 -> { // 奨学金
+                mainTitle = infos.filter { it.title == "件名" }.map {it.content }.first()
+                subTitle = infos.filter { it.title == "期日" }.map { it.content }.first()
+
+            }
+            379 -> { // 集中講義
+                mainTitle = infos.filter { it.title == "タイトル" }.map {it.content }.first()
+                subTitle = infos.filter { it.title == "日付" }.map { it.content }.first()
+
+            }
+            372 -> { // 留学・国際関連
+                mainTitle = infos.filter { it.title == "タイトル" }.map {it.content }.first()
+                subTitle = infos.filter { it.title == "日付" }.map { it.content }.first()
+
+            }
+            368 -> { // 学部生情報
+                mainTitle = infos.filter { it.title == "件名" }.map {it.content }.first()
+
+            }
+            370 -> { // 大学院生情報
+                mainTitle = infos.filter { it.title == "件名" }.map {it.content }.first()
+            }
+        }
+        return hashMapOf("mainTitle" to mainTitle, "subTitle" to subTitle)
     }
 
     companion object {
@@ -24,16 +90,18 @@ data class News(
         val CREATOR: Parcelable.Creator<News> = object: Parcelable.Creator<News> {
             override fun createFromParcel(source: Parcel): News = source.run {
                 val pk: Int = readInt()
+                val newsHeadingCode: Int = readInt()
+                val sourceUrl: String = readString()
                 val newsInfos = mutableListOf<NewsInfo>().apply { readTypedList(this, NewsInfo.CREATOR) }
                 val attachmentInfos = mutableListOf<AttachmentInfo>().apply { readTypedList(this, AttachmentInfo.CREATOR) }
-                News(pk, newsInfos, attachmentInfos)
+                News(pk, newsHeadingCode, sourceUrl, newsInfos, attachmentInfos)
             }
 
             override fun newArray(size: Int): Array<News?> = arrayOfNulls(size)
         }
 
         fun createDummy(): News =
-                News(id = 1223, infos = listOf(NewsInfo(title="あいうえお", content="かきくけこ")), attachmentInfos =  listOf())
+                News(id = 1223, newsHeadingCode = 333, sourceUrl = "", infos = listOf(NewsInfo(title="あいうえお", content="かきくけこ")), attachmentInfos =  listOf())
     }
 }
 

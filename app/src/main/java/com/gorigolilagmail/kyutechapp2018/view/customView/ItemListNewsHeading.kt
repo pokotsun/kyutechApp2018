@@ -31,7 +31,7 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
                         id = circularNewsHeadingId
                         text = "呼"
                         textColor  = Color.WHITE
-                        textSize = 20f
+                        textSize = 16f
                         gravity = Gravity.CENTER
 
                     }.lparams(width = dip(35), height = dip(35)) {
@@ -40,7 +40,7 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
 
                     textView("学生呼び出し") {
                         id = newsHeadingId
-                        textSize = 20f
+                        textSize = 16f
                         textColor = Color.BLACK
                     }.lparams(width = dip(200), height = wrapContent) {
                         leftMargin = dip(20)
