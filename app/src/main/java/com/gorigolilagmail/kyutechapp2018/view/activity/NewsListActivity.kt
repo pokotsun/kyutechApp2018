@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.ApiClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
@@ -18,11 +19,11 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_news_list.*
-import com.jakewharton.rxbinding2.widget.AbsListViewScrollEvent
-import io.reactivex.Observable
 
 
 class NewsListActivity : AppCompatActivity() {
+
+    private var nextUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,7 +57,7 @@ class NewsListActivity : AppCompatActivity() {
                     }
 
                     override fun onNext(response: ApiRequest<News>) {
-                        val nextUrl: String = response.next?: ""
+                        nextUrl = response.next?: ""
                         val newsList = response.results
 
                         listAdapter.items = newsList
@@ -74,29 +75,54 @@ class NewsListActivity : AppCompatActivity() {
                         Log.d("OnSubscribe", "${d.isDisposed}")
                     }
                 })
-
+        
         // スクロールイベントを取得
         RxAbsListView.scrollEvents(news_list)
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(Schedulers.io())
                 .filter { scrollEvent ->
-                    scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount() + 3 >= scrollEvent.totalItemCount()
-                } // スクロール位置が下から3つめまでスクロールしたかを監視
-                .flatMap { scrollEvent ->
-                        Observable.fromArray(mutableListOf(
-                            News.createDummy(), News.createDummy(), News.createDummy()
-                        ))
-                } // データ取得のObservableに処理をつなげる
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe({ newsList ->
-                    listAdapter.items.plusAssign(newsList)
-                    listAdapter.notifyDataSetChanged()
-                }, { t ->
-                    Log.d("エラー", "アイテムエラー")
-                })
+                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
+                    scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount()  >= scrollEvent.totalItemCount()
+                }
+                .filter {  nextUrl.isNotEmpty() } // next_urlが空ではないか？
+                .take(1) // いっぱいイベント拾ってきちゃうけどとりあえずここで渋滞するので上からひとつだけ発火させる
+                .flatMap {  // データ取得のObservableに処理をつなげる
+                    createService().getNextNewsList(nextUrl)
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                }
+                .subscribe {
+                    createService().getNextNewsList(nextUrl)
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .subscribe( object: Observer<ApiRequest<News>> {
 
+                                override fun onComplete() {
+                                    progress_bar.visibility = View.GONE
+                                    Log.d("onComplete", "ページスクロールCompleted")
+                                }
+                                override fun onSubscribe(d: Disposable) {
+                                    progress_bar.visibility = View.VISIBLE
+                                    Log.d("onSubscribe", "ページスクロールSubscribe中")
+                                }
+
+                                override fun onNext(apiRequest: ApiRequest<News>) {
+                                    progress_bar.visibility = View.VISIBLE
+                                    nextUrl = apiRequest.next?: ""
+                                    listAdapter.items.plusAssign(apiRequest.results)
+                                    listAdapter.notifyDataSetChanged()
+
+                                    if(apiRequest.next.isNullOrEmpty())
+                                        Toast.makeText(this@NewsListActivity, "一番古いお知らせです", Toast.LENGTH_SHORT).run { show() }
+                                }
+
+                                override fun onError(e: Throwable) {
+                                    Log.d("onErrored", "${e.message}")
+                                }
+
+                            })
+                }
     }
-
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id: Int = item?.itemId ?: android.R.id.home

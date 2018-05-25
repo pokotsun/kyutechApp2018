@@ -7,6 +7,7 @@ import io.reactivex.Observable
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
+import retrofit2.http.Url
 
 interface ApiClient {
 
@@ -17,6 +18,9 @@ interface ApiClient {
     fun listNewsByNewsHeadingCode(
             @Path("newsHeadingCode") newsHeadingCode: Int
     ): Observable<ApiRequest<News>>
+
+    @GET
+    fun getNextNewsList(@Url url: String): Observable<ApiRequest<News>>
 
 
 }
