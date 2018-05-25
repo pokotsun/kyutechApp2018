@@ -75,7 +75,7 @@ class NewsListActivity : AppCompatActivity() {
                         Log.d("OnSubscribe", "${d.isDisposed}")
                     }
                 })
-        
+
         // スクロールイベントを取得
         RxAbsListView.scrollEvents(news_list)
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -91,37 +91,32 @@ class NewsListActivity : AppCompatActivity() {
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
                 }
-                .subscribe {
-                    createService().getNextNewsList(nextUrl)
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .subscribe( object: Observer<ApiRequest<News>> {
+                .subscribe( object: Observer<ApiRequest<News>> {
 
-                                override fun onComplete() {
-                                    progress_bar.visibility = View.GONE
-                                    Log.d("onComplete", "ページスクロールCompleted")
-                                }
-                                override fun onSubscribe(d: Disposable) {
-                                    progress_bar.visibility = View.VISIBLE
-                                    Log.d("onSubscribe", "ページスクロールSubscribe中")
-                                }
+                    override fun onComplete() {
+                        progress_bar.visibility = View.GONE
+                        Log.d("onComplete", "ページスクロールCompleted")
+                    }
+                    override fun onSubscribe(d: Disposable) {
+                        progress_bar.visibility = View.VISIBLE
+                        Log.d("onSubscribe", "ページスクロールSubscribe中")
+                    }
 
-                                override fun onNext(apiRequest: ApiRequest<News>) {
-                                    progress_bar.visibility = View.VISIBLE
-                                    nextUrl = apiRequest.next?: ""
-                                    listAdapter.items.plusAssign(apiRequest.results)
-                                    listAdapter.notifyDataSetChanged()
+                    override fun onNext(apiRequest: ApiRequest<News>) {
+                        progress_bar.visibility = View.VISIBLE
+                        nextUrl = apiRequest.next?: ""
+                        listAdapter.items.plusAssign(apiRequest.results)
+                        listAdapter.notifyDataSetChanged()
 
-                                    if(apiRequest.next.isNullOrEmpty())
-                                        Toast.makeText(this@NewsListActivity, "一番古いお知らせです", Toast.LENGTH_SHORT).run { show() }
-                                }
+                        if(apiRequest.next.isNullOrEmpty())
+                            Toast.makeText(this@NewsListActivity, "一番古いお知らせです", Toast.LENGTH_SHORT).run { show() }
+                    }
 
-                                override fun onError(e: Throwable) {
-                                    Log.d("onErrored", "${e.message}")
-                                }
+                    override fun onError(e: Throwable) {
+                        Log.d("onErrored", "${e.message}")
+                    }
 
-                            })
-                }
+                })
     }
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
