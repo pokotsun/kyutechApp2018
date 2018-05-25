@@ -76,6 +76,11 @@ class NewsListActivity : AppCompatActivity() {
                     }
                 })
 
+        scrollEvent(listAdapter)
+
+    }
+
+    private fun scrollEvent( listAdapter: NewsListAdapter) {
         // スクロールイベントを取得
         RxAbsListView.scrollEvents(news_list)
                 .subscribeOn(AndroidSchedulers.mainThread())
@@ -94,23 +99,24 @@ class NewsListActivity : AppCompatActivity() {
                 .subscribe( object: Observer<ApiRequest<News>> {
 
                     override fun onComplete() {
-                        progress_bar.visibility = View.GONE
                         Log.d("onComplete", "ページスクロールCompleted")
+                        scrollEvent(listAdapter)
                     }
                     override fun onSubscribe(d: Disposable) {
-                        progress_bar.visibility = View.VISIBLE
                         Log.d("onSubscribe", "ページスクロールSubscribe中")
                     }
 
                     override fun onNext(apiRequest: ApiRequest<News>) {
-                        progress_bar.visibility = View.VISIBLE
                         nextUrl = apiRequest.next?: ""
                         listAdapter.items.plusAssign(apiRequest.results)
                         listAdapter.notifyDataSetChanged()
 
                         if(apiRequest.next.isNullOrEmpty())
-                            Toast.makeText(this@NewsListActivity, "一番古いお知らせです", Toast.LENGTH_SHORT).run { show() }
-                    }
+                            Toast.makeText(this@NewsListActivity, "一番古いお知らせ100件です   ", Toast.LENGTH_SHORT).show()
+                        else
+                            Toast.makeText(this@NewsListActivity, "次のお知らせ100件を取得しました", Toast.LENGTH_SHORT).show()
+                    }//                .take(1)
+
 
                     override fun onError(e: Throwable) {
                         Log.d("onErrored", "${e.message}")
