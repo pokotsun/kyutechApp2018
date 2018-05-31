@@ -7,8 +7,16 @@ import android.view.View
 import android.widget.ArrayAdapter
 
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
+import com.gorigolilagmail.kyutechapp2018.model.User
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.functions.Consumer
+import io.reactivex.schedulers.Schedulers
 
 import kotlinx.android.synthetic.main.activity_login.*
+import org.reactivestreams.Subscriber
+import org.reactivestreams.Subscription
+import java.util.*
 
 class LoginActivity : AppCompatActivity() {
 
@@ -36,6 +44,18 @@ class LoginActivity : AppCompatActivity() {
         Log.d("items", "schoolYear: $schoolYear, departmentId: $department")
 
         disableUi()
+
+        createService().createUser(User.createUserJson(schoolYear, department))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(
+                        { user ->
+                            Log.d("accepted", "user:$user")
+                        },
+                        { t ->
+                            Log.d("denied", "UserPostDenied, ${t.message}")
+                        }
+                )
     }
 
     private fun disableUi() {
@@ -133,8 +153,8 @@ class LoginActivity : AppCompatActivity() {
 //        }
 //    }
 
+    private inline fun convertToSchoolYear(position: Int) = position + 1
     private fun convertToDepartmentId(position: Int): Int = 200 + position
-
 
     companion object {
 
