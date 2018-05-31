@@ -1,9 +1,8 @@
 package com.gorigolilagmail.kyutechapp2018.view.activity
 
 import android.support.v7.app.AppCompatActivity
-import android.os.Build
 import android.os.Bundle
-import android.text.TextUtils
+import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 
@@ -11,24 +10,46 @@ import com.gorigolilagmail.kyutechapp2018.R
 
 import kotlinx.android.synthetic.main.activity_login.*
 
-
 class LoginActivity : AppCompatActivity() {
-
-//    private var mAuthTask: UserLoginTask? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-//        email_sign_in_button.setOnClickListener { attemptLogin() }
+        sign_up_btn.setOnClickListener {
+            attemptSignUp()
+        }
 
+        // 各スピナーの設定
         val schoolYarSpinnerAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, LoginActivity.schoolYears)
         schoolYarSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        login_school_year_spinner.adapter = schoolYarSpinnerAdapter
+        school_year_spinner.adapter = schoolYarSpinnerAdapter
 
         val departmentSpinnerAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, LoginActivity.departments)
         departmentSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        login_department_spinner.adapter = departmentSpinnerAdapter
+        department_spinner.adapter = departmentSpinnerAdapter
+    }
+
+    private fun attemptSignUp() {
+        val schoolYear: Int = school_year_spinner.selectedItemPosition
+        val department: Int = convertToDepartmentId(department_spinner.selectedItemPosition)
+        Log.d("items", "schoolYear: $schoolYear, departmentId: $department")
+
+        disableUi()
+    }
+
+    private fun disableUi() {
+        sign_up_btn.isEnabled = false
+        school_year_spinner.isEnabled = false
+        department_spinner.isEnabled = false
+        sign_up_progress.visibility = View.VISIBLE
+    }
+
+    private fun enableUi() {
+        sign_up_btn.isEnabled = true
+        school_year_spinner.isEnabled = true
+        department_spinner.isEnabled = true
+        sign_up_progress.visibility = View.GONE
     }
 
 //    private fun attemptLogin() {
@@ -112,6 +133,8 @@ class LoginActivity : AppCompatActivity() {
 //        }
 //    }
 
+    private fun convertToDepartmentId(position: Int): Int = 200 + position
+
 
     companion object {
 
@@ -128,6 +151,7 @@ class LoginActivity : AppCompatActivity() {
                 "情報工学部　機械情報工学科", "情報工学部　機械情報工学科（編入）",
                 "情報工学部　生命情報工学科", "情報工学部　生命情報工学科（編入）"
         )
+
         /**
          * Id to identity READ_CONTACTS permission request.
          */
