@@ -5,8 +5,9 @@
     <color name="colorAccent">#FF4081</color>
 
     <!--Kyutech Color-->
-    <color name="kyuTechMainColor">#00BCD4</color>
-    <color name="kyutechMainDarkColor">#008fa1</color>
+    <color name="kyutech_main_color">#00BCD4</color>
+    <color name="kyutech_main_color_dark">#008fa1</color>
+    <color name="kyutech_main_color_light">#22E6FF</color>
 
     <color name="newsHeading">#707070</color>
     <color name="newsTopic1">#EB5757</color>

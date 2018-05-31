@@ -68,7 +68,7 @@ class NewsDetailActivity : AppCompatActivity() {
                 fitsSystemWindows = true
                 appBarLayout {
                     layoutParams.apply {
-                        background = ContextCompat.getDrawable(context, R.color.kyuTechMainColor)
+                        background = ContextCompat.getDrawable(context, R.color.kyutech_main_color)
                     }
                     toolBar = themedToolbar(theme= R.style.ToolbarColoredBackArrow) {
                         title = "お知らせ詳細画面"
@@ -105,7 +105,7 @@ class NewsDetailActivity : AppCompatActivity() {
                             }.lparams(width = matchParent, height = wrapContent)
 
                             textView(attachmentInfo.linkName) {
-                                textColor = ContextCompat.getColor(context, R.color.kyuTechMainColor)
+                                textColor = ContextCompat.getColor(context, R.color.kyutech_main_color)
                                 paintFlags = this.paintFlags or Paint.UNDERLINE_TEXT_FLAG // 下線を引く
                                 onClick { browse(attachmentInfo.url) } // urlを閲覧する
                             }.lparams(width = matchParent, height = wrapContent) {
@@ -123,7 +123,7 @@ class NewsDetailActivity : AppCompatActivity() {
                         }.lparams(width = matchParent, height = wrapContent)
 
                         textView(news.sourceUrl) {
-                            textColor = ContextCompat.getColor(context, R.color.kyuTechMainColor)
+                            textColor = ContextCompat.getColor(context, R.color.kyutech_main_color)
                             paintFlags = this.paintFlags or Paint.UNDERLINE_TEXT_FLAG // 下線を引く
                             onClick { browse(news.sourceUrl) } // urlを閲覧する
                         }.lparams(width = matchParent, height = wrapContent) {
