@@ -37,8 +37,11 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         email_sign_in_button.setOnClickListener { attemptLogin() }
-    }
 
+        val schoolYarSpinnerAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, LoginActivity.schoolYear)
+        schoolYarSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        login_school_year_spinner.adapter = schoolYarSpinnerAdapter
+    }
 
     private fun attemptLogin() {
 
@@ -121,9 +124,16 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    
+
     companion object {
 
+        private val schoolYear: Array<String> = arrayOf(
+                "1年", "2年", "3年生", "4年生"
+        )
+
+        private val departments: Array<String> = arrayOf(
+                ""
+        )
         /**
          * Id to identity READ_CONTACTS permission request.
          */
