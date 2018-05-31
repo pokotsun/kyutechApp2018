@@ -4,10 +4,16 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:textColor">@android:color/black</item>
+        <!--ボタンの色-->
+        <item name="android:colorPrimary">@color/kyutech_main_color</item>
+        <item name="android:colorButtonNormal">@color/kyutech_main_color_dark</item>
+        <item name="android:colorAccent">@color/kyutech_main_color</item>
+
         <!--ステータスバーの色変更(通知が来るところ)-->
         <item name="android:statusBarColor">@color/kyutech_main_color_dark</item>
     </style>
 
+    <!--ツールバーの色-->
     <style name="ToolbarColoredBackArrow" parent="AppTheme">
         <item name="android:textColorSecondary">@android:color/white</item>
         <item name="android:background">@color/kyutech_main_color</item>
@@ -20,5 +26,6 @@
     <style parent="@android:style/Widget.Spinner" name="SpinnerAsEditText">
         <item name="android:background">@android:drawable/editbox_background_normal</item>
     </style>
+
 
 </resources>

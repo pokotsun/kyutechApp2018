@@ -27,12 +27,11 @@
             <com.gorigolilagmail.kyutechapp2018.view.customView.RoundClipFrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                app:cornerRadius="4dp">
+                app:cornerRadius="8dp">
                 <ImageView
                     android:layout_width="70dp"
                     android:layout_height="70dp"
                     android:layout_marginBottom="50dp"
-                    android:background="@drawable/radius_style"
                     android:src="@mipmap/icon"/>
             </com.gorigolilagmail.kyutechapp2018.view.customView.RoundClipFrameLayout>
 
@@ -52,10 +51,9 @@
 
             <Button
                 android:id="@+id/email_sign_in_button"
-                style="?android:textAppearanceSmall"
+                style="@style/Widget.AppCompat.Button.Colored"
                 android:layout_width="160dp"
                 android:layout_height="wrap_content"
-                android:background="@color/kyutech_main_color"
                 android:layout_marginTop="16dp"
                 android:text="Sign Up"
                 android:textColor="@android:color/white"

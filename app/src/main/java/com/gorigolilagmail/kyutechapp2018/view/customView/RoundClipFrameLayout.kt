@@ -25,6 +25,7 @@ class RoundClipFrameLayout @JvmOverloads constructor(context: Context,
         ta.recycle()
     }
 
+    // 丸枠部分の丸さを決める
     fun setCornerRadius(radiusPx: Int) {
         if(mCornerRadius != radiusPx) {
             mCornerRadius = radiusPx
