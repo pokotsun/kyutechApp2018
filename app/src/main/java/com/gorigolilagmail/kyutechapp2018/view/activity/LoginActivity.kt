@@ -10,7 +10,7 @@ import android.widget.Toast
 
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
-import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
+import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.User
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -25,12 +25,7 @@ class LoginActivity : AppCompatActivity() {
         LoginClient.init(applicationContext)
 
         if(LoginClient.isSignedUp()) { // ログイン済みであれば
-//            Log.d("SignedUpUser", "${LoginClient.getCurrentUserInfo()}")
-//            val loginUser = LoginClient.getCurrentUserInfo()
-            Intent(this, MainActivity::class.java).run {
-                finish()
-                startActivity(this)
-            }
+            goToMainActivity()
         }
 
         sign_up_btn.setOnClickListener {
@@ -64,8 +59,7 @@ class LoginActivity : AppCompatActivity() {
                             Log.d("loginuserInfo", "${LoginClient.isSignedUp()}, ${LoginClient.getCurrentUserInfo()}")
                             if(LoginClient.isSignedUp()) {  // ユーザー登録が無事済めば
                                 Intent(this, MainActivity::class.java).run {
-                                    finish()
-                                    startActivity(this)
+                                    goToMainActivity()
                                 }
                             } else { // ユーザー登録ができていなければ
                                 Toast.makeText(this, "ユーザー登録が正常に行えませんでした", Toast.LENGTH_SHORT).show()
@@ -89,6 +83,13 @@ class LoginActivity : AppCompatActivity() {
         school_year_spinner.isEnabled = true
         department_spinner.isEnabled = true
         sign_up_progress.visibility = View.GONE
+    }
+
+    private fun goToMainActivity() {
+        Intent(this, MainActivity::class.java).run {
+            finish()
+            startActivity(this)
+        }
     }
 
     private inline fun convertToSchoolYear(position: Int) = position + 1

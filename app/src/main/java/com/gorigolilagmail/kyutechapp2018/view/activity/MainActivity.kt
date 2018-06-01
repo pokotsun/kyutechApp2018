@@ -53,7 +53,6 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
 
                     override fun onNext(tabEvent: TabLayoutSelectionEvent) {
                         val currentTab = tabEvent.tab()
-
                         toolbar_title.text = tabItems.titles[currentTab.position]
                         tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
 //                        tabItems.selectedTab?.text = "TAB TITLE"

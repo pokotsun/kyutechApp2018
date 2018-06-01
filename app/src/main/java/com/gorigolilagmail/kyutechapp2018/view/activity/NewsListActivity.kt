@@ -9,7 +9,7 @@ import android.view.View
 import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.ApiClient
-import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
+import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.News
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsListAdapter

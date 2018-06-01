@@ -12,7 +12,7 @@ import android.widget.ListView
 import android.widget.ProgressBar
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.ApiClient
-import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.Companion.createService
+import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
 import com.gorigolilagmail.kyutechapp2018.view.activity.NewsListActivity
