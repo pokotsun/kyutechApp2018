@@ -43,7 +43,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun attemptSignUp() {
-        val schoolYear: Int = convertToSchoolYear(school_year_spinner.selectedItemPosition)
+        val schoolYear: Int = school_year_spinner.selectedItemPosition
         val department: Int = convertToDepartmentId(department_spinner.selectedItemPosition)
         Log.d("items", "schoolYear: $schoolYear, departmentId: $department")
 
@@ -92,7 +92,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    private inline fun convertToSchoolYear(position: Int) = position + 1
     private fun convertToDepartmentId(position: Int): Int = 200 + position
 
     companion object {
