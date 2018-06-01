@@ -11,6 +11,9 @@
 
         <!--ステータスバーの色変更(通知が来るところ)-->
         <item name="android:statusBarColor">@color/kyutech_main_color_dark</item>
+
+        <!--Activity起動時の一瞬のブランクをなくす-->
+        <item name="android:windowDisablePreview">true</item>
     </style>
 
     <!--ツールバーの色-->

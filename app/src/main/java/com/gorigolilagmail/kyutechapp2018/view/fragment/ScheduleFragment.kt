@@ -39,11 +39,6 @@ class ScheduleFragment : Fragment() {
 
     }
 
-    override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-    }
-
-
     companion object {
         fun newInstance(page: Int): ScheduleFragment {
             val args: Bundle = Bundle().apply {
