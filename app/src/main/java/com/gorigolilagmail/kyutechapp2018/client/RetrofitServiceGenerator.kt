@@ -76,8 +76,8 @@ class RetrofitServiceGenerator {
                 val builder = OkHttpClient.Builder()
                 builder.sslSocketFactory(sslSocketFactory)
                 builder.hostnameVerifier({_,_ ->
-                        true // ホスト名の検証を行わない
-                    }
+                    true // ホスト名の検証を行わない
+                }
                 )
 
                 return builder

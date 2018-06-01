@@ -10,6 +10,7 @@ import io.realm.RealmConfiguration
 object LoginClient {
     private var realm: Realm? = null
 
+    // 初期化処理
     fun init(context: Context) {
         Realm.init(context)
         val config = RealmConfiguration.Builder().build()

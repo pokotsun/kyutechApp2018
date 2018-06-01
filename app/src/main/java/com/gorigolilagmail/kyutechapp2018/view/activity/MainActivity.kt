@@ -7,6 +7,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.util.Log
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.model.ITabItems
 import com.gorigolilagmail.kyutechapp2018.model.TabItems
 import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
@@ -27,6 +28,8 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+//        LoginClient.signOut()
 
         val adapter = TabAdapter(supportFragmentManager, tabItems.fragments)
 

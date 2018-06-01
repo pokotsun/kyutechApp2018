@@ -6,7 +6,6 @@ import com.gorigolilagmail.kyutechapp2018.model.News
 import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
 import com.gorigolilagmail.kyutechapp2018.model.User
 import io.reactivex.Observable
-import retrofit2.Call
 import retrofit2.http.*
 
 interface ApiClient {
