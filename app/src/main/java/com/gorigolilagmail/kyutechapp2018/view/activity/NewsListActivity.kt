@@ -1,6 +1,5 @@
 package com.gorigolilagmail.kyutechapp2018.view.activity
 
-import android.content.Intent
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -31,6 +30,7 @@ class NewsListActivity : AppCompatActivity() {
 
         val newsHeadingName: String = intent.getStringExtra("newsHeadingName")
         val newsHeadingCode: Int = intent.getIntExtra("newsHeadingCode", 357)
+
 
         // toolbarの設定
         tool_bar.title = ""

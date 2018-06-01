@@ -33,11 +33,12 @@
                 <com.gorigolilagmail.kyutechapp2018.view.customView.RoundClipFrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    app:cornerRadius="8dp">
+                    android:layout_marginBottom="50dp"
+                    app:cornerRadius="16dp">
                     <ImageView
                         android:layout_width="70dp"
                         android:layout_height="70dp"
-                        android:layout_marginBottom="50dp"
+                        android:scaleType="centerInside"
                         android:src="@mipmap/icon"/>
                 </com.gorigolilagmail.kyutechapp2018.view.customView.RoundClipFrameLayout>
 

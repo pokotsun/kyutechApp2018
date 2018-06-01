@@ -16,17 +16,17 @@ class RoundClipFrameLayout @JvmOverloads constructor(context: Context,
     private val mPath: Path = Path()
     private val mRect: RectF = RectF()
 
-    private var mCornerRadius: Int = 0
+    private var mCornerRadius: Float = 8f
 
     init {
         val ta: TypedArray = context.obtainStyledAttributes(attrs, R.styleable.RoundClipFrameLayout, defStyleAttr, 0)
-        mCornerRadius = ta.getDimensionPixelSize(R.styleable.RoundClipFrameLayout_cornerRadius, 0)
+        mCornerRadius = ta.getDimensionPixelSize(R.styleable.RoundClipFrameLayout_cornerRadius, 0).toFloat()
 
         ta.recycle()
     }
 
     // 丸枠部分の丸さを決める
-    fun setCornerRadius(radiusPx: Int) {
+    fun setCornerRadius(radiusPx: Float) {
         if(mCornerRadius != radiusPx) {
             mCornerRadius = radiusPx
             rebuildPath()
@@ -36,7 +36,7 @@ class RoundClipFrameLayout @JvmOverloads constructor(context: Context,
 
     private fun rebuildPath() {
         mPath.reset()
-        mPath.addRoundRect(mRect, mCornerRadius.toFloat(), mCornerRadius.toFloat(), Path.Direction.CW)
+        mPath.addRoundRect(mRect, mCornerRadius, mCornerRadius, Path.Direction.CCW)
         mPath.close()
     }
 

@@ -14,6 +14,7 @@ import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
 import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
 import com.jakewharton.rxbinding2.support.design.widget.TabLayoutSelectionEvent
+import com.jakewharton.rxbinding2.widget.RxProgressBar
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable

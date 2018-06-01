@@ -10,14 +10,12 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.ProgressBar
-import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.ApiClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
 import com.gorigolilagmail.kyutechapp2018.view.activity.NewsListActivity
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsHeadingListAdapter
-import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
