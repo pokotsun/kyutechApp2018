@@ -7,17 +7,20 @@ import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Toast
-
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
-import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
-import com.gorigolilagmail.kyutechapp2018.model.User
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
+import com.gorigolilagmail.kyutechapp2018.presenter.LoginPresenter
+import com.gorigolilagmail.kyutechapp2018.view.MvpView
 
 import kotlinx.android.synthetic.main.activity_login.*
 
-class LoginActivity : AppCompatActivity() {
+interface LoginMvpView: MvpView {
+    fun goToMainActivity(msg: String = "", msgShown: Boolean=true)
+    fun isSignedUp(): Boolean
+}
+
+class LoginActivity : AppCompatActivity(), LoginMvpView {
+    private val presenter = LoginPresenter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -47,32 +50,13 @@ class LoginActivity : AppCompatActivity() {
         val department: Int = convertToDepartmentId(department_spinner.selectedItemPosition)
         Log.d("items", "schoolYear: $schoolYear, departmentId: $department")
 
-        disableUi()
+        disableUi() // 使えなくする
 
-        createService().createUser(User.createUserJson(schoolYear, department))
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { user -> // リクエストが成功した場合
-                            Log.d("accepted", "user:$user")
-                            LoginClient.signUp(user)
-                            Log.d("loginuserInfo", "${LoginClient.isSignedUp()}, ${LoginClient.getCurrentUserInfo()}")
-                            if(LoginClient.isSignedUp()) {  // ユーザー登録が無事済めば
-                                Intent(this, MainActivity::class.java).run {
-                                    Toast.makeText(this@LoginActivity, "ユーザー登録が完了しました！", Toast.LENGTH_SHORT).show()
-                                    goToMainActivity()
-                                }
-                            } else { // ユーザー登録ができていなければ
-                                Toast.makeText(this, "ユーザー登録が正常に行えませんでした", Toast.LENGTH_SHORT).show()
-                            }
-                        },
-                        { t -> // POSTでエラーが生じた場合
-                            Log.d("denied", "UserPostDenied, ${t.message}\n body: ${t.stackTrace}")
-                        }
-                )
+        // ユーザー作成
+        presenter.createUser(schoolYear, department)
     }
 
-    private fun disableUi() {
+    private fun disableUi() { // Uiを使えなくする
         sign_up_btn.isEnabled = false
         school_year_spinner.isEnabled = false
         department_spinner.isEnabled = false
@@ -86,12 +70,22 @@ class LoginActivity : AppCompatActivity() {
         sign_up_progress.visibility = View.GONE
     }
 
-    private fun goToMainActivity() {
+
+    override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+
+    override fun goToMainActivity(msg: String, msgShown: Boolean) {
         Intent(this, MainActivity::class.java).run {
+            if(msgShown) {
+                showToast(msg)
+            }
             finish()
             startActivity(this)
         }
     }
+
+
+
+    override fun isSignedUp(): Boolean = LoginClient.isSignedUp()
 
     private fun convertToDepartmentId(position: Int): Int = 200 + position
 

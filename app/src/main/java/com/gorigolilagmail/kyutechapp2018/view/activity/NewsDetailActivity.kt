@@ -22,7 +22,7 @@ import org.jetbrains.anko.design.coordinatorLayout
 import org.jetbrains.anko.sdk25.coroutines.onClick
 import org.jetbrains.anko.support.v4.nestedScrollView
 
-class NewsDetailActivity : AppCompatActivity() {
+class                       NewsDetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

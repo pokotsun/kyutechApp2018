@@ -6,21 +6,24 @@ import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
 import android.util.Log
+import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
-import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.model.ITabItems
 import com.gorigolilagmail.kyutechapp2018.model.TabItems
 import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
+import com.gorigolilagmail.kyutechapp2018.view.MvpView
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
 import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
 import com.jakewharton.rxbinding2.support.design.widget.TabLayoutSelectionEvent
-import com.jakewharton.rxbinding2.widget.RxProgressBar
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
+interface MainMvpView: MvpView {
+}
+
+class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainMvpView {
 
     private val presenter: MainActivityPresenter = MainActivityPresenter()
 
@@ -29,8 +32,6 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-//        LoginClient.signOut()
 
         val adapter = TabAdapter(supportFragmentManager, tabItems.fragments)
 
@@ -81,7 +82,6 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
     override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
         // ページが横にスクロールした時に動く
         Log.d("MainActivity", "onPageScrolled() position = $position")
-
     }
 
     override fun onPageSelected(position: Int) {
@@ -89,10 +89,16 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
         Log.d("MainActivity", "onPageSelected() position = $position")
         if(position == SCHEDULE_POSITION) {
             tool_bar.inflateMenu(R.menu.menu_quarter)
+            tool_bar.setOnMenuItemClickListener { item ->
+                Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
+                true
+            }
         } else {
             tool_bar.menu.clear()
         }
     }
+
+    override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
     // タブのアイコンを初期化
     private fun initializeTabIcons() {
