@@ -7,6 +7,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.GridLayout
+import android.widget.Toast
 
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.view.customView.ClassGridItem
@@ -32,7 +33,9 @@ class ScheduleFragment : Fragment() {
                 params.columnSpec = GridLayout.spec(i % 5, GridLayout.FILL, 1f)
                 params.rowSpec = GridLayout.spec(j % 5, GridLayout.FILL, 1f)
                 item.layoutParams = params
-
+                item.setOnClickListener {
+                    Toast.makeText(context, "($j, $i)のアイテムがタップされました", Toast.LENGTH_SHORT).show()
+                }
                 schedule_container.addView(item)
             }
         }

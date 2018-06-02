@@ -59,6 +59,7 @@ class LoginActivity : AppCompatActivity() {
                             Log.d("loginuserInfo", "${LoginClient.isSignedUp()}, ${LoginClient.getCurrentUserInfo()}")
                             if(LoginClient.isSignedUp()) {  // ユーザー登録が無事済めば
                                 Intent(this, MainActivity::class.java).run {
+                                    Toast.makeText(this@LoginActivity, "ユーザー登録が完了しました！", Toast.LENGTH_SHORT).show()
                                     goToMainActivity()
                                 }
                             } else { // ユーザー登録ができていなければ
