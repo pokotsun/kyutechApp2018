@@ -8,7 +8,8 @@ import android.widget.GridLayout
 import android.widget.Toast
 
 import com.gorigolilagmail.kyutechapp2018.R
-import com.gorigolilagmail.kyutechapp2018.view.customView.ClassGridItem
+import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
+import com.gorigolilagmail.kyutechapp2018.view.customView.UserScheduleGridItem
 import kotlinx.android.synthetic.main.fragment_schedule.*
 
 class ScheduleFragment : Fragment() {
@@ -25,7 +26,7 @@ class ScheduleFragment : Fragment() {
         // クラスを全25コマ入れていく
         for(i in 0 until 5) {
             for( j in 0 until 5) {
-                setScheduleItem(i%5, j%5)
+                setScheduleItem(UserSchedule.createDummy(i, j, 0))
             }
         }
 
@@ -36,15 +37,15 @@ class ScheduleFragment : Fragment() {
 
     }
 
-    private fun setScheduleItem(row: Int, column: Int) {
-        val item = ClassGridItem(context)
+    private fun setScheduleItem(userSchedule: UserSchedule) {
+        val item = UserScheduleGridItem(context, item = userSchedule)
         val params: GridLayout.LayoutParams = GridLayout.LayoutParams()
-        Log.d("i_test: $row", "${row}, ${column}")
-        params.columnSpec = GridLayout.spec(row, GridLayout.FILL, 1f)
-        params.rowSpec = GridLayout.spec(column, GridLayout.FILL, 1f)
+        params.columnSpec = GridLayout.spec(userSchedule.day, GridLayout.FILL, 1f)
+        params.rowSpec = GridLayout.spec(userSchedule.period, GridLayout.FILL, 1f)
         item.layoutParams = params
         item.setOnClickListener {
-            Toast.makeText(context, "($row, $column)のアイテムがタップされました", Toast.LENGTH_SHORT).show()
+            Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
+                    "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
         }
         schedule_container.addView(item)
     }
