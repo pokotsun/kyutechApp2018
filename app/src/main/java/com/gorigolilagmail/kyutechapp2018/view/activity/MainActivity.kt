@@ -87,6 +87,11 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
     override fun onPageSelected(position: Int) {
         // ページがタブで選択された時に呼ばれる
         Log.d("MainActivity", "onPageSelected() position = $position")
+        if(position == SCHEDULE_POSITION) {
+            tool_bar.inflateMenu(R.menu.menu_quarter)
+        } else {
+            tool_bar.menu.clear()
+        }
     }
 
     // タブのアイコンを初期化
@@ -96,6 +101,10 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener {
             val tab: TabLayout.Tab = tab_layout.getTabAt(i)?: throw NullPointerException("can't get Tab")
             tab.icon = ContextCompat.getDrawable(this, tabItems.icons[tab.position])
         }
+    }
+
+    companion object {
+        private val SCHEDULE_POSITION = 1
     }
 }
 

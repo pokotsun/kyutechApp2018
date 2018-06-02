@@ -3,9 +3,7 @@ package com.gorigolilagmail.kyutechapp2018.view.fragment
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.GridLayout
 import android.widget.Toast
 
@@ -27,19 +25,28 @@ class ScheduleFragment : Fragment() {
         // クラスを全25コマ入れていく
         for(i in 0 until 5) {
             for( j in 0 until 5) {
-                val item = ClassGridItem(context)
-                val params: GridLayout.LayoutParams = GridLayout.LayoutParams()
-                Log.d("i_test: $i", "${i % 5}, ${i % 5}")
-                params.columnSpec = GridLayout.spec(i % 5, GridLayout.FILL, 1f)
-                params.rowSpec = GridLayout.spec(j % 5, GridLayout.FILL, 1f)
-                item.layoutParams = params
-                item.setOnClickListener {
-                    Toast.makeText(context, "($j, $i)のアイテムがタップされました", Toast.LENGTH_SHORT).show()
-                }
-                schedule_container.addView(item)
+                setScheduleItem(i%5, j%5)
             }
         }
 
+    }
+
+    fun setScheduleItems(quarter: Int) {
+        Log.d("QuarterItem", "現在第${quarter+1} クオーターです")
+
+    }
+
+    private fun setScheduleItem(row: Int, column: Int) {
+        val item = ClassGridItem(context)
+        val params: GridLayout.LayoutParams = GridLayout.LayoutParams()
+        Log.d("i_test: $row", "${row}, ${column}")
+        params.columnSpec = GridLayout.spec(row, GridLayout.FILL, 1f)
+        params.rowSpec = GridLayout.spec(column, GridLayout.FILL, 1f)
+        item.layoutParams = params
+        item.setOnClickListener {
+            Toast.makeText(context, "($row, $column)のアイテムがタップされました", Toast.LENGTH_SHORT).show()
+        }
+        schedule_container.addView(item)
     }
 
     companion object {
