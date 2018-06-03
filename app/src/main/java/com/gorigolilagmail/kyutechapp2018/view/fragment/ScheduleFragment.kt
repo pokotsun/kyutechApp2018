@@ -22,19 +22,17 @@ class ScheduleFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-
         // クラスを全25コマ入れていく
+        setScheduleItems(quarter = 0)
+    }
+
+    fun setScheduleItems(quarter: Int) {
+        Log.d("QuarterItem", "現在第${quarter+1} クオーターです")
         for(i in 0 until 5) {
             for( j in 0 until 5) {
                 setScheduleItem(UserSchedule.createDummy(i, j, 0))
             }
         }
-
-    }
-
-    fun setScheduleItems(quarter: Int) {
-        Log.d("QuarterItem", "現在第${quarter+1} クオーターです")
-
     }
 
     private fun setScheduleItem(userSchedule: UserSchedule) {

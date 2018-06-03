@@ -61,6 +61,26 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainM
                         currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
 //                        currentTab.text = "SELECTED"
                         tabItems.selectedTab = currentTab
+
+                        if(currentTab.position == SCHEDULE_POSITION) {
+                            tool_bar.inflateMenu(R.menu.menu_quarter)
+                            tool_bar.setOnMenuItemClickListener { item ->
+                                Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
+
+                                val quarter: Int = when(item.itemId) {
+                                    R.id.first_quarter -> 0
+                                    R.id.second_quarter -> 1
+                                    R.id.third_quarter -> 2
+                                    else -> 3
+                                }
+                                tabItems.getScheduleFragment().setScheduleItems(quarter)
+                                true
+                            }
+                        }
+                        else {
+
+                            tool_bar.menu.clear()
+                        }
                     }
 
                     override fun onSubscribe(d: Disposable) {
@@ -87,15 +107,6 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainM
     override fun onPageSelected(position: Int) {
         // ページがタブで選択された時に呼ばれる
         Log.d("MainActivity", "onPageSelected() position = $position")
-        if(position == SCHEDULE_POSITION) {
-            tool_bar.inflateMenu(R.menu.menu_quarter)
-            tool_bar.setOnMenuItemClickListener { item ->
-                Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
-                true
-            }
-        } else {
-            tool_bar.menu.clear()
-        }
     }
 
     override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()

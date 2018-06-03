@@ -9,7 +9,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
-import com.gorigolilagmail.kyutechapp2018.presenter.LoginPresenter
+import com.gorigolilagmail.kyutechapp2018.presenter.LoginActivityPresenter
 import com.gorigolilagmail.kyutechapp2018.view.MvpView
 
 import kotlinx.android.synthetic.main.activity_login.*
@@ -20,7 +20,7 @@ interface LoginMvpView: MvpView {
 }
 
 class LoginActivity : AppCompatActivity(), LoginMvpView {
-    private val presenter = LoginPresenter(this)
+    private val presenter = LoginActivityPresenter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)

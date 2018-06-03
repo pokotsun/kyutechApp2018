@@ -9,7 +9,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
 
-class LoginPresenter(private val view: LoginMvpView): Presenter {
+class LoginActivityPresenter(private val view: LoginMvpView): Presenter {
 
     fun createUser(schoolYear: Int, department: Int) {
         createService().createUser(User.createUserJson(schoolYear, department))
