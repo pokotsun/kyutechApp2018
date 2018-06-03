@@ -28,7 +28,7 @@ class LoginActivity : AppCompatActivity(), LoginMvpView {
         LoginClient.init(applicationContext)
 
         if(LoginClient.isSignedUp()) { // ログイン済みであれば
-            goToMainActivity()
+            goToMainActivity(msgShown = false)
         }
 
         sign_up_btn.setOnClickListener {
