@@ -26,10 +26,6 @@ class UserScheduleGridItem @JvmOverloads constructor(context: Context,
         view = LayoutInflater.from(context).inflate(R.layout.class_grid_item, this)
         view?.find<TextView>(R.id.syllabus_name)?.text = item.syllabus.title
         view?.find<TextView>(R.id.class_room_name)?.text = item.syllabus.targetPlace
-
-        view?.setOnClickListener {
-
-        }
     }
 
     fun setBlankSchedule() {

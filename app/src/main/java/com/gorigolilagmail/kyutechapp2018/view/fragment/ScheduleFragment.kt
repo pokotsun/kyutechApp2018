@@ -21,6 +21,15 @@ import kotlinx.android.synthetic.main.fragment_schedule.*
 
 class ScheduleFragment : Fragment() {
 
+    enum class Quarter(val id: Int) {
+        FIRST_QUARTER(0),
+        SECOND_QUARTER(1),
+        THIRD_QUARTER(2),
+        FOURTH_QUARTER(3)
+    }
+
+    var currentQuarter: Quarter = Quarter.FIRST_QUARTER
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -31,10 +40,12 @@ class ScheduleFragment : Fragment() {
         super.onResume()
         // クラスを全25コマ入れていく
         val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
-        setScheduleItems( userId, 0)
+        setScheduleItems( userId, currentQuarter.id)
     }
 
     fun setScheduleItems(userId: Int, quarter: Int) {
+
+        currentQuarter = Quarter.values().filter{it.id == quarter}.first()
         // まず空のスケジュールを入れていく
         for(i in 0 until 5) {
             for( j in 0 until 5) {

@@ -64,14 +64,18 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainM
                         tabItems.selectedTab = currentTab
 
                         if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
-                            tool_bar.inflateMenu(R.menu.menu_quarter)
+                            tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
                             tool_bar.setOnMenuItemClickListener { item ->
                                 Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
                                 val quarter: Int = when(item.itemId) {
                                     R.id.first_quarter -> 0
                                     R.id.second_quarter -> 1
                                     R.id.third_quarter -> 2
-                                    else -> 3
+                                    R.id.fourth_quarter -> 3
+                                    else -> { // 編集完了ボタンが押された時
+                                        toolBarEditBtnToggle() // スケジュール画面の状態を変更
+                                        tabItems.getScheduleFragment().currentQuarter.id
+                                    }
                                 }
                                 val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
                                 tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter)
@@ -107,6 +111,16 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainM
     override fun onPageSelected(position: Int) {
         // ページがタブで選択された時に呼ばれる
         Log.d("MainActivity", "onPageSelected() position = $position")
+    }
+
+    private fun toolBarEditBtnToggle() {
+        if(tool_bar.menu.findItem(R.id.schedule_edit).title == "完了") {
+            tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.kyutech_main_color))
+            tool_bar.menu.findItem(R.id.schedule_edit).title = "編集"
+        } else {
+            tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.newsTopic5))
+            tool_bar.menu.findItem(R.id.schedule_edit).title = "完了"
+        }
     }
 
     override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()

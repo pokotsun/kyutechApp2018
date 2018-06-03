@@ -3,23 +3,28 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/first_quarter"
-        android:title="第1クオーター"
+        android:title="第1クオーターの時間割"
         android:orderInCategory="0"
         app:showAsAction="never"/>
     <item
         android:id="@+id/second_quarter"
-        android:title="第2クオーター"
+        android:title="第2クオーターの時間割"
         android:orderInCategory="1"
         app:showAsAction="never"/>
     <item
         android:id="@+id/third_quarter"
-        android:title="第3クオーター"
+        android:title="第3クオーターの時間割"
         android:orderInCategory="2"
         app:showAsAction="never"/>
     <item
-        android:id="@+id/forth_quarter"
-        android:title="第4クオーター"
+        android:id="@+id/fourth_quarter"
+        android:title="第4クオーターの時間割"
         android:orderInCategory="3"
         app:showAsAction="never"/>
+    <item
+        android:id="@+id/schedule_edit"
+        android:title="編集"
+        android:orderInCategory="4"
+        app:showAsAction="always"/>
 
 </menu>
