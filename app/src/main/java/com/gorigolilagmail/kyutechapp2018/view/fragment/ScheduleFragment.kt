@@ -18,6 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_schedule.*
+import org.jetbrains.anko.forEachChild
 
 class ScheduleFragment : Fragment() {
 
@@ -43,13 +44,13 @@ class ScheduleFragment : Fragment() {
         setScheduleItems( userId, currentQuarter.id)
     }
 
-    fun setScheduleItems(userId: Int, quarter: Int) {
+    fun setScheduleItems(userId: Int, quarter: Int, isEditing: Boolean = false) {
 
         currentQuarter = Quarter.values().filter{it.id == quarter}.first()
         // まず空のスケジュールを入れていく
         for(i in 0 until 5) {
             for( j in 0 until 5) {
-                setScheduleItem(UserSchedule.createDummy(i, j, 0), isBlank = true)
+                setScheduleItem(UserSchedule.createDummy(i, j, 0), isBlank = true, isEditing=isEditing)
             }
         }
 
@@ -84,28 +85,31 @@ class ScheduleFragment : Fragment() {
 
     }
 
-    private fun setScheduleItem(userSchedule: UserSchedule, isBlank: Boolean =false) {
-        val item = UserScheduleGridItem(context, item = userSchedule)
-        val params: GridLayout.LayoutParams = GridLayout.LayoutParams().apply {
+    private fun setScheduleItem(userSchedule: UserSchedule, isBlank: Boolean =false, isEditing: Boolean=false) {
+        val item = UserScheduleGridItem(context, item = userSchedule, isEditing=isEditing)
+        item.layoutParams = GridLayout.LayoutParams().apply {
             columnSpec = GridLayout.spec(userSchedule.day, GridLayout.FILL, 1f)
             rowSpec = GridLayout.spec(userSchedule.period, GridLayout.FILL, 1f)
         }
-        item.layoutParams = params
 
-        if(isBlank) {// BlankフラグがTrueだった場合
-            item.setBlankSchedule()
-        } else {
+        if(isEditing) {
             item.setOnClickListener {
                 Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
                         "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
                 showSyllabusListDialog()
             }
+        } else {
+
+        }
+        if(isBlank) {// BlankフラグがTrueだった場合
+            item.setBlankSchedule()
         }
 
-
-
         schedule_container.addView(item)
+
+
     }
+
 
     private fun showSyllabusListDialog() {
         val dialog = SyllabusListFragment()

@@ -17,7 +17,8 @@ import org.jetbrains.anko.find
 class UserScheduleGridItem @JvmOverloads constructor(context: Context,
                                                      attrs: AttributeSet? = null,
                                                      defStyleAttr: Int = 0,
-                                                     item: UserSchedule)
+                                                     item: UserSchedule,
+                                                     isEditing: Boolean=false)
     : LinearLayout(context, attrs, defStyleAttr) {
 
     var view: View? = null
@@ -26,6 +27,9 @@ class UserScheduleGridItem @JvmOverloads constructor(context: Context,
         view = LayoutInflater.from(context).inflate(R.layout.class_grid_item, this)
         view?.find<TextView>(R.id.syllabus_name)?.text = item.syllabus.title
         view?.find<TextView>(R.id.class_room_name)?.text = item.syllabus.targetPlace
+        if(isEditing) {
+
+        }
     }
 
     fun setBlankSchedule() {

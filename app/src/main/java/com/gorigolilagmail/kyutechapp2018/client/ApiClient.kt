@@ -29,6 +29,9 @@ interface ApiClient {
             @Path("quarter") quarter: Int
     ): Observable<ApiRequest<UserSchedule>>
 
+    @POST("/api/user-schedules/")
+    fun createUserSchedule(@Body body: JsonObject): Observable<UserSchedule>
+
 
 
 }

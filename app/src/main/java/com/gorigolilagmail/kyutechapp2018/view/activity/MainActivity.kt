@@ -44,53 +44,45 @@ class MainActivity : AppCompatActivity(), MainMvpView {
         // Tab情報取得
         RxTabLayout.selectionEvents(tab_layout)
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object: Observer<TabLayoutSelectionEvent> {
-                    override fun onComplete() {
-                        Log.d("onComplete", "TabEvent完遂")
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.d("タブに関してエラー発生", "${e.message}")
-                    }
-
-                    override fun onNext(tabEvent: TabLayoutSelectionEvent) {
-                        val currentTab = tabEvent.tab()
-                        toolbar_title.text = tabItems.titles[currentTab.position]
-                        tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
+                .subscribe { tabEvent ->
+                    val currentTab = tabEvent.tab()
+                    toolbar_title.text = tabItems.titles[currentTab.position]
+                    tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
 //                        tabItems.selectedTab?.text = "TAB TITLE"
-                        currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
+                    currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
 //                        currentTab.text = "SELECTED"
-                        tabItems.selectedTab = currentTab
+                    tabItems.selectedTab = currentTab
 
-                        if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
-                            tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
-                            tool_bar.setOnMenuItemClickListener { item ->
-                                Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
-                                val quarter: Int = when(item.itemId) {
-                                    R.id.first_quarter -> 0
-                                    R.id.second_quarter -> 1
-                                    R.id.third_quarter -> 2
-                                    R.id.fourth_quarter -> 3
-                                    else -> { // 編集完了ボタンが押された時
-                                        toolBarEditBtnToggle() // スケジュール画面の状態を変更
-                                        tabItems.getScheduleFragment().currentQuarter.id
-                                    }
+                    if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
+                        tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
+                        tool_bar.setOnMenuItemClickListener { item ->
+                            Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
+                            val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
+                            when(item.itemId) {
+                                R.id.schedule_edit -> { // 編集完了ボタンが押された時
+                                    val quarter = tabItems.getScheduleFragment().currentQuarter.id
+                                    toolBarEditBtnToggle() // スケジュール画面の状態を変更
+                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing = true)
                                 }
-                                val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
-                                tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter)
-                                true
+                                else -> { // クオーターの変更の場合
+                                    val quarter: Int = when (item.itemId) {
+                                        R.id.first_quarter -> 0
+                                        R.id.second_quarter -> 1
+                                        R.id.third_quarter -> 2
+                                        else -> 3
+                                    }
+                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter)
+                                }
                             }
-                        } else { // 時間割画面でなかったら
-
-                            tool_bar.menu.clear()
+                            true
                         }
+                    } else { // 時間割画面でなかったら
+                        tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.kyutech_main_color))
+                        tool_bar.menu.clear()
                     }
+                }
 
-                    override fun onSubscribe(d: Disposable) {
-                        Log.d("OnSubscribe", "TabEvent: ${d.isDisposed}")
-                    }
 
-                })
 
         // toolbarの設定
         tool_bar.title = ""
