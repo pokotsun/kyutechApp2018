@@ -26,7 +26,7 @@
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
-    <style parent="@android:style/Widget.Spinner" name="SpinnerAsEditText">
+    <style name="SpinnerAsEditText" parent="@android:style/Widget.Spinner">
         <item name="android:background">@android:drawable/editbox_background_normal</item>
     </style>
 

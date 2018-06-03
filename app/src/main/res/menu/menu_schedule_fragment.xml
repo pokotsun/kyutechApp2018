@@ -23,7 +23,8 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/schedule_edit"
-        android:title="編集"
+        android:title="@string/schedule_edit"
+        android:icon="@android:drawable/ic_menu_edit"
         android:orderInCategory="4"
         app:showAsAction="always"/>
 

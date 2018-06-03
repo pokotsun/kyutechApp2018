@@ -71,6 +71,7 @@ class MainActivity : AppCompatActivity(), MainMvpView {
                                         R.id.third_quarter -> 2
                                         else -> 3
                                     }
+                                    toolbar_title.text = "時間割(第${quarter+1}クォーター)"
                                     tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter)
                                 }
                             }
@@ -90,12 +91,15 @@ class MainActivity : AppCompatActivity(), MainMvpView {
     }
 
     private fun toolBarEditBtnToggle() {
-        if(tool_bar.menu.findItem(R.id.schedule_edit).title == "完了") {
+        val item = tool_bar.menu.findItem(R.id.schedule_edit)
+        if(item.title == resources.getString(R.string.schedule_save)) {
             tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.kyutech_main_color))
-            tool_bar.menu.findItem(R.id.schedule_edit).title = "編集"
+            item.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_edit)
+            item.title = resources.getString(R.string.schedule_edit)
         } else {
             tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.newsTopic5))
-            tool_bar.menu.findItem(R.id.schedule_edit).title = "完了"
+            item.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_save)
+            item.title = resources.getString(R.string.schedule_save)
         }
     }
 

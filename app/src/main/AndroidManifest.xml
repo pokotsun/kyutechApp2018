@@ -19,20 +19,26 @@
         android:theme="@style/AppTheme">
         <activity
             android:name=".view.activity.MainActivity"
-            android:screenOrientation="portrait">
-        </activity>
-        <activity
-            android:name=".view.activity.NewsListActivity"
-            android:screenOrientation="portrait"/>
-        <activity
-            android:name=".view.activity.NewsDetailActivity"
             android:screenOrientation="portrait"></activity>
         <activity
-            android:name=".view.activity.LoginActivity">
+            android:name=".view.activity.NewsListActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".view.activity.NewsDetailActivity"
+            android:screenOrientation="portrait" />
+
+        <!--最初に起動するアクティビティ-->
+        <activity android:name=".view.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".view.activity.UserScheduleDetailActivity"
+            android:screenOrientation="portrait">
+
         </activity>
     </application>
 
