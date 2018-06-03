@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 interface MainMvpView: MvpView {
 }
 
-class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainMvpView {
+class MainActivity : AppCompatActivity(), MainMvpView {
 
     private val presenter: MainActivityPresenter = MainActivityPresenter()
 
@@ -37,7 +37,6 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainM
         val adapter = TabAdapter(supportFragmentManager, tabItems.fragments)
 
         view_pager.adapter = adapter
-        view_pager.addOnPageChangeListener(this)
         tab_layout.setupWithViewPager(view_pager)
 
         initializeTabIcons() // タブアイコンの初期化処理
@@ -96,21 +95,6 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainM
         // toolbarの設定
         tool_bar.title = ""
         setSupportActionBar(tool_bar)
-    }
-
-    override fun onPageScrollStateChanged(state: Int) {
-        // スクロールし終わった時に呼ばれる
-        Log.d("MainActivity", "onPageStateChanged() position = $state")
-    }
-
-    override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-        // ページが横にスクロールした時に動く
-        Log.d("MainActivity", "onPageScrolled() position = $position")
-    }
-
-    override fun onPageSelected(position: Int) {
-        // ページがタブで選択された時に呼ばれる
-        Log.d("MainActivity", "onPageSelected() position = $position")
     }
 
     private fun toolBarEditBtnToggle() {
