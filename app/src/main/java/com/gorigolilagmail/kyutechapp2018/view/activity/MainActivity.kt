@@ -4,7 +4,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
-import android.support.v4.view.ViewPager
 import android.util.Log
 import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
@@ -15,10 +14,7 @@ import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
 import com.gorigolilagmail.kyutechapp2018.view.MvpView
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
 import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
-import com.jakewharton.rxbinding2.support.design.widget.TabLayoutSelectionEvent
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import kotlinx.android.synthetic.main.activity_main.*
 
 interface MainMvpView: MvpView {
@@ -59,10 +55,10 @@ class MainActivity : AppCompatActivity(), MainMvpView {
                             Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
                             val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
                             when(item.itemId) {
-                                R.id.schedule_edit -> { // 編集完了ボタンが押された時
+                                R.id.schedule_edit -> { // 編集ボタンが押された時
                                     val quarter = tabItems.getScheduleFragment().currentQuarter.id
-                                    toolBarEditBtnToggle() // スケジュール画面の状態を変更
-                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing = true)
+                                    val isEditing: Boolean = toolBarEditBtnToggle(loginUserId, quarter) // スケジュール画面の状態を変更
+                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing=isEditing)
                                 }
                                 else -> { // クオーターの変更の場合
                                     val quarter: Int = when (item.itemId) {
@@ -90,16 +86,20 @@ class MainActivity : AppCompatActivity(), MainMvpView {
         setSupportActionBar(tool_bar)
     }
 
-    private fun toolBarEditBtnToggle() {
+    // 編集ボタンが今どの状態にあるかで表示する内容を変更し、編集中か閲覧中かの状態をBoolで返す
+    private fun toolBarEditBtnToggle(loginUserId: Int, quarter: Int): Boolean {
         val item = tool_bar.menu.findItem(R.id.schedule_edit)
         if(item.title == resources.getString(R.string.schedule_save)) {
             tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.kyutech_main_color))
+            tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing=false)
             item.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_edit)
             item.title = resources.getString(R.string.schedule_edit)
+            return false
         } else {
             tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.newsTopic5))
             item.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_save)
             item.title = resources.getString(R.string.schedule_save)
+            return true
         }
     }
 

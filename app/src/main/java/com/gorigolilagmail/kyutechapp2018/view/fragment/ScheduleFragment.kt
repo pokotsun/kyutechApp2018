@@ -47,6 +47,7 @@ class ScheduleFragment : Fragment() {
     fun setScheduleItems(userId: Int, quarter: Int, isEditing: Boolean = false) {
 
         currentQuarter = Quarter.values().filter{it.id == quarter}.first()
+        Log.d("isEditing", "$isEditing")
         // まず空のスケジュールを入れていく
         for(i in 0 until 5) {
             for( j in 0 until 5) {
@@ -73,7 +74,7 @@ class ScheduleFragment : Fragment() {
                     override fun onNext(apiRequest: ApiRequest<UserSchedule>) {
                         val userSchedules: List<UserSchedule> = apiRequest.results
                         userSchedules.forEach { userSchedule ->
-                            setScheduleItem(userSchedule)
+                            setScheduleItem(userSchedule, isEditing=isEditing)
                         }
                     }
 
@@ -86,7 +87,7 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun setScheduleItem(userSchedule: UserSchedule, isBlank: Boolean =false, isEditing: Boolean=false) {
-        val item = UserScheduleGridItem(context, item = userSchedule, isEditing=isEditing)
+        val item = UserScheduleGridItem(context, item = userSchedule)
         item.layoutParams = GridLayout.LayoutParams().apply {
             columnSpec = GridLayout.spec(userSchedule.day, GridLayout.FILL, 1f)
             rowSpec = GridLayout.spec(userSchedule.period, GridLayout.FILL, 1f)
@@ -99,7 +100,9 @@ class ScheduleFragment : Fragment() {
                 showSyllabusListDialog()
             }
         } else {
+            item.setOnClickListener {
 
+            }
         }
         if(isBlank) {// BlankフラグがTrueだった場合
             item.setBlankSchedule()
