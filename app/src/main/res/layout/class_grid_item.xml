@@ -7,15 +7,40 @@
 
     <!--ブランク状態の時-->
     <LinearLayout
+        android:id="@+id/blank_period_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@android:color/white"
+        android:gravity="center"
         android:layout_marginHorizontal="1dp"
+        android:orientation="vertical"
         android:elevation="3dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="未設定です"
+            android:textSize="10dp"
+            android:textColor="@android:color/black"
+            android:visibility="invisible"
+            android:gravity="center"/>
+        <TextView
+            android:layout_width="55dp"
+            android:layout_height="wrap_content"
+            android:text="未設定です"
+            android:textSize="8dp"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:background="@drawable/classroom_text_style"
+            android:gravity="center"
+            android:layout_marginTop="15dp"
+            android:layout_marginBottom="-5dp"
+            android:visibility="invisible"
+            android:padding="2dp"/>
     </LinearLayout>
 
     <!--選択済みのコマの時-->
     <LinearLayout
+        android:id="@+id/selected_period_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -24,16 +49,17 @@
         android:layout_marginHorizontal="1dp"
         android:elevation="3dp">
         <TextView
-            android:id="@+id/class_name"
+            android:id="@+id/syllabus_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="離散数学"
             android:textSize="10dp"
             android:textColor="@android:color/white"
+            android:singleLine="true"
             android:gravity="center"/>
         <TextView
             android:id="@+id/class_room_name"
-            android:layout_width="40dp"
+            android:layout_width="55dp"
             android:layout_height="wrap_content"
             android:text="2101"
             android:textSize="8dp"
@@ -41,6 +67,7 @@
             android:textColor="@android:color/white"
             android:background="@drawable/classroom_text_style"
             android:gravity="center"
+            android:singleLine="true"
             android:layout_marginTop="15dp"
             android:layout_marginBottom="-5dp"
             android:padding="2dp"/>

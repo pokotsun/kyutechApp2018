@@ -1,10 +1,7 @@
 package com.gorigolilagmail.kyutechapp2018.client
 
 import com.google.gson.JsonObject
-import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
-import com.gorigolilagmail.kyutechapp2018.model.News
-import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
-import com.gorigolilagmail.kyutechapp2018.model.User
+import com.gorigolilagmail.kyutechapp2018.model.*
 import io.reactivex.Observable
 import retrofit2.http.*
 
@@ -25,6 +22,12 @@ interface ApiClient {
             "Content-Type: application/json")
     @POST("/api/users/")
     fun createUser(@Body body: JsonObject): Observable<User>
+
+    @GET("/api/user-schedules/user-{userId}/quarter-{quarter}")
+    fun listUserScheduleByQuarter(
+            @Path("userId") userId: Int,
+            @Path("quarter") quarter: Int
+    ): Observable<ApiRequest<UserSchedule>>
 
 
 

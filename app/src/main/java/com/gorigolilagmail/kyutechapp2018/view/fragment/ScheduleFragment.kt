@@ -8,8 +8,15 @@ import android.widget.GridLayout
 import android.widget.Toast
 
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.client.LoginClient
+import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
+import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
 import com.gorigolilagmail.kyutechapp2018.view.customView.UserScheduleGridItem
+import io.reactivex.Observer
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.disposables.Disposable
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_schedule.*
 
 class ScheduleFragment : Fragment() {
@@ -23,28 +30,64 @@ class ScheduleFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         // クラスを全25コマ入れていく
-        setScheduleItems(quarter = 0)
+        val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
+        setScheduleItems( userId, 0)
     }
 
-    fun setScheduleItems(quarter: Int) {
-        Log.d("QuarterItem", "現在第${quarter+1} クオーターです")
+    fun setScheduleItems(userId: Int, quarter: Int) {
+        // まず空のスケジュールを入れていく
         for(i in 0 until 5) {
             for( j in 0 until 5) {
-                setScheduleItem(UserSchedule.createDummy(i, j, 0))
+                setScheduleItem(UserSchedule.createDummy(i, j, 0), isBlank = true)
             }
         }
+
+        Log.d("QuarterItem", "userId:$userId, 現在第${quarter+1} クオーターです")
+        createService().listUserScheduleByQuarter(userId, quarter)
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(object: Observer<ApiRequest<UserSchedule>> {
+                    override fun onComplete() {
+                        Log.d("onComplete", "UserScheduleComplete")
+                    }
+
+                    override fun onError(e: Throwable) {
+                        Log.d("onError", "userSchedule OnError ${e.message}")
+                    }
+
+                    override fun onNext(apiRequest: ApiRequest<UserSchedule>) {
+                        val userSchedules: List<UserSchedule> = apiRequest.results
+                        userSchedules.forEach { userSchedule ->
+                            setScheduleItem(userSchedule)
+                        }
+                    }
+
+                    override fun onSubscribe(d: Disposable) {
+                        Log.d("onSubscribe", "UserSchedule onSubscribe")
+                    }
+                })
+
     }
 
-    private fun setScheduleItem(userSchedule: UserSchedule) {
+    private fun setScheduleItem(userSchedule: UserSchedule, isBlank: Boolean =false) {
         val item = UserScheduleGridItem(context, item = userSchedule)
-        val params: GridLayout.LayoutParams = GridLayout.LayoutParams()
-        params.columnSpec = GridLayout.spec(userSchedule.day, GridLayout.FILL, 1f)
-        params.rowSpec = GridLayout.spec(userSchedule.period, GridLayout.FILL, 1f)
-        item.layoutParams = params
-        item.setOnClickListener {
-            Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
-                    "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
+        val params: GridLayout.LayoutParams = GridLayout.LayoutParams().apply {
+            columnSpec = GridLayout.spec(userSchedule.day, GridLayout.FILL, 1f)
+            rowSpec = GridLayout.spec(userSchedule.period, GridLayout.FILL, 1f)
         }
+        item.layoutParams = params
+
+        if(isBlank) {// BlankフラグがTrueだった場合
+            item.setBlankSchedule()
+        } else {
+            item.setOnClickListener {
+                Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
+                        "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+
+
         schedule_container.addView(item)
     }
 

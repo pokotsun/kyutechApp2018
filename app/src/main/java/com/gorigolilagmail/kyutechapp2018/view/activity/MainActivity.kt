@@ -8,6 +8,7 @@ import android.support.v4.view.ViewPager
 import android.util.Log
 import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.model.ITabItems
 import com.gorigolilagmail.kyutechapp2018.model.TabItems
 import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
@@ -62,22 +63,21 @@ class MainActivity : AppCompatActivity(),  ViewPager.OnPageChangeListener, MainM
 //                        currentTab.text = "SELECTED"
                         tabItems.selectedTab = currentTab
 
-                        if(currentTab.position == SCHEDULE_POSITION) {
+                        if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
                             tool_bar.inflateMenu(R.menu.menu_quarter)
                             tool_bar.setOnMenuItemClickListener { item ->
                                 Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
-
                                 val quarter: Int = when(item.itemId) {
                                     R.id.first_quarter -> 0
                                     R.id.second_quarter -> 1
                                     R.id.third_quarter -> 2
                                     else -> 3
                                 }
-                                tabItems.getScheduleFragment().setScheduleItems(quarter)
+                                val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
+                                tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter)
                                 true
                             }
-                        }
-                        else {
+                        } else { // 時間割画面でなかったら
 
                             tool_bar.menu.clear()
                         }
