@@ -42,6 +42,7 @@ class ScheduleFragment : Fragment() {
             }
         }
 
+        // スケジュール情報を取得してデータをsetしていく
         Log.d("QuarterItem", "userId:$userId, 現在第${quarter+1} クオーターです")
         createService().listUserScheduleByQuarter(userId, quarter)
                 .subscribeOn(Schedulers.newThread())
@@ -49,10 +50,12 @@ class ScheduleFragment : Fragment() {
                 .subscribe(object: Observer<ApiRequest<UserSchedule>> {
                     override fun onComplete() {
                         Log.d("onComplete", "UserScheduleComplete")
+                        schedule_progress.visibility = View.GONE
                     }
 
                     override fun onError(e: Throwable) {
                         Log.d("onError", "userSchedule OnError ${e.message}")
+                        schedule_progress.visibility = View.GONE
                     }
 
                     override fun onNext(apiRequest: ApiRequest<UserSchedule>) {
@@ -63,6 +66,7 @@ class ScheduleFragment : Fragment() {
                     }
 
                     override fun onSubscribe(d: Disposable) {
+                        schedule_progress.visibility = View.VISIBLE
                         Log.d("onSubscribe", "UserSchedule onSubscribe")
                     }
                 })
@@ -83,12 +87,18 @@ class ScheduleFragment : Fragment() {
             item.setOnClickListener {
                 Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
                         "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
+                showSyllabusListDialog()
             }
         }
 
 
 
         schedule_container.addView(item)
+    }
+
+    private fun showSyllabusListDialog() {
+        val dialog = SyllabusListFragment()
+        dialog.show(fragmentManager, "fragment_dialog")
     }
 
     companion object {
