@@ -18,6 +18,7 @@ import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 interface MainMvpView: MvpView {
+    fun setToolBarTitle(title: String)
 }
 
 class MainActivity : AppCompatActivity(), MainMvpView {
@@ -42,23 +43,23 @@ class MainActivity : AppCompatActivity(), MainMvpView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { tabEvent ->
                     val currentTab = tabEvent.tab()
-                    toolbar_title.text = tabItems.titles[currentTab.position]
-                    tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab!!.position])
+                    setToolBarTitle(tabItems.titles[currentTab.position])
+                    tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab?.position?: 0])
 //                        tabItems.selectedTab?.text = "TAB TITLE"
                     currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
 //                        currentTab.text = "SELECTED"
                     tabItems.selectedTab = currentTab
-
                     if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
+                        tool_bar.menu.clear()
                         tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
                         tool_bar.setOnMenuItemClickListener { item ->
-                            Log.d("Menu Clicked", "${item.title} , ${item.itemId}")
-                            val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
-                            when(item.itemId) {
+                            val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id
+                                    ?: throw NullPointerException()
+                            when (item.itemId) {
                                 R.id.schedule_edit -> { // 編集ボタンが押された時
                                     val quarter = tabItems.getScheduleFragment().currentQuarter.id
                                     val isEditing: Boolean = toolBarEditBtnToggle(loginUserId, quarter) // スケジュール画面の状態を変更
-                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing=isEditing)
+                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing = isEditing)
                                 }
                                 else -> { // クオーターの変更の場合
                                     val quarter: Int = when (item.itemId) {
@@ -67,7 +68,7 @@ class MainActivity : AppCompatActivity(), MainMvpView {
                                         R.id.third_quarter -> 2
                                         else -> 3
                                     }
-                                    toolbar_title.text = "時間割(第${quarter+1}クォーター)"
+                                    setToolBarTitle("時間割(第${quarter + 1}クォーター)")
                                     tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter)
                                 }
                             }
@@ -92,18 +93,22 @@ class MainActivity : AppCompatActivity(), MainMvpView {
         if(item.title == resources.getString(R.string.schedule_save)) {
             tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.kyutech_main_color))
             tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing=false)
-            item.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_edit)
+            item.icon = ContextCompat.getDrawable(this, R.mipmap.edit_icon)
             item.title = resources.getString(R.string.schedule_edit)
             return false
         } else {
             tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.newsTopic5))
-            item.icon = ContextCompat.getDrawable(this, android.R.drawable.ic_menu_save)
+            item.icon = ContextCompat.getDrawable(this, R.mipmap.check_icon)
             item.title = resources.getString(R.string.schedule_save)
             return true
         }
     }
 
     override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+
+    override fun setToolBarTitle(title: String) {
+        toolbar_title.text = title
+    }
 
     // タブのアイコンを初期化
     private fun initializeTabIcons() {

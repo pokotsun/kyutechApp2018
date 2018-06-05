@@ -12,9 +12,18 @@
         <!--ステータスバーの色変更(通知が来るところ)-->
         <item name="android:statusBarColor">@color/kyutech_main_color_dark</item>
 
+        <!--Toolbarの文字の色を変える-->
+        <item name="actionOverflowButtonStyle">@style/MyOverflowButtonStyle</item>
+
         <!--Activity起動時の一瞬のブランクをなくす-->
         <item name="android:windowDisablePreview">true</item>
     </style>
+
+    <!--ツールバーの...アイコンの色を変える-->
+    <style name="MyOverflowButtonStyle" parent="Widget.AppCompat.ActionButton.Overflow">
+        <item name="android:tint">@android:color/white</item>
+    </style>
+
 
     <!--ツールバーの色-->
     <style name="ToolbarColoredBackArrow" parent="AppTheme">

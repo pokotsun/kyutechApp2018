@@ -15,7 +15,7 @@
         android:background="@color/kyutech_main_color">
         <TextView
             android:id="@+id/toolbar_title"
-            android:text="Tool Bar Title"
+            android:text=""
             android:textSize="20dp"
             android:textColor="@android:color/white"
             android:fontFamily="@font/san_francisco_display_regular"
