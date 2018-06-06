@@ -27,6 +27,15 @@ data class Syllabus(
         val professorEmail: String
 
 ) {
+
+    fun convertTargetParticipants2showingText(): String {
+        var result = ""
+        targetParticipantsInfos.forEach { targetParticipantsInfo ->
+            result += targetParticipantsInfo.toShowingText() + "\n\n"
+        }
+        return result
+    }
+
     companion object {
         fun createDummy(): Syllabus = Syllabus(
                 id = 1111, title = "ダミータイトル", subjectCode = 3, teacherName = "山田太郎",
@@ -45,6 +54,9 @@ data class TargetParticipantsInfo(
         val academicCreditKind: String,
         val academicCreditNum: Double
 ) {
+    fun toShowingText(): String =
+            "${targetParticipants} $academicCreditKind $academicCreditNum"
+
     companion object {
         fun createDummy(): TargetParticipantsInfo = TargetParticipantsInfo(
                 targetParticipants = "情報工学部　生命情報工学科　生命情報工学科",

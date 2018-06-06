@@ -5,15 +5,15 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context=".view.activity.UserScheduleDetailActivity">
+    tools:context=".view.activity.UserScheduleDetailActivity"
+    android:theme="@style/AppTheme">
+
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/app_bar"
         android:layout_width="match_parent"
         android:layout_height="@dimen/app_bar_height"
-        android:fitsSystemWindows="true"
-        android:background="@color/kyutech_main_color"
-        android:theme="@style/AppTheme.AppBarOverlay">
+        android:fitsSystemWindows="true">
 
 
         <android.support.design.widget.CollapsingToolbarLayout
@@ -21,31 +21,44 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:fitsSystemWindows="true"
-            app:contentScrim="?attr/colorPrimary"
-            app:layout_scrollFlags="scroll|exitUntilCollapsed"
-            app:toolbarId="@+id/toolbar">
+            app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <LinearLayout
+            <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_height="wrap_content"
+                android:padding="16dp">
                 <TextView
-                    android:text="こりゃ大変だ"
-                    android:layout_width="match_parent"
+                    android:id="@+id/late_title"
+                    android:text="遅刻: 2"
+                    android:layout_width="100dp"
                     android:layout_height="wrap_content" />
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/absent_title"
+                    android:text="欠席: 3"
+                    android:layout_width="100dp"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/late_title"/>
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/memo_input_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20dp"
+                    android:layout_below="@+id/late_title"
+                    app:hintTextAppearance="@style/EditTextHint">
+                    <EditText
+                        android:id="@+id/memo_edit_field"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:hint="メモ"
+                        android:textColorHint="@android:color/black"
+                        android:inputType="textMultiLine"
+                        android:theme="@style/EditTextColorControl"/>
+                </android.support.design.widget.TextInputLayout>
+            </RelativeLayout>
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
-                android:theme="@style/AppTheme"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
-
-    <include layout="@layout/content_user_schedule_detail" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/fab"
@@ -54,6 +67,19 @@
         android:layout_margin="@dimen/fab_margin"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end"
-        app:srcCompat="@android:drawable/ic_menu_save"/>
+        app:srcCompat="@mipmap/save_icon"/>
 
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior">
+        <LinearLayout
+            android:id="@+id/content_wrapper"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="30dp">
+
+        </LinearLayout>
+    </android.support.v4.widget.NestedScrollView>
 </android.support.design.widget.CoordinatorLayout>

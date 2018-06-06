@@ -3,4 +3,6 @@
     <declare-styleable name="RoundClipFrameLayout">
         <attr name="cornerRadius" format="dimension"/>
     </declare-styleable>
+    <!--16dpとかdp単位の時はdimen-->
+    <dimen name="contentTextViewMargin">16dp</dimen>
 </resources>
