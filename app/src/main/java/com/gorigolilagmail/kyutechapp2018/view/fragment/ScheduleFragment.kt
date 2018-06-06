@@ -13,6 +13,7 @@ import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.create
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
 import com.gorigolilagmail.kyutechapp2018.view.customView.UserScheduleGridItem
+import com.trello.rxlifecycle2.RxLifecycle
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -22,12 +23,15 @@ import org.jetbrains.anko.forEachChild
 
 class ScheduleFragment : Fragment() {
 
+
     enum class Quarter(val id: Int) {
         FIRST_QUARTER(0),
         SECOND_QUARTER(1),
         THIRD_QUARTER(2),
         FOURTH_QUARTER(3)
     }
+
+    var isEditing: Boolean = false
 
     var currentQuarter: Quarter = Quarter.FIRST_QUARTER
 
@@ -62,19 +66,35 @@ class ScheduleFragment : Fragment() {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object: Observer<ApiRequest<UserSchedule>> {
                     override fun onComplete() {
-                        Log.d("onComplete", "UserScheduleComplete")
-                        schedule_progress.visibility = View.GONE
+                        try {
+                            Log.d("onComplete", "UserScheduleComplete")
+                            schedule_progress.visibility = View.GONE
+                        } catch(e: IllegalStateException) {
+                            Log.w("イリーガル", "${e.message}")
+                        }
                     }
 
                     override fun onError(e: Throwable) {
                         Log.d("onError", "userSchedule OnError ${e.message}")
                         schedule_progress.visibility = View.GONE
+
                     }
 
                     override fun onNext(apiRequest: ApiRequest<UserSchedule>) {
                         val userSchedules: List<UserSchedule> = apiRequest.results
-                        userSchedules.forEach { userSchedule ->
-                            setScheduleItem(userSchedule, isEditing=isEditing)
+                        try {
+                            userSchedules.forEach { userSchedule ->
+                                setScheduleItem(userSchedule, isEditing = isEditing)
+                            }
+                        } catch(e: Exception) {
+                            when(e) {
+                                is NullPointerException, is java.lang.NullPointerException -> {
+                                    Log.w("ぬるぽ", "${e.message}")
+                                }
+                                is IllegalStateException -> {
+                                    Log.w("イリーガル", "${e.message}")
+                                }
+                            }
                         }
                     }
 
@@ -107,10 +127,7 @@ class ScheduleFragment : Fragment() {
         if(isBlank) {// BlankフラグがTrueだった場合
             item.setBlankSchedule()
         }
-
         schedule_container.addView(item)
-
-
     }
 
 

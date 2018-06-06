@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
@@ -50,16 +52,21 @@ class MainActivity : AppCompatActivity(), MainMvpView {
 //                        currentTab.text = "SELECTED"
                     tabItems.selectedTab = currentTab
                     if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
+                        val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id
+                                ?: throw NullPointerException()
+                        val quarter = tabItems.getScheduleFragment().currentQuarter.id
+
                         tool_bar.menu.clear()
                         tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
+
+                        if(tabItems.getScheduleFragment().isEditing) { // 編集状態で別のタブに移動していたら編集状態に戻す
+                            scheduleToEditMode(loginUserId, quarter, tool_bar.menu.findItem(R.id.schedule_edit))
+                        }
+
                         tool_bar.setOnMenuItemClickListener { item ->
-                            val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id
-                                    ?: throw NullPointerException()
                             when (item.itemId) {
                                 R.id.schedule_edit -> { // 編集ボタンが押された時
-                                    val quarter = tabItems.getScheduleFragment().currentQuarter.id
-                                    val isEditing: Boolean = toolBarEditBtnToggle(loginUserId, quarter) // スケジュール画面の状態を変更
-                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing = isEditing)
+                                    toolBarEditBtnToggle(loginUserId, quarter)
                                 }
                                 else -> { // クオーターの変更の場合
                                     val quarter: Int = when (item.itemId) {
@@ -89,19 +96,29 @@ class MainActivity : AppCompatActivity(), MainMvpView {
 
     // 編集ボタンが今どの状態にあるかで表示する内容を変更し、編集中か閲覧中かの状態をBoolで返す
     private fun toolBarEditBtnToggle(loginUserId: Int, quarter: Int): Boolean {
-        val item = tool_bar.menu.findItem(R.id.schedule_edit)
-        if(item.title == resources.getString(R.string.schedule_save)) {
-            tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.kyutech_main_color))
-            tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing=false)
-            item.icon = ContextCompat.getDrawable(this, R.mipmap.edit_icon)
-            item.title = resources.getString(R.string.schedule_edit)
-            return false
-        } else {
-            tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.newsTopic5))
-            item.icon = ContextCompat.getDrawable(this, R.mipmap.check_icon)
-            item.title = resources.getString(R.string.schedule_save)
-            return true
+        val item: MenuItem = tool_bar.menu.findItem(R.id.schedule_edit)
+        val isEditing: Boolean = tabItems.getScheduleFragment().isEditing
+        if(isEditing) {
+            scheduleToBrowseMode(loginUserId, quarter, item)
+        } else { // 編集状態にする
+            scheduleToEditMode(loginUserId, quarter, item)
         }
+        tabItems.getScheduleFragment().isEditing = isEditing.not()
+        return tabItems.getScheduleFragment().isEditing
+    }
+
+    private fun scheduleToEditMode(loginUserId: Int, quarter: Int, item: MenuItem) {
+        changeStateOfSchedule(loginUserId, quarter, item, R.color.newsTopic5, R.mipmap.check_icon, true)
+    }
+
+    private inline fun scheduleToBrowseMode(loginUserId: Int, quarter: Int, item: MenuItem) {
+        changeStateOfSchedule(loginUserId, quarter, item, R.color.kyutech_main_color, R.mipmap.save_icon, false)
+    }
+
+    private inline fun changeStateOfSchedule(loginUserId: Int, quarter: Int, item: MenuItem, backgroundColorId: Int, iconId: Int, isEditing: Boolean) {
+        tool_bar.setBackgroundColor(ContextCompat.getColor(this, backgroundColorId))
+        item.icon = ContextCompat.getDrawable(this, iconId)
+        tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing)
     }
 
     override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()

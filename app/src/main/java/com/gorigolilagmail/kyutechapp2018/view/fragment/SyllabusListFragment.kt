@@ -17,7 +17,6 @@ class SyllabusListFragment : DialogFragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -34,20 +33,13 @@ class SyllabusListFragment : DialogFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val adapter = SyllabusListAdapter(context)
-        val syllabuses: List<Syllabus> = listOf(
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy(),
-                Syllabus.createDummy()
-        )
+        // ダミー
+        val mutableSyllabuses = mutableListOf<Syllabus>()
+        for (i in 0 until 30) {
+            mutableSyllabuses.add(Syllabus.createDummy())
+        }
+        val syllabuses: List<Syllabus> = mutableSyllabuses
+
         adapter.items = syllabuses
         syllabus_list.adapter = adapter
     }
