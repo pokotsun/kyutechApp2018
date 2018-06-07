@@ -3,6 +3,7 @@ package com.gorigolilagmail.kyutechapp2018.client
 import com.google.gson.JsonObject
 import com.gorigolilagmail.kyutechapp2018.model.*
 import io.reactivex.Observable
+import okhttp3.ResponseBody
 import retrofit2.http.*
 
 interface ApiClient {
@@ -23,15 +24,28 @@ interface ApiClient {
     @POST("/api/users/")
     fun createUser(@Body body: JsonObject): Observable<User>
 
+    // Syllabus
+    @GET("/api/syllabuses/day-{day}/period-{period}")
+    fun listSyllabusByDayAndPeriod(
+            @Path("day") day: Int,
+            @Path("period") period: Int
+    ): Observable<ApiRequest<Syllabus>>
+
+
     @GET("/api/user-schedules/user-{userId}/quarter-{quarter}")
     fun listUserScheduleByQuarter(
             @Path("userId") userId: Int,
             @Path("quarter") quarter: Int
     ): Observable<ApiRequest<UserSchedule>>
 
+    @Headers("Accept: application/json",
+            "Content-Type: application/json")
     @POST("/api/user-schedules/")
     fun createUserSchedule(@Body body: JsonObject): Observable<UserSchedule>
 
-
+    @DELETE("/api/user-schedules/{userScheduleId}/")
+    fun deleteUserSchedule(
+            @Path("userScheduleId") userScheduleId: Int
+    ): Observable<ResponseBody>
 
 }

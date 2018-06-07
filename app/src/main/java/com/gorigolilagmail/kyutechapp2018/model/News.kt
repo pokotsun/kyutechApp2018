@@ -107,11 +107,9 @@ data class NewsInfo(
         val content: String
 ): Parcelable {
     override fun describeContents(): Int = 0
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.run {
-            writeString(title)
-            writeString(content)
-        }
+    override fun writeToParcel(dest: Parcel, flags: Int) = dest.run {
+        writeString(title)
+        writeString(content)
     }
 
     companion object {
@@ -132,12 +130,10 @@ data class AttachmentInfo(
         val url: String
 ): Parcelable {
     override fun describeContents(): Int = 0
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.run {
-            writeString(title)
-            writeString(linkName)
-            writeString(url)
-        }
+    override fun writeToParcel(dest: Parcel, flags: Int) = dest.run {
+        writeString(title)
+        writeString(linkName)
+        writeString(url)
     }
 
     companion object {

@@ -3,6 +3,7 @@ package com.gorigolilagmail.kyutechapp2018.view.customView
 import android.content.Context
 import android.graphics.Color
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
@@ -23,14 +24,14 @@ class ItemListSyllabusUi(context: Context): LinearLayout(context), AnkoComponent
             ui.run {
                 relativeLayout {
                     lparams(width= matchParent, height= wrapContent)
-                    padding = dip(8)
+                    padding = dip(4)
                     gravity = Gravity.CENTER_VERTICAL
 
                     circularTextView {
                         id = circularSyllabusKindId
                         text = "必"
                         textColor  = Color.WHITE
-                        textSize = 13f
+                        textSize = 10f
                         gravity = Gravity.CENTER
 
                     }.lparams(width = dip(30), height = dip(30)) {
@@ -42,8 +43,9 @@ class ItemListSyllabusUi(context: Context): LinearLayout(context), AnkoComponent
                         textSize = 14f
                         textColor = Color.BLACK
                         singleLine = true
+                        ellipsize = TextUtils.TruncateAt.END
                     }.lparams(width = dip(150), height = wrapContent) {
-                        leftMargin = dip(20)
+                        leftMargin = dip(5)
                         rightOf(circularSyllabusKindId)
                         centerVertically()
                     }
@@ -54,6 +56,7 @@ class ItemListSyllabusUi(context: Context): LinearLayout(context), AnkoComponent
                         textSize = 7f
                         textAlignment = View.TEXT_ALIGNMENT_TEXT_END
                         singleLine = true
+                        ellipsize = TextUtils.TruncateAt.END
                     }.lparams(width = dip(50), height = wrapContent) {
                         rightOf(titleId)
                         centerVertically()

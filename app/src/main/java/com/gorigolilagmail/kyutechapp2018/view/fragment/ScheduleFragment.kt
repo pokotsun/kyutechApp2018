@@ -22,7 +22,6 @@ import kotlinx.android.synthetic.main.fragment_schedule.*
 
 class ScheduleFragment : Fragment() {
 
-
     enum class Quarter(val id: Int) {
         FIRST_QUARTER(0),
         SECOND_QUARTER(1),
@@ -70,7 +69,7 @@ class ScheduleFragment : Fragment() {
                             Log.d("onComplete", "UserScheduleComplete")
                             schedule_progress.visibility = View.GONE
                         } catch(e: IllegalStateException) {
-                            Log.w("イリーガル", "${e.message}")
+                            Log.w("IllegalStateException!!", "${e.message}")
                         }
                     }
 
@@ -117,7 +116,9 @@ class ScheduleFragment : Fragment() {
             item.setOnClickListener {
                 Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
                         "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
-                showSyllabusListDialog()
+                userSchedule.run {
+                    showSyllabusListDialog(period, day, quarter)
+                }
             }
         } else { // 編集中じゃない -> 閲覧中の時
             if(isBlank.not()) {
@@ -133,8 +134,8 @@ class ScheduleFragment : Fragment() {
     }
 
 
-    private fun showSyllabusListDialog() {
-        val dialog = SyllabusListFragment()
+    private fun showSyllabusListDialog(period: Int, day: Int, quarter: Int) {
+        val dialog = SyllabusListDialogFragment.newInstance(period, day, quarter)
         dialog.show(fragmentManager, "fragment_dialog")
     }
 
