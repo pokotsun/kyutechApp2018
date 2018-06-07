@@ -12,6 +12,7 @@ import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
+import com.gorigolilagmail.kyutechapp2018.view.activity.UserScheduleDetailActivity
 import com.gorigolilagmail.kyutechapp2018.view.customView.UserScheduleGridItem
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -117,9 +118,9 @@ class ScheduleFragment : Fragment() {
                         "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
                 showSyllabusListDialog()
             }
-        } else {
+        } else { // 編集中じゃない -> 閲覧中の時
             item.setOnClickListener {
-
+                UserScheduleDetailActivity.intent(context, userSchedule).run { startActivity(this) }
             }
         }
         if(isBlank) {// BlankフラグがTrueだった場合

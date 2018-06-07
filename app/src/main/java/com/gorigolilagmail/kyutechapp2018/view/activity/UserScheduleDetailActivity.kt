@@ -1,11 +1,15 @@
 package com.gorigolilagmail.kyutechapp2018.view.activity
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
 import android.widget.TextView
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.model.Syllabus
+import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
 import kotlinx.android.synthetic.main.activity_user_schedule_detail.*
 
 class UserScheduleDetailActivity : AppCompatActivity() {
@@ -15,15 +19,14 @@ class UserScheduleDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_schedule_detail)
 //        setSupportActionBar(toolbar)
 
+        val userSchedule: UserSchedule = intent.getParcelableExtra(UserScheduleDetailActivity.USER_SCHEDULE_EXTRA)
+
         fab.setOnClickListener { view ->
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }
 
-        val syllabus = Syllabus.createDummy()
-        setSyllabusInfos2View(syllabus)
-
-
+        setSyllabusInfos2View(userSchedule.syllabus)
     }
 
     private fun setSyllabusInfos2View(syllabus: Syllabus) {
@@ -69,5 +72,12 @@ class UserScheduleDetailActivity : AppCompatActivity() {
         }
         contentView.findViewById<TextView>(R.id.content).text = content
         content_wrapper.addView(contentView)
+    }
+
+    companion object {
+        private const val USER_SCHEDULE_EXTRA: String = "userSchedule"
+        fun intent(context: Context, userSchedule: UserSchedule): Intent =
+                Intent(context, UserScheduleDetailActivity::class.java)
+                        .putExtra(USER_SCHEDULE_EXTRA, userSchedule)
     }
 }
