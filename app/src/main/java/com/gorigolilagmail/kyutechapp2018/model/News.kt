@@ -89,12 +89,10 @@ data class News(
         @JvmField
         val CREATOR: Parcelable.Creator<News> = object: Parcelable.Creator<News> {
             override fun createFromParcel(source: Parcel): News = source.run {
-                val pk: Int = readInt()
-                val newsHeadingCode: Int = readInt()
-                val sourceUrl: String = readString()
-                val newsInfos = mutableListOf<NewsInfo>().apply { readTypedList(this, NewsInfo.CREATOR) }
-                val attachmentInfos = mutableListOf<AttachmentInfo>().apply { readTypedList(this, AttachmentInfo.CREATOR) }
-                News(pk, newsHeadingCode, sourceUrl, newsInfos, attachmentInfos)
+                News(readInt(), readInt(), readString(),
+                        mutableListOf<NewsInfo>().apply { readTypedList(this, NewsInfo.CREATOR)},
+                        mutableListOf<AttachmentInfo>().apply {readTypedList(this, AttachmentInfo.CREATOR)}
+                )
             }
 
             override fun newArray(size: Int): Array<News?> = arrayOfNulls(size)
