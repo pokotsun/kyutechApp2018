@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity(), MainMvpView {
     }
 
     private inline fun scheduleToBrowseMode(loginUserId: Int, quarter: Int, item: MenuItem) {
-        changeStateOfSchedule(loginUserId, quarter, item, R.color.kyutech_main_color, R.mipmap.save_icon, false)
+        changeStateOfSchedule(loginUserId, quarter, item, R.color.kyutech_main_color, R.mipmap.edit_icon, false)
     }
 
     private inline fun changeStateOfSchedule(loginUserId: Int, quarter: Int, item: MenuItem, backgroundColorId: Int, iconId: Int, isEditing: Boolean) {

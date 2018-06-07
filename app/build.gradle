@@ -71,6 +71,6 @@ dependencies {
 //    implementation 'com.jakewharton.rxbinding2:rxbinding-support-v4:2.1.1'
 
     // Rx LifeCycle
-    implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:2.2.1'
+//    implementation 'com.trello.rxlifecycle2:rxlifecycle-android-lifecycle-kotlin:2.2.1'
 
 }

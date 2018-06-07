@@ -29,7 +29,6 @@
 
         <!--最初に起動するアクティビティ-->
         <activity android:name=".view.activity.LoginActivity">
-
         </activity>
 
         <activity

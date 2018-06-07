@@ -13,13 +13,11 @@ import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.create
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
 import com.gorigolilagmail.kyutechapp2018.view.customView.UserScheduleGridItem
-import com.trello.rxlifecycle2.RxLifecycle
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_schedule.*
-import org.jetbrains.anko.forEachChild
 
 class ScheduleFragment : Fragment() {
 
