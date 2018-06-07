@@ -14,15 +14,14 @@ data class News(
 ): Parcelable {
     override fun describeContents(): Int = 0
 
-    override fun writeToParcel(dest: Parcel, flags: Int) {
-        dest.run {
-            writeInt(id)
-            writeInt(newsHeadingCode)
-            writeString(sourceUrl)
-            writeTypedList(infos)
-            writeTypedList(attachmentInfos)
-        }
+    override fun writeToParcel(dest: Parcel, flags: Int)  = dest.run {
+        writeInt(id)
+        writeInt(newsHeadingCode)
+        writeString(sourceUrl)
+        writeTypedList(infos)
+        writeTypedList(attachmentInfos)
     }
+
 
     // 一覧で表示する情報を渡す (インターンについて   2018/12/11) など
     fun getTitleInfos(): HashMap<String, String> {

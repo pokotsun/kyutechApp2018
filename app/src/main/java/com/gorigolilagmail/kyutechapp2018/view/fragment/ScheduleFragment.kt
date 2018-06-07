@@ -51,6 +51,7 @@ class ScheduleFragment : Fragment() {
 
         currentQuarter = Quarter.values().filter{it.id == quarter}.first()
         Log.d("isEditing", "$isEditing")
+        (schedule_container as ViewGroup).removeAllViews() // すべての子Viewをまず消す
         // まず空のスケジュールを入れていく
         for(i in 0 until 5) {
             for( j in 0 until 5) {
@@ -119,8 +120,10 @@ class ScheduleFragment : Fragment() {
                 showSyllabusListDialog()
             }
         } else { // 編集中じゃない -> 閲覧中の時
-            item.setOnClickListener {
-                UserScheduleDetailActivity.intent(context, userSchedule).run { startActivity(this) }
+            if(isBlank.not()) {
+                item.setOnClickListener {
+                    UserScheduleDetailActivity.intent(context, userSchedule).run { startActivity(this) }
+                }
             }
         }
         if(isBlank) {// BlankフラグがTrueだった場合
