@@ -1,6 +1,7 @@
 package com.gorigolilagmail.kyutechapp2018.view.customView
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.view.View
@@ -18,6 +19,7 @@ class UserScheduleGridItem @JvmOverloads constructor(context: Context,
                                                      attrs: AttributeSet? = null,
                                                      defStyleAttr: Int = 0,
                                                      item: UserSchedule,
+                                                     userDepartment: String,
                                                      isEditing: Boolean=false)
     : LinearLayout(context, attrs, defStyleAttr) {
 
@@ -27,9 +29,7 @@ class UserScheduleGridItem @JvmOverloads constructor(context: Context,
         view = LayoutInflater.from(context).inflate(R.layout.class_grid_item, this)
         view?.find<TextView>(R.id.syllabus_name)?.text = item.syllabus.title
         view?.find<TextView>(R.id.class_room_name)?.text = item.syllabus.targetPlace
-        if(isEditing) {
-
-        }
+        view?.find<LinearLayout>(R.id.selected_period_container)?.background = ContextCompat.getDrawable(context, item.getScheduleKindColorId(userDepartment))
     }
 
     fun setBlankSchedule() {

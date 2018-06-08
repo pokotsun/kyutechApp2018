@@ -9,7 +9,6 @@ import android.widget.GridLayout
 import android.widget.Toast
 
 import com.gorigolilagmail.kyutechapp2018.R
-import com.gorigolilagmail.kyutechapp2018.R.id.schedule_container
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
@@ -36,7 +35,7 @@ class ScheduleFragment : Fragment() {
     var currentQuarter: Quarter = Quarter.FIRST_QUARTER
 
     val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
-
+    val userDepartment: String = LoginClient.getCurrentUserInfo()?.getDepartmentName()?: throw NullPointerException()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -120,7 +119,7 @@ class ScheduleFragment : Fragment() {
     }
 
     private fun setScheduleItem(userSchedule: UserSchedule, isBlank: Boolean =false, isEditing: Boolean=false) {
-        val item = UserScheduleGridItem(context, item = userSchedule)
+        val item = UserScheduleGridItem(context, item = userSchedule, userDepartment=userDepartment)
         item.layoutParams = GridLayout.LayoutParams().apply {
             columnSpec = GridLayout.spec(userSchedule.day, GridLayout.FILL, 1f)
             rowSpec = GridLayout.spec(userSchedule.period, GridLayout.FILL, 1f)

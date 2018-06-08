@@ -3,6 +3,7 @@ package com.gorigolilagmail.kyutechapp2018.model
 import android.os.Parcel
 import android.os.Parcelable
 import com.google.gson.JsonObject
+import com.gorigolilagmail.kyutechapp2018.R
 
 data class UserSchedule(
         val id: Int,
@@ -28,6 +29,27 @@ data class UserSchedule(
         writeInt(absentNum)
     }
 
+    fun getScheduleKindColorId(department: String): Int {
+        val targetParticipantInfos = syllabus.targetParticipantsInfos.filter { targetParticipantInfo ->
+            targetParticipantInfo.targetParticipants.contains(department)
+        }
+        if(targetParticipantInfos.isNotEmpty()) {
+            targetParticipantInfos.first().let { targetParticipantInfo ->
+                targetParticipantInfo.academicCreditKind.run {
+                    when {
+                        contains("必") -> return R.color.newsTopic1
+                        contains("選必") -> return R.color.newsTopic4
+                        contains("選") -> return R.color.newsTopic3
+                        else -> return android.R.color.darker_gray
+                    }
+                }
+            }
+        }
+        else {
+            return android.R.color.darker_gray
+        }
+    }
+
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<UserSchedule> = object: Parcelable.Creator<UserSchedule> {
@@ -37,7 +59,7 @@ data class UserSchedule(
                         readString(), readInt(), readInt()
                 )
             }
-            
+
             override fun newArray(size: Int): Array<UserSchedule?> = arrayOfNulls(size)
         }
 
@@ -48,8 +70,8 @@ data class UserSchedule(
         )
 
         fun createJson(userId: Int, syllabusId: Int, day: Int,
-                                   period: Int, quarter: Int, memo: String,
-                                   lateNum: Int, absentNum: Int): JsonObject =
+                       period: Int, quarter: Int, memo: String,
+                       lateNum: Int, absentNum: Int): JsonObject =
                 JsonObject().apply {
                     addProperty("user_id", userId)
                     addProperty("syllabus_id", syllabusId)
