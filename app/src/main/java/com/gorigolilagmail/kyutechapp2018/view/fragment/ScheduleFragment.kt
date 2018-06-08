@@ -1,5 +1,6 @@
 package com.gorigolilagmail.kyutechapp2018.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.util.Log
@@ -8,6 +9,7 @@ import android.widget.GridLayout
 import android.widget.Toast
 
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.R.id.schedule_container
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
@@ -33,6 +35,9 @@ class ScheduleFragment : Fragment() {
 
     var currentQuarter: Quarter = Quarter.FIRST_QUARTER
 
+    val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
+
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -42,7 +47,6 @@ class ScheduleFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         // クラスを全25コマ入れていく
-        val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
         setScheduleItems( userId, currentQuarter.id)
     }
 
@@ -105,6 +109,16 @@ class ScheduleFragment : Fragment() {
 
     }
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent) {
+        if(requestCode == RESULT_DIALOG_CODE) {
+            val resultCode = data.getBooleanExtra("isSubmitted", false)
+            if(resultCode) {
+                Toast.makeText(context, "時間割の登録ができました!!", Toast.LENGTH_SHORT).show()
+                setScheduleItems(userId, currentQuarter.id, isEditing=true)
+            }
+        }
+    }
+
     private fun setScheduleItem(userSchedule: UserSchedule, isBlank: Boolean =false, isEditing: Boolean=false) {
         val item = UserScheduleGridItem(context, item = userSchedule)
         item.layoutParams = GridLayout.LayoutParams().apply {
@@ -136,10 +150,13 @@ class ScheduleFragment : Fragment() {
 
     private fun showSyllabusListDialog(period: Int, day: Int, quarter: Int) {
         val dialog = SyllabusListDialogFragment.newInstance(period, day, quarter)
+        dialog.setTargetFragment(this, RESULT_DIALOG_CODE)
         dialog.show(fragmentManager, "fragment_dialog")
     }
 
     companion object {
+        private const val RESULT_DIALOG_CODE: Int = 100
+
         fun newInstance(page: Int): ScheduleFragment {
             val args: Bundle = Bundle().apply {
                 putInt("page", page)
@@ -149,6 +166,7 @@ class ScheduleFragment : Fragment() {
             }
         }
     }
+
 
 
 

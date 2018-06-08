@@ -31,7 +31,7 @@ data class User(
             override fun newArray(size: Int): Array<User?> = arrayOfNulls(size)
         }
 
-        fun createUserJson(schoolYear: Int, departmentId: Int): JsonObject =
+        fun createJson(schoolYear: Int, departmentId: Int): JsonObject =
                 JsonObject().apply {
                     addProperty("school_year", schoolYear)
                     addProperty("department", departmentId)

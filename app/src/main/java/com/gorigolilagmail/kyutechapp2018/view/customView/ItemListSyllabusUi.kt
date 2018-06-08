@@ -71,8 +71,6 @@ class ItemListSyllabusUi(context: Context): LinearLayout(context), AnkoComponent
         val newsHeading = find<TextView>(titleId)
         val updatedDate = find<TextView>(professorNameId)
 
-//        Log.d("アイテム", item.toString())
-
         circularNewsHeading.text = "必"
         circularNewsHeading.setCircleBackgroundColor(ContextCompat.getColor(context, R.color.newsTopic1))
         circularNewsHeading.setStrokeWidth(0f)

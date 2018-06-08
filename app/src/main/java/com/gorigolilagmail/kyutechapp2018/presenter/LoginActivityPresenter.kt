@@ -12,7 +12,7 @@ import io.reactivex.schedulers.Schedulers
 class LoginActivityPresenter(private val view: LoginMvpView): Presenter {
 
     fun createUser(schoolYear: Int, department: Int) {
-        createService().createUser(User.createUserJson(schoolYear, department))
+        createService().createUser(User.createJson(schoolYear, department))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(

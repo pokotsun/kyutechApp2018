@@ -2,6 +2,7 @@ package com.gorigolilagmail.kyutechapp2018.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.google.gson.JsonObject
 
 data class UserSchedule(
         val id: Int,
@@ -45,6 +46,20 @@ data class UserSchedule(
                 day = day, period = period, quarter = quarter,
                 memo = "メモ", lateNum = 13, absentNum = 12
         )
+
+        fun createJson(userId: Int, syllabusId: Int, day: Int,
+                                   period: Int, quarter: Int, memo: String,
+                                   lateNum: Int, absentNum: Int): JsonObject =
+                JsonObject().apply {
+                    addProperty("user_id", userId)
+                    addProperty("syllabus_id", syllabusId)
+                    addProperty("day", day)
+                    addProperty("period", period)
+                    addProperty("quarter", quarter)
+                    addProperty("memo", memo)
+                    addProperty("late_num", lateNum)
+                    addProperty("absent_num", absentNum)
+                }
 
         val FIRST_PERIOD = 0
         val SECOND_PERIOD = 1
