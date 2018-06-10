@@ -10,7 +10,6 @@ import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.presenter.LoginActivityPresenter
-import com.gorigolilagmail.kyutechapp2018.view.MvpView
 
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -19,7 +18,7 @@ interface LoginMvpView: MvpView {
     fun isSignedUp(): Boolean
 }
 
-class LoginActivity : AppCompatActivity(), LoginMvpView {
+class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
     private val presenter = LoginActivityPresenter(this)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,9 +68,6 @@ class LoginActivity : AppCompatActivity(), LoginMvpView {
         department_spinner.isEnabled = true
         sign_up_progress.visibility = View.GONE
     }
-
-
-    override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
     override fun goToMainActivity(msg: String, msgShown: Boolean) {
         Intent(this, MainActivity::class.java).run {

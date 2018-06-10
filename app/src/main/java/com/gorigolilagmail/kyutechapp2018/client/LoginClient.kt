@@ -41,7 +41,7 @@ object LoginClient {
     // 今現在SignUpしているユーザーを取ってくる
     fun getCurrentUserInfo(): User? = realm?.where(RealmUser::class.java)?.findFirst()?.let { realmUser ->
         User(realmUser.id, realmUser.schoolYear, realmUser.department)
-    }?: null
+    }
 
     fun printAllUser() {
         val loginUsers = realm?.where(RealmUser::class.java)?.findAll()

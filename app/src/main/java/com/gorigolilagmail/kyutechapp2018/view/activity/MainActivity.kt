@@ -4,8 +4,6 @@ import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
-import android.util.Log
-import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
@@ -13,7 +11,6 @@ import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.model.ITabItems
 import com.gorigolilagmail.kyutechapp2018.model.TabItems
 import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
-import com.gorigolilagmail.kyutechapp2018.view.MvpView
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
 import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -23,7 +20,7 @@ interface MainMvpView: MvpView {
     fun setToolBarTitle(title: String)
 }
 
-class MainActivity : AppCompatActivity(), MainMvpView {
+class MainActivity : MvpAppCompatActivity(), MainMvpView {
 
     private val presenter: MainActivityPresenter = MainActivityPresenter()
 
