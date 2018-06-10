@@ -1,4 +1,4 @@
-package com.gorigolilagmail.kyutechapp2018.model
+package com.gorigolilagmail.kyutechapp2018.client
 
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment

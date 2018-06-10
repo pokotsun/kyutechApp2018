@@ -1,6 +1,5 @@
 package com.gorigolilagmail.kyutechapp2018.view.activity
 
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
@@ -8,8 +7,8 @@ import android.view.MenuItem
 import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
-import com.gorigolilagmail.kyutechapp2018.model.ITabItems
-import com.gorigolilagmail.kyutechapp2018.model.TabItems
+import com.gorigolilagmail.kyutechapp2018.client.ITabItems
+import com.gorigolilagmail.kyutechapp2018.client.TabItems
 import com.gorigolilagmail.kyutechapp2018.presenter.MainActivityPresenter
 import com.gorigolilagmail.kyutechapp2018.view.adapter.TabAdapter
 import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
@@ -51,19 +50,17 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                     if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
                         val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id
                                 ?: throw NullPointerException()
-                        val quarter = tabItems.getScheduleFragment().currentQuarter.id
-
                         tool_bar.menu.clear()
                         tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
 
                         if(tabItems.getScheduleFragment().isEditing) { // 編集状態で別のタブに移動していたら編集状態に戻す
-                            scheduleToEditMode(loginUserId, quarter, tool_bar.menu.findItem(R.id.schedule_edit))
+                            scheduleToEditMode(loginUserId, tabItems.getScheduleFragment().currentQuarter.id, tool_bar.menu.findItem(R.id.schedule_edit))
                         }
 
                         tool_bar.setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.schedule_edit -> { // 編集ボタンが押された時
-                                    toolBarEditBtnToggle(loginUserId, quarter)
+                                    toolBarEditBtnToggle(loginUserId, tabItems.getScheduleFragment().currentQuarter.id)
                                 }
                                 else -> { // クオーターの変更の場合
                                     val quarter: Int = when (item.itemId) {

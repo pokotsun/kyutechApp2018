@@ -51,6 +51,7 @@ class ScheduleFragment : Fragment() {
 
     fun setScheduleItems(userId: Int, quarter: Int, isEditing: Boolean = false) {
 
+        Log.d("クオーターのエラー", "$quarter: ${Quarter.values().filter{it.id == quarter}.first()}")
         currentQuarter = Quarter.values().filter{it.id == quarter}.first()
         Log.d("isEditing", "$isEditing")
         (schedule_container as ViewGroup).removeAllViews() // すべての子Viewをまず消す
@@ -62,8 +63,8 @@ class ScheduleFragment : Fragment() {
         }
 
         // スケジュール情報を取得してデータをsetしていく
-        Log.d("QuarterItem", "userId:$userId, 現在第${quarter+1} クオーターです")
-        createService().listUserScheduleByQuarter(userId, quarter)
+        Log.d("QuarterItem", "userId:$userId, 現在第${currentQuarter.id + 1} クオーターです")
+        createService().listUserScheduleByQuarter(userId, currentQuarter.id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object: Observer<ApiRequest<UserSchedule>> {
