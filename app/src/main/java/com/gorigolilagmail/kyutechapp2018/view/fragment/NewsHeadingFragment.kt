@@ -25,7 +25,7 @@ import org.jetbrains.anko.*
 /**
  * Created by pokotsun on 18/03/10.
  */
-class NewsHeadingFragment: Fragment() {
+class NewsHeadingFragment: MvpAppCompatFragment() {
 
     private val ui = NewsFragmentUi()
 

@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 interface MainMvpView: MvpView {
     fun setToolBarTitle(title: String)
+    fun setToolBarBackground(colorId: Int)
 }
 
 class MainActivity : MvpAppCompatActivity(), MainMvpView {
@@ -30,7 +31,6 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
         setContentView(R.layout.activity_main)
 
         val adapter = TabAdapter(supportFragmentManager, tabItems.fragments)
-
         view_pager.adapter = adapter
         tab_layout.setupWithViewPager(view_pager)
 
@@ -110,16 +110,15 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
     }
 
     private inline fun changeStateOfSchedule(loginUserId: Int, quarter: Int, item: MenuItem, backgroundColorId: Int, iconId: Int, isEditing: Boolean) {
-        tool_bar.setBackgroundColor(ContextCompat.getColor(this, backgroundColorId))
+        setToolBarBackground(backgroundColorId)
         item.icon = ContextCompat.getDrawable(this, iconId)
         tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing)
     }
 
-    override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
+    override fun setToolBarTitle(title: String) { toolbar_title.text = title }
 
-    override fun setToolBarTitle(title: String) {
-        toolbar_title.text = title
-    }
+    override fun setToolBarBackground(colorId: Int) { tool_bar.setBackgroundColor(ContextCompat.getColor(this, colorId)) }
+
 
     // タブのアイコンを初期化
     private fun initializeTabIcons() {
@@ -131,7 +130,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
     }
 
     companion object {
-        private val SCHEDULE_POSITION = 1
+        private const val SCHEDULE_POSITION = 1
     }
 }
 

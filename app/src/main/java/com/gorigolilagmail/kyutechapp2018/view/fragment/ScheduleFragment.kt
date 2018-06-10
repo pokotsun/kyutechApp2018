@@ -21,7 +21,7 @@ import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_schedule.*
 
-class ScheduleFragment : Fragment() {
+class ScheduleFragment : MvpAppCompatFragment() {
 
     enum class Quarter(val id: Int) {
         FIRST_QUARTER(0),
