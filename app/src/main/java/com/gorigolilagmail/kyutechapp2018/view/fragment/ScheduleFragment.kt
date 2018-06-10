@@ -112,7 +112,7 @@ class ScheduleFragment : Fragment() {
         if(requestCode == RESULT_DIALOG_CODE) {
             val resultCode = data.getBooleanExtra("isSubmitted", false)
             if(resultCode) {
-                Toast.makeText(context, "時間割の登録ができました!!", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "時間割の更新が完了しました!!", Toast.LENGTH_SHORT).show()
                 setScheduleItems(userId, currentQuarter.id, isEditing=true)
             }
         }
@@ -130,7 +130,7 @@ class ScheduleFragment : Fragment() {
                 Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
                         "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
                 userSchedule.run {
-                    showSyllabusListDialog(period, day, quarter)
+                    showSyllabusListDialog(period, day, quarter, userSchedule.id)
                 }
             }
         } else { // 編集中じゃない -> 閲覧中の時
@@ -147,8 +147,8 @@ class ScheduleFragment : Fragment() {
     }
 
 
-    private fun showSyllabusListDialog(period: Int, day: Int, quarter: Int) {
-        val dialog = SyllabusListDialogFragment.newInstance(period, day, quarter)
+    private fun showSyllabusListDialog(period: Int, day: Int, quarter: Int, currentUserScheduleId: Int) {
+        val dialog = SyllabusListDialogFragment.newInstance(period, day, quarter, currentUserScheduleId)
         dialog.setTargetFragment(this, RESULT_DIALOG_CODE)
         dialog.show(fragmentManager, "fragment_dialog")
     }

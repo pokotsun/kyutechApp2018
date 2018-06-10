@@ -10,6 +10,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
@@ -31,8 +32,6 @@ class SyllabusListDialogFragment : DialogFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_syllabus_list, container, false)
     }
@@ -47,12 +46,39 @@ class SyllabusListDialogFragment : DialogFragment() {
         val period = arguments.getInt(PERIOD_EXTRA)
         val day = arguments.getInt(DAY_EXTRA)
         val quarter = arguments.getInt(QUARTER_EXTRA)
+        val currentUserScheduleId = arguments.getInt(CURRENT_SCHEDULE_ID)
+
+        if(currentUserScheduleId > 0) {
+            remove_btn.setOnClickListener {
+                createService().deleteUserSchedule(currentUserScheduleId)
+                        .subscribeOn(Schedulers.newThread())
+                        .observeOn(AndroidSchedulers.mainThread())
+                        .subscribe { response ->
+                            if(response.isSuccessful) {
+                                submitResult(true)
+                            }
+                            else {
+                                Toast.makeText(context, "削除に失敗しました", Toast.LENGTH_SHORT).show()
+                            }
+                            dismiss()
+                        }
+            }
+        } else {
+            remove_btn.visibility = View.GONE
+        }
+
 
         createService().listSyllabusByDayAndPeriod(day, period)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe { progress_bar.visibility = View.VISIBLE }
-                .doOnComplete { progress_bar.visibility = View.GONE }
+                .doOnSubscribe {
+                    syllabus_list_container.visibility = View.GONE
+                    progress_bar.visibility = View.VISIBLE
+                }
+                .doOnComplete {
+                    syllabus_list_container.visibility = View.VISIBLE
+                    progress_bar.visibility = View.GONE
+                }
                 .doOnError { Log.d("error", "${it.message}") }
                 .subscribe { apiRequest ->
                     val adapter = SyllabusListAdapter(context)
@@ -109,14 +135,16 @@ class SyllabusListDialogFragment : DialogFragment() {
         private val PERIOD_EXTRA: String = "period"
         private val DAY_EXTRA: String = "day"
         private val QUARTER_EXTRA: String = "quarter"
+        private val CURRENT_SCHEDULE_ID: String = "current_user_schedule_id"
 
         @JvmStatic
-        fun newInstance(period: Int, day: Int, quarter: Int) =
+        fun newInstance(period: Int, day: Int, quarter: Int, currentUserScheduleId: Int) =
                 SyllabusListDialogFragment().apply {
                     arguments = Bundle().apply {
                         putInt(PERIOD_EXTRA, period)
                         putInt(DAY_EXTRA, day)
                         putInt(QUARTER_EXTRA, quarter)
+                        putInt(CURRENT_SCHEDULE_ID, currentUserScheduleId)
                     }
                 }
     }

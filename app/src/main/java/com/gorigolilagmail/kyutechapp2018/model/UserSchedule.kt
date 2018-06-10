@@ -64,7 +64,7 @@ data class UserSchedule(
             override fun newArray(size: Int): Array<UserSchedule?> = arrayOfNulls(size)
         }
 
-        fun createDummy(day: Int, period: Int, quarter: Int): UserSchedule = UserSchedule(id=2222,
+        fun createDummy(day: Int, period: Int, quarter: Int): UserSchedule = UserSchedule(id=0,
                 syllabus = Syllabus.createDummy(),
                 day = day, period = period, quarter = quarter,
                 memo = "メモ", lateNum = 13, absentNum = 12

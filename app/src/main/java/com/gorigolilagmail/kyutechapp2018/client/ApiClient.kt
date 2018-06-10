@@ -3,7 +3,7 @@ package com.gorigolilagmail.kyutechapp2018.client
 import com.google.gson.JsonObject
 import com.gorigolilagmail.kyutechapp2018.model.*
 import io.reactivex.Observable
-import okhttp3.ResponseBody
+import retrofit2.Response
 import retrofit2.http.*
 
 interface ApiClient {
@@ -46,6 +46,6 @@ interface ApiClient {
     @DELETE("/api/user-schedules/{userScheduleId}/")
     fun deleteUserSchedule(
             @Path("userScheduleId") userScheduleId: Int
-    ): Observable<ResponseBody>
+    ): Observable<Response<Void>>
 
 }
