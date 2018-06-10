@@ -9,18 +9,10 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.ProgressBar
-import com.gorigolilagmail.kyutechapp2018.client.ApiClient
-import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
-import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
-import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
 import com.gorigolilagmail.kyutechapp2018.presenter.NewsHeadingListFragmentPresenter
 import com.gorigolilagmail.kyutechapp2018.view.activity.MvpView
 import com.gorigolilagmail.kyutechapp2018.view.activity.NewsListActivity
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsHeadingListAdapter
-import io.reactivex.Observer
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
-import io.reactivex.schedulers.Schedulers
 import org.jetbrains.anko.*
 
 /**

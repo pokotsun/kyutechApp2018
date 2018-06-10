@@ -7,13 +7,13 @@ import com.gorigolilagmail.kyutechapp2018.view.fragment.MvpNewsHeadingListView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
-interface MvpNewsHeadingListFragmentPresenter {
+interface ImplNewsHeadingListFragmentPresenter {
     fun setNewsHeadings2ListAdapter(adapter: NewsHeadingListAdapter)
     fun onNewsHeadingsListClicked(position: Int, adapter: NewsHeadingListAdapter)
 }
 
 class NewsHeadingListFragmentPresenter(private val view: MvpNewsHeadingListView)
-    : MvpNewsHeadingListFragmentPresenter {
+    : ImplNewsHeadingListFragmentPresenter {
 
     override fun setNewsHeadings2ListAdapter(adapter: NewsHeadingListAdapter) {
         createService().listNewsHeadings()

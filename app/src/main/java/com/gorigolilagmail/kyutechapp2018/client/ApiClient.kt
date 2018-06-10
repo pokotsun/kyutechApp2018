@@ -31,6 +31,8 @@ interface ApiClient {
             @Path("period") period: Int
     ): Observable<ApiRequest<Syllabus>>
 
+    @GET
+    fun getNextSyllabusList(@Url url: String): Observable<ApiRequest<Syllabus>>
 
     @GET("/api/user-schedules/user-{userId}/quarter-{quarter}")
     fun listUserScheduleByQuarter(

@@ -18,13 +18,21 @@ import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.create
 import com.gorigolilagmail.kyutechapp2018.model.Syllabus
 import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
 import com.gorigolilagmail.kyutechapp2018.view.adapter.SyllabusListAdapter
+import com.jakewharton.rxbinding2.widget.RxAbsListView
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_syllabus_list.*
 
-class SyllabusListDialogFragment : DialogFragment() {
+interface MvpSyllabusListDialogFramgnetView {
+    fun showProgress()
+    fun dismissProgress()
+}
+
+
+class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgnetView {
 
     val userId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
+    private var nextUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +57,7 @@ class SyllabusListDialogFragment : DialogFragment() {
         val currentUserScheduleId = arguments.getInt(CURRENT_SCHEDULE_ID)
 
         if(currentUserScheduleId > 0) {
-            remove_btn.setOnClickListener {
+            remove_btn.setOnClickListener { // 削除ボタンが押された時の挙動
                 createService().deleteUserSchedule(currentUserScheduleId)
                         .subscribeOn(Schedulers.newThread())
                         .observeOn(AndroidSchedulers.mainThread())
@@ -57,9 +65,7 @@ class SyllabusListDialogFragment : DialogFragment() {
                             if(response.isSuccessful) {
                                 submitResult(true)
                             }
-                            else {
-                                Toast.makeText(context, "削除に失敗しました", Toast.LENGTH_SHORT).show()
-                            }
+                            else { Toast.makeText(context, "削除に失敗しました", Toast.LENGTH_SHORT).show() }
                             dismiss()
                         }
             }
@@ -67,26 +73,24 @@ class SyllabusListDialogFragment : DialogFragment() {
             remove_btn.visibility = View.GONE
         }
 
+        val listAdapter = SyllabusListAdapter(context)
 
         createService().listSyllabusByDayAndPeriod(day, period)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
-                    syllabus_list_container.visibility = View.GONE
-                    progress_bar.visibility = View.VISIBLE
+                    showProgress()
                 }
                 .doOnComplete {
-                    syllabus_list_container.visibility = View.VISIBLE
-                    progress_bar.visibility = View.GONE
+                    dismissProgress()
                 }
                 .doOnError { Log.d("error", "${it.message}") }
                 .subscribe { apiRequest ->
-                    val adapter = SyllabusListAdapter(context)
-                    adapter.items = apiRequest.results
-                    syllabus_list.adapter = adapter
+                    listAdapter.items = apiRequest.results
+                    syllabus_list.adapter = listAdapter
 
                     syllabus_list.setOnItemClickListener { parent, view, position, id ->
-                        val item = adapter.items[position]
+                        val item = listAdapter.items[position]
                         createService()
                                 .createUserSchedule(
                                         UserSchedule.createJson(
@@ -105,16 +109,37 @@ class SyllabusListDialogFragment : DialogFragment() {
                     }
                 }
 
+        scrollEvent(listAdapter)
+    }
 
-        // ダミー
-//        val mutableSyllabuses = mutableListOf<Syllabus>()
-//        for (i in 0 until 30) {
-//            mutableSyllabuses.add(Syllabus.createDummy())
-//        }
-//        val syllabuses: List<Syllabus> = mutableSyllabuses
+    private fun scrollEvent(listAdapter: SyllabusListAdapter) {
+        // スクロールイベントを取得
+        RxAbsListView.scrollEvents(syllabus_list)
+                .subscribeOn(AndroidSchedulers.mainThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .filter { scrollEvent ->
+//                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
+                    scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount() >= scrollEvent.totalItemCount()
+                }
+                .filter{ nextUrl.isNotEmpty() }
+                .take(1)
+                .flatMap {
+                    createService().getNextSyllabusList(nextUrl)
+                            .subscribeOn(Schedulers.newThread())
+                            .observeOn(AndroidSchedulers.mainThread())
+                            .doOnSubscribe { progress_bar.visibility = View.VISIBLE }
+                            .doOnComplete { progress_bar.visibility = View.GONE }
+                }
+                .subscribe { apiRequest ->
+                    nextUrl = apiRequest.next?: ""
+                    listAdapter.items = apiRequest.results
+                    listAdapter.notifyDataSetChanged()
 
-//        adapter.items = syllabuses
-//        syllabus_list.adapter = adapter
+                    if(apiRequest.next.isNullOrEmpty())
+                        Toast.makeText(context, "一番古いお知らせ${apiRequest.results.size}件です", Toast.LENGTH_SHORT).show()
+                    else
+                        Toast.makeText(context, "次のお知らせ${apiRequest.results.size}件を取得しました", Toast.LENGTH_SHORT).show()
+                }
     }
 
     override fun onDetach() {
@@ -128,6 +153,18 @@ class SyllabusListDialogFragment : DialogFragment() {
                 targetFragment.onActivityResult(targetRequestCode, Activity.RESULT_OK, this)
             }
         }
+    }
+
+    override fun showProgress() {
+//        syllabus_list_container.visibility = View.GONE
+        remove_btn.visibility = View.GONE
+        progress_bar.visibility = View.VISIBLE
+    }
+
+    override fun dismissProgress() {
+//        syllabus_list_container.visibility = View.VISIBLE
+        remove_btn.visibility = View.VISIBLE
+        progress_bar.visibility = View.GONE
     }
 
 
