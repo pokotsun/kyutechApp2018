@@ -45,6 +45,13 @@ interface ApiClient {
     @POST("/api/user-schedules/")
     fun createUserSchedule(@Body body: JsonObject): Observable<UserSchedule>
 
+    @Headers("Accept: application/json",
+            "Content-Type: application/json")
+    @PUT("/api/user-schedules/{userScheduleId}/")
+    fun updateUserSchedule(
+            @Path("userScheduleId") userScheduleId: Int,
+            @Body body: JsonObject): Observable<UserSchedule>
+
     @DELETE("/api/user-schedules/{userScheduleId}/")
     fun deleteUserSchedule(
             @Path("userScheduleId") userScheduleId: Int

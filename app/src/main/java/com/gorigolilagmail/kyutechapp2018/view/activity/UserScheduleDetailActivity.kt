@@ -6,10 +6,18 @@ import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.View
+import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.TextView
+import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
+import com.gorigolilagmail.kyutechapp2018.client.LoginClient
+import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.Syllabus
 import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
+import io.reactivex.android.schedulers.AndroidSchedulers
+import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_schedule_detail.*
 
 class UserScheduleDetailActivity : AppCompatActivity() {
@@ -17,11 +25,34 @@ class UserScheduleDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_schedule_detail)
+
+        // アクティビティ起動時にキーボードを表示しないようにする
+        window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 //        setSupportActionBar(toolbar)
 
         val userSchedule: UserSchedule = intent.getParcelableExtra(UserScheduleDetailActivity.USER_SCHEDULE_EXTRA)
 
+        val userId = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
         fab.setOnClickListener { view ->
+            createService().updateUserSchedule(
+                    userSchedule.id,
+                    UserSchedule.createJson(
+                            userId = userId, syllabusId = userSchedule.syllabus.id,
+                            day = userSchedule.day, period = userSchedule.period,
+                            quarter=userSchedule.quarter,
+                            memo=memo_edit_field.text.toString(),
+                            lateNum=userSchedule.lateNum, absentNum=userSchedule.absentNum
+                    )
+            )
+                    .subscribeOn(Schedulers.newThread())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .doOnSubscribe{ update_progress.visibility = View.VISIBLE }
+                    .doOnComplete { update_progress.visibility = View.GONE }
+                    .subscribe { userSchedule ->
+                        Log.d("updateComplete", "UserComplete $userSchedule")
+                        Toast.makeText(this, "更新が完了しました!!", Toast.LENGTH_SHORT).show()
+                    }
+
             Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                     .setAction("Action", null).show()
         }

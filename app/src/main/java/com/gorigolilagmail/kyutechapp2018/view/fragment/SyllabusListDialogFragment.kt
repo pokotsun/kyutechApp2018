@@ -56,6 +56,8 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
         val quarter = arguments.getInt(QUARTER_EXTRA)
         val currentUserScheduleId = arguments.getInt(CURRENT_SCHEDULE_ID)
 
+        Log.d("currentUserScheduleId", "$currentUserScheduleId")
+
         if(currentUserScheduleId > 0) {
             remove_btn.setOnClickListener { // 削除ボタンが押された時の挙動
                 createService().deleteUserSchedule(currentUserScheduleId)
@@ -79,9 +81,11 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
+                    syllabus_list_container.visibility = View.GONE
                     showProgress()
                 }
                 .doOnComplete {
+                    syllabus_list_container.visibility = View.VISIBLE
                     dismissProgress()
                 }
                 .doOnError { Log.d("error", "${it.message}") }
@@ -157,13 +161,11 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
 
     override fun showProgress() {
 //        syllabus_list_container.visibility = View.GONE
-        remove_btn.visibility = View.GONE
         progress_bar.visibility = View.VISIBLE
     }
 
     override fun dismissProgress() {
 //        syllabus_list_container.visibility = View.VISIBLE
-        remove_btn.visibility = View.VISIBLE
         progress_bar.visibility = View.GONE
     }
 
