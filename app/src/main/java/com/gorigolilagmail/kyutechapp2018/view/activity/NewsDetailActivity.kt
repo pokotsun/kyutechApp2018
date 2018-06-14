@@ -11,6 +11,7 @@ import android.support.design.widget.AppBarLayout.LayoutParams.SCROLL_FLAG_SCROL
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.Toolbar
+import android.view.Gravity
 import android.view.MenuItem
 import android.view.View
 import com.gorigolilagmail.kyutechapp2018.R
@@ -84,12 +85,14 @@ class NewsDetailActivity : AppCompatActivity() {
                             //                            R.style.AppTheme
                             textView(newsInfo.title) {
                                 textColor = Color.WHITE
-                                textSize = 20.toFloat()
+                                textSize = 16f
                                 backgroundColor = Color.GRAY
                                 padding = dip(4)
+                                gravity = Gravity.CENTER
                             }.lparams(width = matchParent, height = wrapContent)
 
                             textView(newsInfo.content) {
+                                gravity = Gravity.CENTER
                             }.lparams(width = matchParent, height = wrapContent) {
                                 margin = dip(16)
                             }
@@ -99,9 +102,10 @@ class NewsDetailActivity : AppCompatActivity() {
                         news.attachmentInfos.forEach { attachmentInfo ->
                             textView(attachmentInfo.title) {
                                 textColor = Color.WHITE
-                                textSize = 20.toFloat()
+                                textSize = 16f
                                 backgroundColor = Color.GRAY
                                 padding = dip(4)
+                                gravity = Gravity.CENTER
                             }.lparams(width = matchParent, height = wrapContent)
 
                             textView(attachmentInfo.linkName) {
@@ -113,19 +117,19 @@ class NewsDetailActivity : AppCompatActivity() {
                             }
                         }
 
-
-
                         textView("ソースURL") {
                             textColor = Color.WHITE
-                            textSize = 20.toFloat()
+                            textSize = 16f
                             backgroundColor = Color.GRAY
                             padding = dip(4)
+                            gravity = Gravity.CENTER
                         }.lparams(width = matchParent, height = wrapContent)
 
                         textView(news.sourceUrl) {
                             textColor = ContextCompat.getColor(context, R.color.kyutech_main_color)
-                            paintFlags = this.paintFlags or Paint.UNDERLINE_TEXT_FLAG // 下線を引く
+                            paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG // 下線を引く
                             onClick { browse(news.sourceUrl) } // urlを閲覧する
+                            gravity = Gravity.CENTER
                         }.lparams(width = matchParent, height = wrapContent) {
                             margin = dip(16)
                         }

@@ -5,6 +5,7 @@ import android.support.v4.app.Fragment
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.view.fragment.NewsHeadingListFragment
 import com.gorigolilagmail.kyutechapp2018.view.fragment.ScheduleFragment
+import com.gorigolilagmail.kyutechapp2018.view.fragment.SchoolBusFragment
 import com.gorigolilagmail.kyutechapp2018.view.fragment.TestFragment
 
 /**
@@ -25,7 +26,7 @@ class TabItems: ITabItems {
     private val scheduleFragment = ScheduleFragment.newInstance(1)
     override val fragments: Array<Fragment> = arrayOf(
             NewsHeadingListFragment.newInstance(0), scheduleFragment,
-            TestFragment.newInstance(2), TestFragment.newInstance(3)
+            SchoolBusFragment.newInstance(), TestFragment.newInstance(3)
     )
 
     override val icons: Array<Int> = arrayOf(
