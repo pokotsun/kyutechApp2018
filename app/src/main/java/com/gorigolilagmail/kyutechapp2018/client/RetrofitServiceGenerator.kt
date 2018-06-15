@@ -17,8 +17,10 @@ object RetrofitServiceGenerator {
     // emosi.herokuapp.comで指定したところに設定
     // Retrofitの設定
     private fun createRetrofit(): Retrofit = Retrofit.Builder()
-            .baseUrl("https://ec2-18-221-237-112.us-east-2.compute.amazonaws.com/")
-            .client(getUnsafeClient())
+            .baseUrl("https://kyutechapp2018.planningdev.com/")
+            .client(getClient())
+//            .baseUrl("https://ec2-18-221-237-112.us-east-2.compute.amazonaws.com/")
+//            .client(getUnsafeClient())
             .addConverterFactory(createGson())
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .build()

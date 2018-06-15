@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ListView
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.presenter.NewsHeadingListFragmentPresenter
 import com.gorigolilagmail.kyutechapp2018.view.activity.MvpView
 import com.gorigolilagmail.kyutechapp2018.view.activity.NewsListActivity
@@ -24,6 +25,7 @@ interface MvpNewsHeadingListView: MvpView {
     fun invisibleProgressbar()
     fun visibleProgressbar()
     fun setItems2ListAdapter(adapter: NewsHeadingListAdapter)
+    fun printLogErr(str: String)
 }
 
 class NewsHeadingListFragment: MvpAppCompatFragment(), MvpNewsHeadingListView {
@@ -60,6 +62,8 @@ class NewsHeadingListFragment: MvpAppCompatFragment(), MvpNewsHeadingListView {
     override fun visibleProgressbar() { ui.progressBar?.visibility = View.VISIBLE }
     override fun invisibleProgressbar() { ui.progressBar?.visibility = View.GONE }
 
+    override fun printLogErr(str: String) { Log.d("onNewsHeadingListFm", str) }
+
     override fun setItems2ListAdapter(adapter: NewsHeadingListAdapter) {
         ui.newsList?.adapter = adapter
     }
@@ -83,13 +87,13 @@ class NewsHeadingListFragment: MvpAppCompatFragment(), MvpNewsHeadingListView {
     }
 
     companion object {
-        fun newInstance(page: Int): NewsHeadingListFragment {
-            val args: Bundle = Bundle().apply {
+        @JvmStatic
+        fun newInstance(page: Int): NewsHeadingListFragment
+            = NewsHeadingListFragment().apply {
+            arguments = Bundle().apply {
                 putInt("page", page)
             }
-            return NewsHeadingListFragment().apply {
-                arguments = args
-            }
         }
+
     }
 }

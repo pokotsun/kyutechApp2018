@@ -2,6 +2,7 @@ package com.gorigolilagmail.kyutechapp2018.view.activity
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity
@@ -19,6 +20,7 @@ import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_schedule_detail.*
+import org.jetbrains.anko.backgroundColor
 
 class UserScheduleDetailActivity : AppCompatActivity() {
 
@@ -48,13 +50,18 @@ class UserScheduleDetailActivity : AppCompatActivity() {
                     .observeOn(AndroidSchedulers.mainThread())
                     .doOnSubscribe{ update_progress.visibility = View.VISIBLE }
                     .doOnComplete { update_progress.visibility = View.GONE }
+                    .doOnError { Log.d("onNewsHeadListFm", "${it.message}") }
                     .subscribe { userSchedule ->
                         Log.d("updateComplete", "UserComplete $userSchedule")
-                        Toast.makeText(this, "更新が完了しました!!", Toast.LENGTH_SHORT).show()
+
+                        val snackbar = Snackbar.make(view, "更新が完了しました!!", Snackbar.LENGTH_SHORT)
+                        snackbar.view.setBackgroundColor(Color.BLACK)
+                        val textView = snackbar.view.findViewById(android.support.design.R.id.snackbar_text) as TextView
+                        textView.setTextColor(Color.WHITE)
+                        snackbar.show()
                     }
 
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                    .setAction("Action", null).show()
+
         }
 
         setSyllabusInfos2View(userSchedule.syllabus)

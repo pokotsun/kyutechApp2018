@@ -49,7 +49,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
         val department: Int = convertToDepartmentId(department_spinner.selectedItemPosition)
         Log.d("items", "schoolYear: $schoolYear, departmentId: $department")
 
-        disableUi() // 使えなくする
+        disableUi() // UIを使えなくする
 
         // ユーザー作成
         presenter.createUser(schoolYear, department)
@@ -62,7 +62,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
         sign_up_progress.visibility = View.VISIBLE
     }
 
-    private fun enableUi() {
+    private fun enableUi() { // UIを使えるようにする
         sign_up_btn.isEnabled = true
         school_year_spinner.isEnabled = true
         department_spinner.isEnabled = true

@@ -3,12 +3,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.fragment.SettingFragment">
-
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    tools:context=".view.fragment.SettingFragment"
+    android:theme="@style/AppTheme">
+    <ListView
+        android:id="@+id/setting_list"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
-
+        android:layout_height="wrap_content"
+        tools:listitem="@android:layout/simple_list_item_1"/>
 </FrameLayout>
