@@ -71,7 +71,7 @@ class NewsDetailActivity : AppCompatActivity() {
                     layoutParams.apply {
                         background = ContextCompat.getDrawable(context, R.color.kyutech_main_color)
                     }
-                    toolBar = themedToolbar(theme= R.style.ToolbarColoredBackArrow) {
+                    toolBar = themedToolbar(theme=R.style.ToolbarColoredBackArrow) {
                         title = "お知らせ詳細画面"
                         setTitleTextColor(Color.WHITE)
                     }.lparams(width= matchParent, height= wrapContent) {
@@ -84,15 +84,16 @@ class NewsDetailActivity : AppCompatActivity() {
                         news.infos.forEach { newsInfo ->
                             //                            R.style.AppTheme
                             textView(newsInfo.title) {
-                                textColor = Color.WHITE
-                                textSize = 16f
-                                backgroundColor = Color.GRAY
-                                padding = dip(4)
-                                gravity = Gravity.CENTER
+                                textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
+//                                textColor = Color.BLACK
+//                                setTypeface(typeface, Typeface.BOLD)
+                                textSize = 15f
+                                backgroundColor = ContextCompat.getColor(context, R.color.gray_very_pale)
+                                padding = dip(8)
+                                leftPadding = dip(12)
                             }.lparams(width = matchParent, height = wrapContent)
 
                             textView(newsInfo.content) {
-                                gravity = Gravity.CENTER
                             }.lparams(width = matchParent, height = wrapContent) {
                                 margin = dip(16)
                             }
@@ -101,12 +102,13 @@ class NewsDetailActivity : AppCompatActivity() {
                         // 添付情報
                         news.attachmentInfos.forEach { attachmentInfo ->
                             textView(attachmentInfo.title) {
-                                textColor = Color.WHITE
+                                textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
                                 textSize = 16f
-                                backgroundColor = Color.GRAY
-                                padding = dip(4)
-                                gravity = Gravity.CENTER
+                                backgroundColor = ContextCompat.getColor(context, R.color.gray_very_pale)
+                                padding = dip(8)
+                                leftPadding = dip(12)
                             }.lparams(width = matchParent, height = wrapContent)
+
 
                             textView(attachmentInfo.linkName) {
                                 textColor = ContextCompat.getColor(context, R.color.kyutech_main_color)
@@ -118,11 +120,10 @@ class NewsDetailActivity : AppCompatActivity() {
                         }
 
                         textView("ソースURL") {
-                            textColor = Color.WHITE
+                            textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
                             textSize = 16f
-                            backgroundColor = Color.GRAY
+                            backgroundColor = ContextCompat.getColor(context, R.color.gray_very_pale)
                             padding = dip(4)
-                            gravity = Gravity.CENTER
                         }.lparams(width = matchParent, height = wrapContent)
 
                         textView(news.sourceUrl) {

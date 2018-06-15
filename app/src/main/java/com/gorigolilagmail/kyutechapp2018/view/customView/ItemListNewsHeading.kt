@@ -2,11 +2,12 @@ package com.gorigolilagmail.kyutechapp2018.view.customView
 
 import android.content.Context
 import android.graphics.Color
-import android.util.Log
+import android.support.v4.content.ContextCompat
 import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.extensions.circularTextView
 import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
 import org.jetbrains.anko.*
@@ -50,10 +51,10 @@ class ItemListNewsHeadingUi(context: Context): LinearLayout(context), AnkoCompon
 
                     textView("2018/3/10 18:00") {
                         id = updatedDateId
-                        textColor = Color.BLACK
-                        textSize = 9f
+                        textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
+                        textSize = 10f
                         textAlignment = View.TEXT_ALIGNMENT_TEXT_END
-                    }.lparams(width = dip(70), height = wrapContent) {
+                    }.lparams(width = dip(90), height = wrapContent) {
                         rightOf(newsHeadingId)
                         centerVertically()
                         alignParentRight()

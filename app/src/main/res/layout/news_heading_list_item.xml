@@ -17,17 +17,19 @@
     <TextView
         android:id="@+id/newsHeading"
         android:text="学生呼び出し"
-        android:textSize="12dp"
+        android:textSize="11dp"
         android:fontFamily="@font/san_francisco_display_regular"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/circularTextView"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="50dp"/>
+        android:layout_marginLeft="50dp"
+        android:textStyle="bold"/>
     <TextView
         android:id="@+id/updatedDate"
         android:text="2018/3/10 18:00"
-        android:textSize="10dp"
+        android:textSize="12dp"
+        android:textColor="@color/gray_little_dark"
         android:fontFamily="@font/san_francisco_display_regular"
         android:layout_width="50dp"
         android:textAlignment="textEnd"

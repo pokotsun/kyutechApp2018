@@ -28,7 +28,8 @@
             android:screenOrientation="portrait" />
 
         <!--最初に起動するアクティビティ-->
-        <activity android:name=".view.activity.LoginActivity">
+        <activity android:name=".view.activity.LoginActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
