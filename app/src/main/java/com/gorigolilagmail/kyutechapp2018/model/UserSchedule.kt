@@ -29,27 +29,6 @@ data class UserSchedule(
         writeInt(absentNum)
     }
 
-    fun getScheduleKindColorId(department: String): Int {
-        val targetParticipantInfos = syllabus.targetParticipantsInfos.filter { targetParticipantInfo ->
-            targetParticipantInfo.targetParticipants.contains(department)
-        }
-        if(targetParticipantInfos.isNotEmpty()) {
-            targetParticipantInfos.first().let { targetParticipantInfo ->
-                targetParticipantInfo.academicCreditKind.run {
-                    when {
-                        contains("必") -> return R.color.newsTopic1
-                        contains("選必") -> return R.color.newsTopic4
-                        contains("選") -> return R.color.newsTopic3
-                        contains("査定外") -> return R.color.newsTopic12
-                        else -> return android.R.color.darker_gray
-                    }
-                }
-            }
-        }
-        else {
-            return android.R.color.darker_gray
-        }
-    }
 
     companion object {
         @JvmField

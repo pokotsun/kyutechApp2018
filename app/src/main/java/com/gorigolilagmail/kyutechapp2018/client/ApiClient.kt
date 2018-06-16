@@ -25,16 +25,16 @@ interface ApiClient {
     fun createUser(@Body body: JsonObject): Observable<User>
 
     // Syllabus
-    @GET("/api/syllabuses/day-{day}/period-{period}")
+    @GET("/api/syllabuses/day-{day}/period-{period}/")
     fun listSyllabusByDayAndPeriod(
-            @Path("day") day: Int,
+            @Path("day") day: String,
             @Path("period") period: Int
     ): Observable<ApiRequest<Syllabus>>
 
     @GET
     fun getNextSyllabusList(@Url url: String): Observable<ApiRequest<Syllabus>>
 
-    @GET("/api/user-schedules/user-{userId}/quarter-{quarter}")
+    @GET("/api/user-schedules/user-{userId}/quarter-{quarter}/")
     fun listUserScheduleByQuarter(
             @Path("userId") userId: Int,
             @Path("quarter") quarter: Int

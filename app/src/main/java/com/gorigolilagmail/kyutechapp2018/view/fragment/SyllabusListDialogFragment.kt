@@ -55,6 +55,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
         val day = arguments.getInt(DAY_EXTRA)
         val quarter = arguments.getInt(QUARTER_EXTRA)
         val currentUserScheduleId = arguments.getInt(CURRENT_SCHEDULE_ID)
+        val userDepartment = arguments.getString(USER_DEPARTMENT_NAME)
 
         Log.d("currentUserScheduleId", "$currentUserScheduleId")
 
@@ -77,7 +78,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
 
         val listAdapter = SyllabusListAdapter(context)
 
-        createService().listSyllabusByDayAndPeriod(day, period)
+        createService().listSyllabusByDayAndPeriod(Syllabus.convertDayId2Str(day), period)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .doOnSubscribe {
@@ -91,6 +92,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                 .doOnError { Log.d("error", "${it.message}") }
                 .subscribe { apiRequest ->
                     listAdapter.items = apiRequest.results
+                    listAdapter.userDepartment = userDepartment
                     syllabus_list.adapter = listAdapter
 
                     syllabus_list.setOnItemClickListener { parent, view, position, id ->
@@ -122,7 +124,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { scrollEvent ->
-//                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
+                    //                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
                     scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount() >= scrollEvent.totalItemCount()
                 }
                 .filter{ nextUrl.isNotEmpty() }
@@ -175,15 +177,18 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
         private val DAY_EXTRA: String = "day"
         private val QUARTER_EXTRA: String = "quarter"
         private val CURRENT_SCHEDULE_ID: String = "current_user_schedule_id"
+        private val USER_DEPARTMENT_NAME: String = "user_department_name"
+
 
         @JvmStatic
-        fun newInstance(period: Int, day: Int, quarter: Int, currentUserScheduleId: Int) =
+        fun newInstance(period: Int, day: Int, quarter: Int, currentUserScheduleId: Int, userDepartment: String) =
                 SyllabusListDialogFragment().apply {
                     arguments = Bundle().apply {
                         putInt(PERIOD_EXTRA, period)
                         putInt(DAY_EXTRA, day)
                         putInt(QUARTER_EXTRA, quarter)
                         putInt(CURRENT_SCHEDULE_ID, currentUserScheduleId)
+                        putString(USER_DEPARTMENT_NAME, userDepartment)
                     }
                 }
     }

@@ -29,7 +29,7 @@ class UserScheduleGridItem @JvmOverloads constructor(context: Context,
         view = LayoutInflater.from(context).inflate(R.layout.class_grid_item, this)
         view?.find<TextView>(R.id.syllabus_name)?.text = item.syllabus.title
         view?.find<TextView>(R.id.class_room_name)?.text = item.syllabus.targetPlace
-        view?.find<LinearLayout>(R.id.selected_period_container)?.background = ContextCompat.getDrawable(context, item.getScheduleKindColorId(userDepartment))
+        view?.find<LinearLayout>(R.id.selected_period_container)?.background = ContextCompat.getDrawable(context, item.syllabus.getScheduleKindColorId(userDepartment))
     }
 
     fun setBlankSchedule() {

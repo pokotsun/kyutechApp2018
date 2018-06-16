@@ -34,8 +34,8 @@ class ScheduleFragment : MvpAppCompatFragment() {
 
     var currentQuarter: Quarter = Quarter.FIRST_QUARTER
 
-    val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
-    val userDepartment: String = LoginClient.getCurrentUserInfo()?.getDepartmentName()?: throw NullPointerException()
+    private val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
+    private val userDepartment: String = LoginClient.getCurrentUserInfo()?.getDepartmentName()?: throw NullPointerException()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -131,7 +131,7 @@ class ScheduleFragment : MvpAppCompatFragment() {
                 Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
                         "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
                 userSchedule.run {
-                    showSyllabusListDialog(period, day, quarter, userSchedule.id)
+                    showSyllabusListDialog(period, day, quarter, userSchedule.id, userDepartment)
                 }
             }
         } else { // 編集中じゃない -> 閲覧中の時
@@ -148,8 +148,8 @@ class ScheduleFragment : MvpAppCompatFragment() {
     }
 
 
-    private fun showSyllabusListDialog(period: Int, day: Int, quarter: Int, currentUserScheduleId: Int) {
-        val dialog = SyllabusListDialogFragment.newInstance(period, day, quarter, currentUserScheduleId)
+    private fun showSyllabusListDialog(period: Int, day: Int, quarter: Int, currentUserScheduleId: Int, userDepartment: String) {
+        val dialog = SyllabusListDialogFragment.newInstance(period, day, quarter, currentUserScheduleId, userDepartment)
         dialog.setTargetFragment(this, RESULT_DIALOG_CODE)
         dialog.show(fragmentManager, "fragment_dialog")
     }

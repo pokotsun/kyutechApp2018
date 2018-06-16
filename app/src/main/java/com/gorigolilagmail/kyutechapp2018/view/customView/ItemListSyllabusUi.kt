@@ -67,13 +67,16 @@ class ItemListSyllabusUi(context: Context): LinearLayout(context), AnkoComponent
             }.apply {this@ItemListSyllabusUi.addView(this) }
 
     // Itemをviewにセットしていく
-    fun setItem(item: Syllabus) {
+    fun setItem(item: Syllabus, userDepartment: String) {
         val circularNewsHeading = find<CircularTextView>(circularSyllabusKindId)
         val newsHeading = find<TextView>(titleId)
         val updatedDate = find<TextView>(professorNameId)
 
-        circularNewsHeading.text = "必"
-        circularNewsHeading.setCircleBackgroundColor(ContextCompat.getColor(context, R.color.newsTopic1))
+        val kindName = item.getScheduleKind(userDepartment)
+        val kindColorId = item.getScheduleKindColorId(userDepartment)
+
+        circularNewsHeading.text = kindName
+        circularNewsHeading.setCircleBackgroundColor(ContextCompat.getColor(context, kindColorId))
         circularNewsHeading.setStrokeWidth(0f)
 
         newsHeading.text = item.title

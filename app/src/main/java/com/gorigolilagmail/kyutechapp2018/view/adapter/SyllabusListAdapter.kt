@@ -10,6 +10,7 @@ import org.jetbrains.anko.UI
 
 class SyllabusListAdapter(private val context: Context): BaseAdapter() {
     var items: List<Syllabus> = emptyList()
+    var userDepartment: String = ""
 
     override fun getCount(): Int = items.size
 
@@ -24,6 +25,6 @@ class SyllabusListAdapter(private val context: Context): BaseAdapter() {
                     ItemListSyllabusUi(context).apply {
                         createView(context.UI {})
                     }).apply {
-                setItem(items[position])
+                setItem(items[position], userDepartment)
             }
 }

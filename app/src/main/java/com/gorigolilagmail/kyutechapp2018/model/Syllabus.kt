@@ -2,6 +2,7 @@ package com.gorigolilagmail.kyutechapp2018.model
 
 import android.os.Parcel
 import android.os.Parcelable
+import com.gorigolilagmail.kyutechapp2018.R
 
 data class Syllabus(
         val id: Int,
@@ -66,6 +67,42 @@ data class Syllabus(
         writeString(professorEmail)
     }
 
+    fun getScheduleKind(department: String): String {
+        val targetParticipantInfos = targetParticipantsInfos.filter { targetParticipantInfo ->
+            targetParticipantInfo.targetParticipants.contains(department)
+        }
+        if(targetParticipantInfos.isNotEmpty()) {
+            targetParticipantInfos.first().let { targetParticipantInfo ->
+                targetParticipantInfo.academicCreditKind.run {
+                    when {
+                        contains("選必") -> return "選必"
+                        contains("必") -> return "必"
+                        contains("選") -> return "選"
+                        contains("査定外") -> return "査外"
+                        else -> return "未"
+                    }
+                }
+            }
+        }
+        else {
+            return "未"
+        }
+    }
+
+    fun getScheduleKindColorId(department: String): Int {
+        val kindText = getScheduleKind(department)
+        when(kindText) {
+            "必" -> return R.color.newsTopic1
+            "選必" -> return R.color.newsTopic4
+            "選" -> return R.color.newsTopic3
+            "査外" -> return R.color.newsTopic12
+            else -> return android.R.color.darker_gray
+        }
+    }
+
+
+
+
     companion object {
         @JvmField
         val CREATOR: Parcelable.Creator<Syllabus> = object: Parcelable.Creator<Syllabus> {
@@ -81,6 +118,15 @@ data class Syllabus(
             }
 
             override fun newArray(size: Int): Array<Syllabus?> = arrayOfNulls(size)
+        }
+
+        // dayを数字から文字列に直す
+        fun convertDayId2Str(id: Int): String = when(id) {
+            0 -> "mon"
+            1 -> "tues"
+            2 -> "wedn"
+            3 -> "thurs"
+            else -> "fri"
         }
 
         fun createDummy(): Syllabus = Syllabus(
