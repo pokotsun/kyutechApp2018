@@ -31,9 +31,27 @@ class SettingFragment : Fragment() {
     override fun onViewCreated(view: View?, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setting_list.adapter = ArrayAdapter<String>(context, android.R.layout.simple_list_item_1, settingItems)
+
+        setting_list.setOnItemClickListener { parent, view, position, id ->
+            when(position) {
+                0 -> {
+                    val dialog = UserEditFragment.newInstance()
+                    dialog.setTargetFragment(this, RESULT_CODE)
+                    dialog.show(fragmentManager, "fragment_dialog")
+                }
+                1 -> {
+
+                }
+                2 -> {
+
+                }
+            }
+        }
     }
 
     companion object {
+
+        private const val RESULT_CODE: Int = 1000
 
         @JvmStatic
         fun newInstance() =

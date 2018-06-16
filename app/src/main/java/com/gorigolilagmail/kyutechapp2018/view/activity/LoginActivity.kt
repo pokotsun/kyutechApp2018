@@ -87,11 +87,11 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
 
     companion object {
 
-        private val schoolYears: Array<String> = arrayOf(
+        val schoolYears: Array<String> = arrayOf(
                 "1年生", "2年生", "3年生", "4年生"
         )
 
-        private val departments: Array<String> = arrayOf(
+        val departments: Array<String> = arrayOf(
                 "情工１類　Ⅰクラス", "情工１類　Ⅱクラス", "情工２類　Ⅲクラス",
                 "情工３類　Ⅳクラス", "情工３類　Ⅴクラス",
                 "知能情報工学科", "知能情報工学科（編入）",
