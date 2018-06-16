@@ -1,15 +1,20 @@
 package com.gorigolilagmail.kyutechapp2018.view.activity
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.renderscript.ScriptGroup
 import android.support.design.widget.Snackbar
+import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.view.WindowManager
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
@@ -24,9 +29,14 @@ import org.jetbrains.anko.backgroundColor
 
 class UserScheduleDetailActivity : AppCompatActivity() {
 
+//    private var inputMethodManager: InputMethodManager? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_schedule_detail)
+
+//        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+
 
         // アクティビティ起動時にキーボードを表示しないようにする
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
@@ -63,8 +73,51 @@ class UserScheduleDetailActivity : AppCompatActivity() {
 
 
         }
-
         setSyllabusInfos2View(userSchedule.syllabus)
+
+        content_wrapper.setOnClickListener {
+            if(memo_edit_field.isFocused) {
+                memo_edit_field.clearFocus()
+                content_wrapper.requestFocus()
+                hideSoftKeyboard()
+            }
+        }
+
+        memo_edit_field.setOnFocusChangeListener { v, hasFocus ->
+            if(!hasFocus) {
+                // フォーカスが外れた場合キーボードを非表示にする
+                val inputMethodManager: InputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                inputMethodManager.hideSoftInputFromWindow(v.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+            }
+        }
+
+        // 遅刻の➖ボタンが押された時の挙動
+        late_minus_btn.setOnClickListener {
+            val lateCount = late_count.text.toString().toInt()
+            if(lateCount > 0)
+                late_count.text = (lateCount - 1).toString()
+        }
+
+        // 遅刻のプラスボタンが押された時の挙動
+        late_plus_btn.setOnClickListener {
+            val lateCount = late_count.text.toString().toInt()
+            if(lateCount < 15)
+                late_count.text = (lateCount + 1).toString()
+        }
+
+        // 欠席の➖ボタンが押された時の挙動
+        absent_minus_btn.setOnClickListener {
+            val absentCount = absent_count.text.toString().toInt()
+            if(absentCount > 0)
+                absent_count.text = (absentCount - 1).toString()
+        }
+
+        // 欠席のプラスボタンが押された時の挙動
+        absent_plus_btn.setOnClickListener {
+            val absentCount = absent_count.text.toString().toInt()
+            if(absentCount < 15)
+                absent_count.text = (absentCount + 1).toString()
+        }
     }
 
     private fun setSyllabusInfos2View(syllabus: Syllabus) {
@@ -99,16 +152,18 @@ class UserScheduleDetailActivity : AppCompatActivity() {
         }
     }
 
+    // キーボードを隠す
+    private fun hideSoftKeyboard() {
+        val inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        inputMethodManager.hideSoftInputFromWindow(this.currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
+    }
+
+
+    // シラバスの情報の一つをviewにセットする
     private inline fun setSyllabusInfo2View(title: String, content: String) {
         val contentView = layoutInflater.inflate(R.layout.syllabus_content, null)
         contentView.findViewById<TextView>(R.id.title).text = title
-        if(title.isNullOrEmpty()) {
-            contentView.findViewById<TextView>(R.id.content).text = "\n"
-        }
-        else {
-            contentView.findViewById<TextView>(R.id.content).text = content
-        }
-        contentView.findViewById<TextView>(R.id.content).text = content
+        contentView.findViewById<TextView>(R.id.content).text = if(title.isNullOrEmpty()) "\n" else content
         content_wrapper.addView(contentView)
     }
 
@@ -117,5 +172,7 @@ class UserScheduleDetailActivity : AppCompatActivity() {
         fun intent(context: Context, userSchedule: UserSchedule): Intent =
                 Intent(context, UserScheduleDetailActivity::class.java)
                         .putExtra(USER_SCHEDULE_EXTRA, userSchedule)
+
+
     }
 }

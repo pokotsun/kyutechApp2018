@@ -101,7 +101,7 @@ data class TargetParticipantsInfo(
         val academicCreditNum: Double
 ): Parcelable {
     fun toShowingText(): String =
-            "${targetParticipants} $academicCreditKind $academicCreditNum"
+            "${targetParticipants.split("　").last()} $academicCreditKind $academicCreditNum"
 
     override fun describeContents(): Int = 0
 

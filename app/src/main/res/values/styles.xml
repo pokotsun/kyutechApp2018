@@ -48,7 +48,7 @@
     </style>
 
     <style name="EditTextColorControl">
-        <item name="colorControlNormal">@android:color/holo_orange_light</item>
+        <item name="colorControlNormal">@color/kyutech_main_color</item>
         <!--アンダーラインの色-->
         <item name="colorControlActivated">@color/kyutech_main_color_dark</item>
     </style>
