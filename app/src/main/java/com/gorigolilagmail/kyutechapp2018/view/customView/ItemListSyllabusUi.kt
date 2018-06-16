@@ -24,8 +24,9 @@ class ItemListSyllabusUi(context: Context): LinearLayout(context), AnkoComponent
             ui.run {
                 relativeLayout {
                     lparams(width= matchParent, height= wrapContent)
-                    padding = dip(4)
+                    padding = dip(10)
                     gravity = Gravity.CENTER_VERTICAL
+                    background = ContextCompat.getDrawable(context, R.drawable.list_divider)
 
                     circularTextView {
                         id = circularSyllabusKindId
@@ -50,10 +51,10 @@ class ItemListSyllabusUi(context: Context): LinearLayout(context), AnkoComponent
                         centerVertically()
                     }
 
-                    textView("2018/3/10 18:00") {
+                    textView("篠原先生") {
                         id = professorNameId
-                        textColor = Color.BLACK
-                        textSize = 7f
+                        textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
+                        textSize = 10f
                         textAlignment = View.TEXT_ALIGNMENT_TEXT_END
                         singleLine = true
                         ellipsize = TextUtils.TruncateAt.END

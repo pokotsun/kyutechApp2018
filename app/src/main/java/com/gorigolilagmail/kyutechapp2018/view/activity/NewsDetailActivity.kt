@@ -29,7 +29,6 @@ class NewsDetailActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
 
         val news: News = intent.getParcelableExtra(NewsDetailActivity.NEWS_EXTRA)
-
         val ui = NewsDetailActivityUI(news)
 
         ui.setContentView(this)
@@ -79,19 +78,12 @@ class NewsDetailActivity : AppCompatActivity() {
                     }
                 }.lparams(width= matchParent, height = dip(60))
 
+                // お知らせページのコンテンツ部分
                 nestedScrollView {
                     verticalLayout {
                         news.infos.forEach { newsInfo ->
-                            //                            R.style.AppTheme
-                            textView(newsInfo.title) {
-                                textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
-//                                textColor = Color.BLACK
-//                                setTypeface(typeface, Typeface.BOLD)
-                                textSize = 15f
-                                backgroundColor = ContextCompat.getColor(context, R.color.gray_very_pale)
-                                padding = dip(8)
-                                leftPadding = dip(12)
-                            }.lparams(width = matchParent, height = wrapContent)
+                            themedTextView(newsInfo.title, R.style.detailTitle)
+                                    .lparams(width = matchParent, height = wrapContent)
 
                             textView(newsInfo.content) {
                             }.lparams(width = matchParent, height = wrapContent) {
@@ -101,14 +93,9 @@ class NewsDetailActivity : AppCompatActivity() {
 
                         // 添付情報
                         news.attachmentInfos.forEach { attachmentInfo ->
-                            textView(attachmentInfo.title) {
-                                textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
-                                textSize = 16f
-                                backgroundColor = ContextCompat.getColor(context, R.color.gray_very_pale)
-                                padding = dip(8)
-                                leftPadding = dip(12)
-                            }.lparams(width = matchParent, height = wrapContent)
-
+                            // タイトル部
+                            themedTextView(attachmentInfo.title, R.style.detailTitle)
+                                    .lparams(width = matchParent, height = wrapContent)
 
                             textView(attachmentInfo.linkName) {
                                 textColor = ContextCompat.getColor(context, R.color.kyutech_main_color)
@@ -119,18 +106,19 @@ class NewsDetailActivity : AppCompatActivity() {
                             }
                         }
 
-                        textView("ソースURL") {
-                            textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
-                            textSize = 16f
-                            backgroundColor = ContextCompat.getColor(context, R.color.gray_very_pale)
-                            padding = dip(4)
+                        // ソースURLについて
+                        themedTextView("ソースURL", R.style.detailTitle) {
+//                            textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
+//                            textSize = 16f
+//                            backgroundColor = ContextCompat.getColor(context, R.color.gray_very_pale)
+//                            padding = dip(4)
                         }.lparams(width = matchParent, height = wrapContent)
 
+                        // ソースURLのリンク表示
                         textView(news.sourceUrl) {
                             textColor = ContextCompat.getColor(context, R.color.kyutech_main_color)
                             paintFlags = paintFlags or Paint.UNDERLINE_TEXT_FLAG // 下線を引く
                             onClick { browse(news.sourceUrl) } // urlを閲覧する
-                            gravity = Gravity.CENTER
                         }.lparams(width = matchParent, height = wrapContent) {
                             margin = dip(16)
                         }

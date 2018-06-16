@@ -13,8 +13,10 @@ import com.gorigolilagmail.kyutechapp2018.R
 import kotlinx.android.synthetic.main.fragment_setting.*
 
 class SettingFragment : Fragment() {
-    private val settingItems = arrayOf("設定", "P&Dとは", "シラバスにGo", "LiveCampusにGo")
-
+    private val settingItems =
+            arrayOf("ユーザー情報更新", "P&Dについて", "このアプリについて", "ご不満・ご要望フォーム",
+            "九工大飯塚キャンパスHP", "九工大シラバス", "九工大moodle", "九工大シラバス")
+    
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -4,6 +4,7 @@
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <!-- Customize your theme here. -->
         <item name="android:textColor">@android:color/primary_text_light_nodisable</item>
+
         <!--ボタンの色-->
         <item name="android:colorPrimary">@color/kyutech_main_color</item>
         <item name="android:colorButtonNormal">@color/kyutech_main_color_dark</item>
@@ -53,16 +54,18 @@
     </style>
 
     <!--詳細情報でリストで表示するときのタイトルのスタイル-->
-    <style name="titleTextView" parent="@style/AppTheme">
-        <item name="android:textSize">20dp</item>
-        <item name="android:textColor">@android:color/white</item>
-        <item name="android:padding">4dp</item>
-        <item name="android:background">@android:color/darker_gray</item>
+    <style name="detailTitle" parent="@style/AppTheme">
+        <item name="android:textSize">15dp</item>
+        <item name="android:textColor">@color/gray_little_dark</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:paddingLeft">12dp</item>
+        <item name="android:background">@color/gray_very_pale</item>
     </style>
+
 
     <!--詳細情報でリストで表示するときの内容のスタイル-->
     <style name="contentTextView" parent="@style/AppTheme">
-        <item name="android:layout_margin">@dimen/contentTextViewMargin</item>
+        <item name="android:layout_margin">@dimen/text_margin</item>
     </style>
 
 
