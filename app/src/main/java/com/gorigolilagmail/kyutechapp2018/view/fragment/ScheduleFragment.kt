@@ -62,8 +62,9 @@ class ScheduleFragment : MvpAppCompatFragment() {
             }
         }
 
-        // スケジュール情報を取得してデータをsetしていく
         Log.d("QuarterItem", "userId:$userId, 現在第${currentQuarter.id + 1} クオーターです")
+
+        // スケジュール情報を取得してデータをsetしていく
         createService().listUserScheduleByQuarter(userId, currentQuarter.id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -106,7 +107,7 @@ class ScheduleFragment : MvpAppCompatFragment() {
         if(requestCode == RESULT_DIALOG_CODE) {
             val resultCode = data.getBooleanExtra("isSubmitted", false)
             if(resultCode) {
-                Toast.makeText(context, "時間割の更新が完了しました!!", Toast.LENGTH_SHORT).show()
+                showShortSnackBar("時間割の更新が完了しました!!", view?: throw NullPointerException("ScheduleにおいてViewを取得できなかった"))
                 setScheduleItems(userId, currentQuarter.id, isEditing=true)
             }
         }
