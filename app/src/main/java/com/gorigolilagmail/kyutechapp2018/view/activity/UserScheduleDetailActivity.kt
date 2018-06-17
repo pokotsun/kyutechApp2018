@@ -44,7 +44,14 @@ class UserScheduleDetailActivity : AppCompatActivity() {
 
         val userSchedule: UserSchedule = intent.getParcelableExtra(UserScheduleDetailActivity.USER_SCHEDULE_EXTRA)
 
+        // 各データをUIにセットしていく
+        late_count.text = userSchedule.lateNum.toString()
+        absent_count.text = userSchedule.absentNum.toString()
+        memo_edit_field.setText(userSchedule.memo, TextView.BufferType.EDITABLE)
+
         val userId = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
+
+        // Saveボタンが押された時の挙動
         fab.setOnClickListener { view ->
             createService().updateUserSchedule(
                     userSchedule.id,
@@ -65,7 +72,7 @@ class UserScheduleDetailActivity : AppCompatActivity() {
                         Log.d("updateComplete", "UserComplete $userSchedule")
 
                         val snackbar = Snackbar.make(view, "更新が完了しました!!", Snackbar.LENGTH_SHORT)
-                        snackbar.view.setBackgroundColor(Color.BLACK)
+//                        snackbar.view.setBackgroundColor(Color.BLACK)
                         val textView = snackbar.view.findViewById(android.support.design.R.id.snackbar_text) as TextView
                         textView.setTextColor(Color.WHITE)
                         snackbar.show()

@@ -1,7 +1,9 @@
 package com.gorigolilagmail.kyutechapp2018.view.activity
 
+import android.content.Context
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.util.AttributeSet
 import android.util.Log
 import android.view.MenuItem
 import android.view.View
@@ -24,21 +26,16 @@ interface NewsListMvpAppCompatActivity: MvpView {
 
 }
 
-class NewsListActivity : AppCompatActivity(), NewsListMvpAppCompatActivity {
+class NewsListActivity : MvpAppCompatActivity(), NewsListMvpAppCompatActivity {
 
     private var nextUrl: String = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_news_list)
-    }
-
-    override fun onResume() {
-        super.onResume()
 
         val newsHeadingName: String = intent.getStringExtra("newsHeadingName")
         val newsHeadingCode: Int = intent.getIntExtra("newsHeadingCode", 357)
-
 
         // toolbarの設定
         tool_bar.title = ""
@@ -49,8 +46,8 @@ class NewsListActivity : AppCompatActivity(), NewsListMvpAppCompatActivity {
 
         val listAdapter = NewsListAdapter(this)
 
-        val service: ApiClient = createService()
-        service.listNewsByNewsHeadingCode(newsHeadingCode)
+        // News情報を取得してリストで表示する
+        createService().listNewsByNewsHeadingCode(newsHeadingCode)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(object: Observer<ApiRequest<News>> {
@@ -82,9 +79,14 @@ class NewsListActivity : AppCompatActivity(), NewsListMvpAppCompatActivity {
                         Log.d("OnSubscribe", "${d.isDisposed}")
                     }
                 })
-
         scrollEvent(listAdapter)
     }
+
+    override fun onResume() {
+        super.onResume()
+
+    }
+
 
     private fun scrollEvent( listAdapter: NewsListAdapter) {
         // スクロールイベントを取得
@@ -121,11 +123,13 @@ class NewsListActivity : AppCompatActivity(), NewsListMvpAppCompatActivity {
                         Log.d("onNext", "ページスクロールonNext中")
 
                         if(apiRequest.next.isNullOrEmpty())
-                            Toast.makeText(this@NewsListActivity, "一番古いお知らせ${apiRequest.results.size}件です", Toast.LENGTH_SHORT).show()
+                            showShortSnackBar("一番古いお知らせ${apiRequest.results.size}件を取得しました", news_list_root)
+//                            Toast.makeText(this@NewsListActivity, "一番古いお知らせ${apiRequest.results.size}件です", Toast.LENGTH_SHORT).show()
                         else
-                            Toast.makeText(this@NewsListActivity, "次のお知らせ${apiRequest.results.size}件を取得しました", Toast.LENGTH_SHORT).show()
-                    }
+                            showShortSnackBar("次のお知らせ${apiRequest.results.size}件を取得しました", news_list_root)
 
+//                        Toast.makeText(this@NewsListActivity, "次のお知らせ${apiRequest.results.size}件を取得しました", Toast.LENGTH_SHORT).show()
+                    }
 
                     override fun onError(e: Throwable) {
                         Log.d("onErrored", "${e.message}")
@@ -133,8 +137,6 @@ class NewsListActivity : AppCompatActivity(), NewsListMvpAppCompatActivity {
 
                 })
     }
-
-    override fun showToast(msg: String) = Toast.makeText(this, msg, Toast.LENGTH_SHORT).show()
 
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id: Int = item?.itemId ?: android.R.id.home
