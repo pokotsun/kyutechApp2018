@@ -27,7 +27,7 @@ import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_schedule_detail.*
 import org.jetbrains.anko.backgroundColor
 
-class UserScheduleDetailActivity : AppCompatActivity() {
+class UserScheduleDetailActivity : MvpAppCompatActivity() {
 
 //    private var inputMethodManager: InputMethodManager? = null
 
@@ -36,7 +36,6 @@ class UserScheduleDetailActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user_schedule_detail)
 
 //        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
 
         // アクティビティ起動時にキーボードを表示しないようにする
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
@@ -71,11 +70,7 @@ class UserScheduleDetailActivity : AppCompatActivity() {
                     .subscribe { userSchedule ->
                         Log.d("updateComplete", "UserComplete $userSchedule")
 
-                        val snackbar = Snackbar.make(view, "更新が完了しました!!", Snackbar.LENGTH_SHORT)
-//                        snackbar.view.setBackgroundColor(Color.BLACK)
-                        val textView = snackbar.view.findViewById(android.support.design.R.id.snackbar_text) as TextView
-                        textView.setTextColor(Color.WHITE)
-                        snackbar.show()
+                        showShortSnackBar("更新が完了しました!!", view)
                     }
 
 
