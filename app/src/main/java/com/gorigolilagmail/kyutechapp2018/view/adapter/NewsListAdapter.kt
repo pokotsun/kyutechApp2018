@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.BaseAdapter
 import com.gorigolilagmail.kyutechapp2018.model.News
-import com.gorigolilagmail.kyutechapp2018.view.customView.ItemListNews
+import com.gorigolilagmail.kyutechapp2018.view.customView.ItemListNewsUi
+import org.jetbrains.anko.UI
 
 /**
  * Created by pokotsun on 18/03/16.
@@ -25,8 +26,15 @@ class NewsListAdapter(private val context: Context): BaseAdapter() {
     override fun getView(position: Int,
                          convertView: View?,
                          parent: ViewGroup?): View =
-                ((convertView as? ItemListNews) ?: ItemListNews(context)).apply {
-                    setView(items[position])
+                ((convertView as? ItemListNewsUi) ?:
+                ItemListNewsUi(context).apply {
+                    createView(context.UI {})
+                }).apply {
+                    setItem(items[position])
                 }
+
+//    ItemListNewsHeadingUi(context).apply {
+//        createView(context.UI {})
+//    })
 
 }

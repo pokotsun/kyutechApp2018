@@ -1,40 +1,69 @@
 package com.gorigolilagmail.kyutechapp2018.view.customView
 
 import android.content.Context
-import android.util.AttributeSet
+import android.text.TextUtils
 import android.util.Log
-import android.view.LayoutInflater
+import android.view.Gravity
 import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.model.News
-import org.jetbrains.anko.find
+import org.jetbrains.anko.*
 
 /**
  * Created by pokotsun on 18/03/16.
  */
 
-class ItemListNews @JvmOverloads constructor(context: Context,
-                                             attrs: AttributeSet? = null,
-                                             defStyleAttr: Int = 0)
-    : LinearLayout(context, attrs, defStyleAttr) {
+class ItemListNewsUi(context: Context): LinearLayout(context), AnkoComponent<Context> {
+    private val mainTitleId: Int = View.generateViewId()
+    private val subTitleId: Int = View.generateViewId()
 
-    var view: View? = null
+    override fun createView(ui: AnkoContext<Context>): View = ui.run {
+        linearLayout {
+            layoutParams = LayoutParams(matchParent, dip(60))
+            padding = dip(18)
+            leftPadding = dip(4)
+            gravity = Gravity.CENTER_VERTICAL
 
-    fun setView(news: News) {
+            textView("歴史学?U(01) 1限") {
+                id = mainTitleId
+                textSize = 13f
+                ellipsize = TextUtils.TruncateAt.MIDDLE
+                singleLine = true
+            }.lparams(0, wrapContent) {
+                weight = 7f
+            }
+
+            textView("2018年8月11日") {
+                id = subTitleId
+                textSize = 10f
+                textColor = R.color.gray_little_dark
+                gravity = Gravity.END
+                singleLine = true
+                ellipsize = TextUtils.TruncateAt.END
+            }.lparams(0, wrapContent) {
+                weight = 3f
+            }
+        }
+    }.apply { this@ItemListNewsUi.addView(this) }
+
+    fun setItem(news: News) {
         val titleInfos: HashMap<String, String> = news.getTitleInfos()
-        view = LayoutInflater.from(context).inflate(R.layout.news_list_item, this)
-        view?.find<TextView>(R.id.main_title)?.text = titleInfos["mainTitle"]
-        val subTitleField: TextView? = view?.findViewById<TextView>(R.id.sub_title)
 
-        // サブタイトルフィールドの処理
-        if(subTitleField != null) {
-            if((titleInfos["subTitle"] ?: "").isNullOrEmpty()) { // サブタイトルの欄が空白ならば
+        val mainTitleTextView: TextView? = find(mainTitleId)
+        val subTitleTextView: TextView? = find(subTitleId)
+
+        mainTitleTextView?.text = titleInfos["mainTitle"]
+
+//         サブタイトルフィールドの処理
+        if(subTitleTextView != null) {
+            // サブタイトルの欄が空白ならばそこのViewを空白にする
+            if((titleInfos["subTitle"] ?: "").isNullOrEmpty()) {
                 Log.d("titlesInfo", "${titleInfos}")
-                subTitleField.visibility = View.GONE
+                subTitleTextView.visibility = View.GONE
             } else {
-                subTitleField.text = titleInfos["subTitle"]
+                subTitleTextView.text = titleInfos["subTitle"]
             }
         }
     }

@@ -36,11 +36,11 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
 
         // 各スピナーの設定
         val schoolYarSpinnerAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, LoginActivity.schoolYears)
-        schoolYarSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        schoolYarSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
         school_year_spinner.adapter = schoolYarSpinnerAdapter
 
         val departmentSpinnerAdapter = ArrayAdapter<String>(this, R.layout.spinner_item, LoginActivity.departments)
-        departmentSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        departmentSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_list_item_1)
         department_spinner.adapter = departmentSpinnerAdapter
     }
 
