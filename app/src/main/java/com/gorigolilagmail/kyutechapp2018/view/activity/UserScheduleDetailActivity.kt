@@ -165,12 +165,14 @@ class UserScheduleDetailActivity : AppCompatActivity() {
         inputMethodManager.hideSoftInputFromWindow(this.currentFocus.windowToken, InputMethodManager.HIDE_NOT_ALWAYS)
     }
 
-
     // シラバスの情報の一つをviewにセットする
     private inline fun setSyllabusInfo2View(title: String, content: String) {
         val contentView = layoutInflater.inflate(R.layout.syllabus_content, null)
-        contentView.findViewById<TextView>(R.id.title).text = title
-        contentView.findViewById<TextView>(R.id.content).text = if(title.isNullOrEmpty()) "\n" else content
+        val titleTextView = contentView.findViewById<TextView>(R.id.title)
+        val contentTextView = contentView.findViewById<TextView>(R.id.content)
+        titleTextView.text = title
+        contentTextView.text = if(title.isNullOrEmpty()) "\n" else content
+        contentTextView.setTextIsSelectable(true) // 内容部分は選択可能にする
         content_wrapper.addView(contentView)
     }
 

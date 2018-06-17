@@ -81,11 +81,15 @@ class NewsDetailActivity : AppCompatActivity() {
                 // お知らせページのコンテンツ部分
                 nestedScrollView {
                     verticalLayout {
+
                         news.infos.forEach { newsInfo ->
+                            // News情報のタイトル部分
                             themedTextView(newsInfo.title, R.style.detailTitle)
                                     .lparams(width = matchParent, height = wrapContent)
 
+                            // News情報の内容部分
                             textView(newsInfo.content) {
+                                setTextIsSelectable(true) // Content部分は選択可能にする
                             }.lparams(width = matchParent, height = wrapContent) {
                                 margin = dip(16)
                             }
