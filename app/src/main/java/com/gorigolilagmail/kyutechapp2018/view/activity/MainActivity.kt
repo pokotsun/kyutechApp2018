@@ -70,7 +70,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                                         else -> 3
                                     }
                                     setToolBarTitle("時間割(第${quarter + 1}クォーター)")
-                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter)
+                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing=tabItems.getScheduleFragment().isEditing)
                                 }
                             }
                             true
@@ -115,8 +115,10 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
         tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing)
     }
 
+    // ToolBarのタイトルを変更する
     override fun setToolBarTitle(title: String) { toolbar_title.text = title }
 
+    // Toolbarの背景色を変更する
     override fun setToolBarBackground(colorId: Int) { tool_bar.setBackgroundColor(ContextCompat.getColor(this, colorId)) }
 
 

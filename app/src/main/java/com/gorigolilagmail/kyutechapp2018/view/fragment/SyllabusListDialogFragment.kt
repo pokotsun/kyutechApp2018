@@ -95,6 +95,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                     listAdapter.userDepartment = userDepartment
                     syllabus_list.adapter = listAdapter
 
+                    // リスト表示されているシラバスが選択された時の挙動
                     syllabus_list.setOnItemClickListener { parent, view, position, id ->
                         val item = listAdapter.items[position]
                         createService()

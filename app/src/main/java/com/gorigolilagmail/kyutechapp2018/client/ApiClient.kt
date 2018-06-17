@@ -27,7 +27,8 @@ interface ApiClient {
     @Headers("Accept: application/json",
             "Content-Type: application/json")
     @PUT("/api/users/{userId}/")
-    fun updateUser(@Path("userId") userId: Int): Observable<User>
+    fun updateUser(@Path("userId") userId: Int,
+                   @Body body: JsonObject): Observable<User>
 
     // Syllabus
     @GET("/api/syllabuses/day-{day}/period-{period}/")

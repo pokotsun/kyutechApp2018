@@ -54,11 +54,11 @@ class ScheduleFragment : MvpAppCompatFragment() {
         Log.d("クオーターのエラー", "$quarter: ${Quarter.values().filter{it.id == quarter}.first()}")
         currentQuarter = Quarter.values().filter{it.id == quarter}.first()
         Log.d("isEditing", "$isEditing")
-        (schedule_container as ViewGroup).removeAllViews() // すべての子Viewをまず消す
-        // まず空のスケジュールを入れていく
+        (schedule_container as? ViewGroup)?.removeAllViews() // すべての子Viewをまず消す
+        // 空のスケジュールを入れていく(表示を崩さないため)
         for(i in 0 until 5) {
             for( j in 0 until 5) {
-                setScheduleItem(UserSchedule.createDummy(i, j, 0), isBlank = true, isEditing=isEditing)
+                setScheduleItem(UserSchedule.createDummy(i, j, currentQuarter.id), isBlank = true, isEditing=isEditing)
             }
         }
 
@@ -67,45 +67,38 @@ class ScheduleFragment : MvpAppCompatFragment() {
         createService().listUserScheduleByQuarter(userId, currentQuarter.id)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object: Observer<ApiRequest<UserSchedule>> {
-                    override fun onComplete() {
-                        try {
-                            Log.d("onComplete", "UserScheduleComplete")
-                            schedule_progress.visibility = View.GONE
-                        } catch(e: IllegalStateException) {
-                            Log.w("IllegalStateException!!", "${e.message}")
+                .doOnSubscribe {
+                    schedule_progress.visibility = View.VISIBLE
+                    Log.d("onSubscribe", "UserSchedule onSubscribe")
+                }
+                .doOnComplete {
+                    Log.d("onComplete", "UserScheduleComplete")
+                    try { schedule_progress.visibility = View.GONE }
+                    catch(e: IllegalStateException) {
+                        Log.w("IllegalStateException!!", "${e.message}")
+                    }
+                }
+                .doOnError { e ->
+                    Log.d("onError", "userSchedule OnError ${e.message}")
+                    schedule_progress.visibility = View.GONE
+                }
+                .subscribe { apiRequest ->
+                    val userSchedules: List<UserSchedule> = apiRequest.results
+                    try {
+                        userSchedules.forEach { userSchedule ->
+                            setScheduleItem(userSchedule, isEditing = isEditing)
                         }
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.d("onError", "userSchedule OnError ${e.message}")
-                        schedule_progress.visibility = View.GONE
-
-                    }
-
-                    override fun onNext(apiRequest: ApiRequest<UserSchedule>) {
-                        val userSchedules: List<UserSchedule> = apiRequest.results
-                        try {
-                            userSchedules.forEach { userSchedule ->
-                                setScheduleItem(userSchedule, isEditing = isEditing)
+                    } catch(e: Exception) {
+                        when(e) {
+                            is NullPointerException, is java.lang.NullPointerException -> {
+                                Log.w("ぬるぽ", "${e.message}")
                             }
-                        } catch(e: Exception) {
-                            when(e) {
-                                is NullPointerException, is java.lang.NullPointerException -> {
-                                    Log.w("ぬるぽ", "${e.message}")
-                                }
-                                is IllegalStateException -> {
-                                    Log.w("イリーガル", "${e.message}")
-                                }
+                            is IllegalStateException -> {
+                                Log.w("イリーガル", "${e.message}")
                             }
                         }
                     }
-
-                    override fun onSubscribe(d: Disposable) {
-                        schedule_progress.visibility = View.VISIBLE
-                        Log.d("onSubscribe", "UserSchedule onSubscribe")
-                    }
-                })
+                }
 
     }
 
@@ -129,6 +122,7 @@ class ScheduleFragment : MvpAppCompatFragment() {
         if(isEditing) { // 閲覧中の時
             item.setOnClickListener {
                 userSchedule.run {
+                    Log.d("selectedQuarter", "$quarter")
                     showSyllabusListDialog(period, day, quarter, userSchedule.id, userDepartment)
                 }
             }
