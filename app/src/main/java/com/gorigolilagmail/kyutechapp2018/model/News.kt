@@ -70,7 +70,11 @@ data class News(
             }
             372 -> { // 留学・国際関連
                 mainTitle = infos.filter { it.title == "タイトル" }.map {it.content }.first()
-                subTitle = infos.filter { it.title == "日付" }.map { it.content }.first()
+                subTitle = try {
+                    infos.filter { it.title == "日付" }.map { it.content }.first()
+                } catch(e: NoSuchElementException) {
+                    ""
+                }
 
             }
             368 -> { // 学部生情報

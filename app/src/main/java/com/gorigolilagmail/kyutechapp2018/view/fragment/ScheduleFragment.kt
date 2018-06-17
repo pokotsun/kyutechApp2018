@@ -126,10 +126,8 @@ class ScheduleFragment : MvpAppCompatFragment() {
             rowSpec = GridLayout.spec(userSchedule.period, GridLayout.FILL, 1f)
         }
 
-        if(isEditing) {
+        if(isEditing) { // 閲覧中の時
             item.setOnClickListener {
-                Toast.makeText(context, "(${userSchedule.day}, ${userSchedule.period})" +
-                        "のアイテムがタップされました", Toast.LENGTH_SHORT).show()
                 userSchedule.run {
                     showSyllabusListDialog(period, day, quarter, userSchedule.id, userDepartment)
                 }
