@@ -14,7 +14,7 @@ import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
 import kotlinx.android.synthetic.main.fragment_setting.*
 
-class SettingFragment : Fragment() {
+class SettingFragment : MvpAppCompatFragment() {
     private val settingItems =
             arrayOf("ユーザー情報更新", "P&Dについて", "このアプリについて", "ご不満・ご要望フォーム",
                     "九工大飯塚キャンパスHP", "九工大シラバス", "九工大moodle")
@@ -43,11 +43,11 @@ class SettingFragment : Fragment() {
                 ABOUT_P_AND_D -> goToBrowser("https://www.planningdev.com/")
                 ABOUT_THIS_APP -> {
                     // TODO 未実装
-                    Toast.makeText(context, "申し訳ありません. 準備中です.", Toast.LENGTH_SHORT).show()
+                    showShortSnackBar("申し訳ありません. 準備中です.", view)
                 }
                 DEMAND_FORM -> {
                     // TODO 未実装
-                    Toast.makeText(context, "申し訳ありません. 準備中です.", Toast.LENGTH_SHORT).show()
+                    showShortSnackBar("申し訳ありません. 準備中です.", view)
                 }
                 KYUTECH_CAMPUS_HP -> goToBrowser("https://www.iizuka.kyutech.ac.jp/")
                 SYLLABUS_HP -> goToBrowser("https://edragon-syllabus.jimu.kyutech.ac.jp/guest/syllabuses")
