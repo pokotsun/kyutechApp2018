@@ -13,8 +13,12 @@ import com.gorigolilagmail.kyutechapp2018.client.ApiClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.News
+import com.gorigolilagmail.kyutechapp2018.model.NewsHeading
+import com.gorigolilagmail.kyutechapp2018.presenter.NewsListActivityPresenter
 import com.gorigolilagmail.kyutechapp2018.view.adapter.NewsListAdapter
+import com.jakewharton.rxbinding2.widget.AbsListViewScrollEvent
 import com.jakewharton.rxbinding2.widget.RxAbsListView
+import io.reactivex.Observable
 import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.Disposable
@@ -23,12 +27,18 @@ import kotlinx.android.synthetic.main.activity_news_list.*
 
 
 interface NewsListMvpAppCompatActivity: MvpView {
-
+    fun showProgress()
+    fun hideProgress()
+    fun setAdapter2list(adapter: NewsListAdapter)
+    fun goToNewsDetailActivity(item: News)
+    fun getRxAbsListViewScrollEvent(): Observable<AbsListViewScrollEvent>
+    fun showShortSnackbarWithoutView(msg: String)
 }
 
 class NewsListActivity : MvpAppCompatActivity(), NewsListMvpAppCompatActivity {
 
     private var nextUrl: String = ""
+    private val presenter = NewsListActivityPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,109 +48,52 @@ class NewsListActivity : MvpAppCompatActivity(), NewsListMvpAppCompatActivity {
         val newsHeadingCode: Int = intent.getIntExtra("newsHeadingCode", 357)
 
         // toolbarの設定
-        tool_bar.title = ""
-        toolbar_title.text = newsHeadingName
-        setSupportActionBar(tool_bar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
+        initializeToolBar(newsHeadingName)
 
         val listAdapter = NewsListAdapter(this)
 
         // News情報を取得してリストで表示する
-        createService().listNewsByNewsHeadingCode(newsHeadingCode)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(object: Observer<ApiRequest<News>> {
-                    override fun onComplete() {
-                        //すべてStreamを流しきった時に呼ばれる
-                        progress_bar.visibility = View.GONE
-                        Log.d("onComplete", "完遂")
-                    }
+        presenter.setNews2list(listAdapter, newsHeadingCode)
+        news_list.setOnItemClickListener { parent, view, position, id ->
+            presenter.onNewsListItemClick(listAdapter, position)
+        }
 
-                    override fun onError(e: Throwable) {
-                        Log.d("通信失敗", "${e.message}")
-                    }
-
-                    override fun onNext(response: ApiRequest<News>) {
-                        nextUrl = response.next?: ""
-                        val newsList = response.results
-
-                        listAdapter.items = newsList
-                        news_list.adapter = listAdapter
-                        news_list.setOnItemClickListener { _, _, position, _ ->
-                            val item: News = listAdapter.items[position]
-                            Log.d("Parce前", "$item")
-                            NewsDetailActivity.intent(this@NewsListActivity, item).let { startActivity(it) }
-                        }
-                    }
-                    override fun onSubscribe(d: Disposable) {
-                        // Subscribeした瞬間に呼ばれる
-                        progress_bar.visibility = View.VISIBLE
-                        Log.d("OnSubscribe", "${d.isDisposed}")
-                    }
-                })
-        scrollEvent(listAdapter)
+        presenter.onScrolled2lastItem(listAdapter)
     }
 
     override fun onResume() {
         super.onResume()
-
     }
 
+    override fun showProgress() { progress_bar.visibility = View.VISIBLE }
+    override fun hideProgress() { progress_bar.visibility = View.GONE }
 
-    private fun scrollEvent( listAdapter: NewsListAdapter) {
-        // スクロールイベントを取得
+    override fun setAdapter2list(adapter: NewsListAdapter) {
+        news_list.adapter = adapter
+    }
+
+    // 詳細ページに移動する
+    override fun goToNewsDetailActivity(item: News) {
+        NewsDetailActivity.intent(this@NewsListActivity, item).let { startActivity(it) }
+    }
+
+    override fun getRxAbsListViewScrollEvent(): Observable<AbsListViewScrollEvent> =
         RxAbsListView.scrollEvents(news_list)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter { scrollEvent ->
-                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
-                    scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount()  >= scrollEvent.totalItemCount()
-                }
-                .filter {  nextUrl.isNotEmpty() } // next_urlが空ではないか？
-                .take(1) // いっぱいイベント拾ってしまうがとりあえずここで渋滞するので上からひとつだけ発火させる
-                .flatMap {  // データ取得のObservableに処理をつなげる
-                    createService().getNextNewsList(nextUrl)
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnSubscribe { progress_bar.visibility = View.VISIBLE }
-                            .doOnComplete { progress_bar.visibility = View.GONE }
-                }
-                .subscribe( object: Observer<ApiRequest<News>> {
 
-                    override fun onComplete() {
-                        Log.d("onComplete", "ページスクロールCompleted")
-                        scrollEvent(listAdapter)
-                    }
-                    override fun onSubscribe(d: Disposable) {
-                        Log.d("onSubscribe", "ページスクロールSubscribe中")
-                    }
+    override fun showShortSnackbarWithoutView(msg: String) = showShortSnackBar(msg, news_list_root)
 
-                    override fun onNext(apiRequest: ApiRequest<News>) {
-                        nextUrl = apiRequest.next?: ""
-                        listAdapter.items.plusAssign(apiRequest.results)
-                        listAdapter.notifyDataSetChanged()
-                        Log.d("onNext", "ページスクロールonNext中")
-
-                        if(apiRequest.next.isNullOrEmpty())
-                            showShortSnackBar("一番古いお知らせ${apiRequest.results.size}件を取得しました", news_list_root)
-//                            Toast.makeText(this@NewsListActivity, "一番古いお知らせ${apiRequest.results.size}件です", Toast.LENGTH_SHORT).show()
-                        else
-                            showShortSnackBar("次のお知らせ${apiRequest.results.size}件を取得しました", news_list_root)
-
-//                        Toast.makeText(this@NewsListActivity, "次のお知らせ${apiRequest.results.size}件を取得しました", Toast.LENGTH_SHORT).show()
-                    }
-
-                    override fun onError(e: Throwable) {
-                        Log.d("onErrored", "${e.message}")
-                    }
-
-                })
+    // toolbarの設定
+    private fun initializeToolBar(newsHeadingName: String) {
+        tool_bar.title = "" // Defaultで用意されているToolbarのTitleを無効化する
+        toolbar_title.text = newsHeadingName
+        setSupportActionBar(tool_bar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true) // Homeボタンを表示するかどうか
+        supportActionBar?.setHomeButtonEnabled(true) // Homeボタンを有効にするかどうか
     }
 
+    // OptionItemが押された時の挙動を決める(Homeボタンとか)
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id: Int = item?.itemId ?: android.R.id.home
-
         return when(id) {
         // 戻るボタン
             android.R.id.home -> {

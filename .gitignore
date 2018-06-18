@@ -25,4 +25,5 @@ workspace.xml
 /js/js.translator/testData/**/out/
 .gradle/
 build/
+app/release
 
