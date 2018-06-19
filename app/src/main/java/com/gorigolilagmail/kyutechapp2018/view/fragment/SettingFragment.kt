@@ -46,8 +46,7 @@ class SettingFragment : MvpAppCompatFragment() {
                     showShortSnackBar("申し訳ありません. 準備中です.", view)
                 }
                 DEMAND_FORM -> {
-                    // TODO 未実装
-                    showShortSnackBar("申し訳ありません. 準備中です.", view)
+                    goToBrowser("https://docs.google.com/forms/d/e/1FAIpQLSeBqDZ8OTsuOjFnniTIxSrNq6phAZ22dt95bCC1w-lV6VPZ9Q/viewform")
                 }
                 KYUTECH_CAMPUS_HP -> goToBrowser("https://www.iizuka.kyutech.ac.jp/")
                 SYLLABUS_HP -> goToBrowser("https://edragon-syllabus.jimu.kyutech.ac.jp/guest/syllabuses")

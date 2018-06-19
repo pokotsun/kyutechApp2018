@@ -11,6 +11,7 @@ import io.reactivex.schedulers.Schedulers
 
 class LoginActivityPresenter(private val view: LoginMvpView): Presenter {
 
+    // ユーザーの登録を行う
     fun createUser(schoolYear: Int, department: Int) {
         createService().createUser(User.createJson(schoolYear, department))
                 .subscribeOn(Schedulers.newThread())

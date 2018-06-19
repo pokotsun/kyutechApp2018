@@ -17,6 +17,7 @@ interface ImplNewsListActivityPresenter {
 class NewsListActivityPresenter(private val view: NewsListMvpAppCompatActivity): Presenter, ImplNewsListActivityPresenter {
     private var nextUrl: String = ""
 
+    // Apiサーバーから取得したNews一覧をListViewにセット
     override fun setNews2list(adapter: NewsListAdapter, newsHeadingCode: Int) {
         createService().listNewsByNewsHeadingCode(newsHeadingCode)
                 .subscribeOn(Schedulers.newThread())
@@ -37,14 +38,14 @@ class NewsListActivityPresenter(private val view: NewsListMvpAppCompatActivity):
         view.goToNewsDetailActivity(item)
     }
 
-    // Scrollし
+    // Scroll情報を監視して下の方に行った時に次の100件を取得するようにする
     override fun onScrolled2lastItem(adapter: NewsListAdapter) {
         // スクロールイベントを取得
         view.getRxAbsListViewScrollEvent()
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { scrollEvent ->
-                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
+//                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
                     scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount() >= scrollEvent.totalItemCount()
                 }
                 .filter { nextUrl.isNotEmpty() } // next_urlが空ではないか？
@@ -69,10 +70,5 @@ class NewsListActivityPresenter(private val view: NewsListMvpAppCompatActivity):
                         view.showShortSnackbarWithoutView("次のお知らせ${apiRequest.results.size}件を取得しました")
                     }
                 }
-
     }
-
-
-
-
 }

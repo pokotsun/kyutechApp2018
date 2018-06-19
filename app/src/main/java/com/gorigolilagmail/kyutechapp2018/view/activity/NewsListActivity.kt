@@ -37,7 +37,6 @@ interface NewsListMvpAppCompatActivity: MvpView {
 
 class NewsListActivity : MvpAppCompatActivity(), NewsListMvpAppCompatActivity {
 
-    private var nextUrl: String = ""
     private val presenter = NewsListActivityPresenter(this)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,10 +60,6 @@ class NewsListActivity : MvpAppCompatActivity(), NewsListMvpAppCompatActivity {
         presenter.onScrolled2lastItem(listAdapter)
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     override fun showProgress() { progress_bar.visibility = View.VISIBLE }
     override fun hideProgress() { progress_bar.visibility = View.GONE }
 
@@ -73,9 +68,8 @@ class NewsListActivity : MvpAppCompatActivity(), NewsListMvpAppCompatActivity {
     }
 
     // 詳細ページに移動する
-    override fun goToNewsDetailActivity(item: News) {
+    override fun goToNewsDetailActivity(item: News) =
         NewsDetailActivity.intent(this@NewsListActivity, item).let { startActivity(it) }
-    }
 
     override fun getRxAbsListViewScrollEvent(): Observable<AbsListViewScrollEvent> =
         RxAbsListView.scrollEvents(news_list)

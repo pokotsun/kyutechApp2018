@@ -19,7 +19,9 @@ interface LoginMvpView: MvpView {
 }
 
 class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
+
     private val presenter = LoginActivityPresenter(this)
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -27,9 +29,10 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
         LoginClient.init(applicationContext)
 
         if(LoginClient.isSignedUp()) { // ログイン済みであれば
-            goToMainActivity(msgShown = false)
+            goToMainActivity(msgShown=false)
         }
 
+        // ユーザー登録ボタンの挙動
         sign_up_btn.setOnClickListener {
             attemptSignUp()
         }
@@ -44,15 +47,15 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
         department_spinner.adapter = departmentSpinnerAdapter
     }
 
+    // ユーザー登録ボタンが押された時の挙動
     private fun attemptSignUp() {
         val schoolYear: Int = school_year_spinner.selectedItemPosition
         val department: Int = convertToDepartmentId(department_spinner.selectedItemPosition)
         Log.d("items", "schoolYear: $schoolYear, departmentId: $department")
 
         disableUi() // UIを使えなくする
+        presenter.createUser(schoolYear, department) // ユーザー作成
 
-        // ユーザー作成
-        presenter.createUser(schoolYear, department)
     }
 
     private fun disableUi() { // Uiを使えなくする

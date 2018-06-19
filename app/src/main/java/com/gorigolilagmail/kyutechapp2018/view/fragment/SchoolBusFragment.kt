@@ -35,6 +35,7 @@ class SchoolBusFragment : Fragment() {
                         imageView(R.mipmap.schoolbus_time_schedule) {
                             adjustViewBounds = true
                         }.lparams(matchParent, wrapContent)
+
                         imageView(R.mipmap.schoolbus_schedule_30) {
                             adjustViewBounds = true
                         }.lparams(matchParent, wrapContent)

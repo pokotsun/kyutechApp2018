@@ -33,11 +33,11 @@ class NewsDetailActivity : AppCompatActivity() {
 
         ui.setContentView(this)
 
-        setSupportActionBar(ui.toolBar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
+        // Toolbarの状態を初期化
+        initToolBar(ui)
     }
 
+    // OptionItemが押された時の挙動(戻るボタンとか)
     override fun onOptionsItemSelected(item: MenuItem?): Boolean {
         val id: Int = item?.itemId ?: android.R.id.home
 
@@ -51,6 +51,12 @@ class NewsDetailActivity : AppCompatActivity() {
                 super.onOptionsItemSelected(item)
             }
         }
+    }
+
+    private fun initToolBar(ui: NewsDetailActivityUI) {
+        setSupportActionBar(ui.toolBar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
     }
 
     companion object {
@@ -81,7 +87,7 @@ class NewsDetailActivity : AppCompatActivity() {
                 // お知らせページのコンテンツ部分
                 nestedScrollView {
                     verticalLayout {
-
+                        // Newsの主情報部分をセットしていく
                         news.infos.forEach { newsInfo ->
                             // News情報のタイトル部分
                             themedTextView(newsInfo.title, R.style.detailTitle)
@@ -112,7 +118,7 @@ class NewsDetailActivity : AppCompatActivity() {
 
                         // ソースURLについて
                         themedTextView("ソースURL", R.style.detailTitle) {
-//                            textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
+                            //                            textColor = ContextCompat.getColor(context, R.color.gray_little_dark)
 //                            textSize = 16f
 //                            backgroundColor = ContextCompat.getColor(context, R.color.gray_very_pale)
 //                            padding = dip(4)

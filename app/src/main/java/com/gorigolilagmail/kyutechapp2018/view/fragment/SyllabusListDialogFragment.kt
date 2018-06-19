@@ -149,10 +149,6 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                 }
     }
 
-    override fun onDetach() {
-        super.onDetach()
-    }
-
     private fun submitResult(isPosted: Boolean) {
         if(targetFragment != null) {
             Intent().run {
