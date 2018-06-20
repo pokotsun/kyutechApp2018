@@ -35,13 +35,13 @@ class UserScheduleDetailActivity : MvpAppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_schedule_detail)
 
-//        inputMethodManager = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-
         // アクティビティ起動時にキーボードを表示しないようにする
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN)
 //        setSupportActionBar(toolbar)
 
         val userSchedule: UserSchedule = intent.getParcelableExtra(UserScheduleDetailActivity.USER_SCHEDULE_EXTRA)
+
+        Log.d("userScheduleDetail", "${userSchedule.lateNum}, ${userSchedule.absentNum}, ${userSchedule.memo}")
 
         // 各データをUIにセットしていく
         late_count.text = userSchedule.lateNum.toString()
@@ -59,7 +59,7 @@ class UserScheduleDetailActivity : MvpAppCompatActivity() {
                             day = userSchedule.day, period = userSchedule.period,
                             quarter=userSchedule.quarter,
                             memo=memo_edit_field.text.toString(),
-                            lateNum=userSchedule.lateNum, absentNum=userSchedule.absentNum
+                            lateNum=late_count.text.toString().toInt(), absentNum=absent_count.text.toString().toInt()
                     )
             )
                     .subscribeOn(Schedulers.newThread())
@@ -70,10 +70,8 @@ class UserScheduleDetailActivity : MvpAppCompatActivity() {
                     .subscribe { userSchedule ->
                         Log.d("updateComplete", "UserComplete $userSchedule")
 
-                        showShortSnackBar("更新が完了しました!!", view)
+                        showShortSnackBar("遅刻・欠席・メモの更新が完了しました!!", view)
                     }
-
-
         }
         setSyllabusInfos2View(userSchedule.syllabus)
 
