@@ -20,7 +20,12 @@ interface ITabItems {
 
 class TabItems: ITabItems {
 
-    private val scheduleFragment = ScheduleFragment.newInstance(1)
+    private val scheduleFragment = try {
+        ScheduleFragment.newInstance(1)
+    } catch(e: NullPointerException) {
+        ScheduleFragment.newInstance(1)
+    }
+
     override val fragments: Array<Fragment> = arrayOf(
             NewsHeadingListFragment.newInstance(0), scheduleFragment,
             SchoolBusFragment.newInstance(), SettingFragment.newInstance()
