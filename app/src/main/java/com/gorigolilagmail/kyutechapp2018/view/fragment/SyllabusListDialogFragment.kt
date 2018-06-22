@@ -78,6 +78,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
 
         val listAdapter = SyllabusListAdapter(context)
 
+        // シラバスを取得
         createService().listSyllabusByDayAndPeriod(Syllabus.convertDayId2Str(day), period)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -94,6 +95,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                     listAdapter.items = apiRequest.results
                     listAdapter.userDepartment = userDepartment
                     syllabus_list.adapter = listAdapter
+                    nextUrl = apiRequest.next?: ""
 
                     // リスト表示されているシラバスが選択された時の挙動
                     syllabus_list.setOnItemClickListener { parent, view, position, id ->
@@ -125,7 +127,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { scrollEvent ->
-                    //                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
+                    Log.d("SyllabusScrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
                     scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount() >= scrollEvent.totalItemCount()
                 }
                 .filter{ nextUrl.isNotEmpty() }

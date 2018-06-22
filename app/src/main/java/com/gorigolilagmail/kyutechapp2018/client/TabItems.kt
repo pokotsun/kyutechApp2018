@@ -20,14 +20,10 @@ interface ITabItems {
 
 class TabItems: ITabItems {
 
-    private val scheduleFragment = try {
-        ScheduleFragment.newInstance(1)
-    } catch(e: NullPointerException) {
-        ScheduleFragment.newInstance(1)
-    }
+    private var scheduleFragment = ScheduleFragment.newInstance(1)
 
     override val fragments: Array<Fragment> = arrayOf(
-            NewsHeadingListFragment.newInstance(0), scheduleFragment,
+            NewsHeadingListFragment.newInstance(0), getScheduleFragment(),
             SchoolBusFragment.newInstance(), SettingFragment.newInstance()
     )
 
@@ -46,5 +42,10 @@ class TabItems: ITabItems {
     override var selectedTab: TabLayout.Tab? = null
 
     // TabにセットされているScheduleFragmentにアクセスするためのもの
-    override fun getScheduleFragment(): ScheduleFragment = scheduleFragment
+    override fun getScheduleFragment(): ScheduleFragment = try {
+        scheduleFragment
+    } catch(e: NullPointerException) {
+        scheduleFragment = ScheduleFragment.newInstance(3)
+        scheduleFragment
+    }
 }
