@@ -41,7 +41,13 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { tabEvent ->
                     val currentTab = tabEvent.tab()
-                    setToolBarTitle(tabItems.titles[currentTab.position])
+                    // まずTabのタイトルテキストを変更する
+                    if(currentTab.position == SCHEDULE_POSITION) {
+                        setToolBarTitle("時間割(第${tabItems.getScheduleFragment().currentQuarter.id + 1}クォーター)")
+                    } else {
+                        setToolBarTitle(tabItems.titles[currentTab.position])
+                    }
+
                     tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab?.position?: 0])
 //                        tabItems.selectedTab?.text = "TAB TITLE"
                     currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
