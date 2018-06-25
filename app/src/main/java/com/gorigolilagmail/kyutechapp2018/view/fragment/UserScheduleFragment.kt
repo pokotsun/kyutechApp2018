@@ -2,26 +2,21 @@ package com.gorigolilagmail.kyutechapp2018.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.*
 import android.widget.GridLayout
-import android.widget.Toast
 
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
-import com.gorigolilagmail.kyutechapp2018.model.ApiRequest
 import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
 import com.gorigolilagmail.kyutechapp2018.view.activity.UserScheduleDetailActivity
 import com.gorigolilagmail.kyutechapp2018.view.customView.UserScheduleGridItem
-import io.reactivex.Observer
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.disposables.Disposable
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_schedule.*
 
-class ScheduleFragment : MvpAppCompatFragment() {
+class UserScheduleFragment : MvpAppCompatFragment() {
 
     enum class Quarter(val id: Int) {
         FIRST_QUARTER(0),
@@ -30,9 +25,9 @@ class ScheduleFragment : MvpAppCompatFragment() {
         FOURTH_QUARTER(3)
     }
 
-    var isEditing: Boolean = false
-
     var currentQuarter: Quarter = Quarter.FIRST_QUARTER
+
+    var isEditing: Boolean = false
 
     private val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
     private val userDepartment: String = LoginClient.getCurrentUserInfo()?.getDepartmentName()?: throw NullPointerException()
@@ -44,9 +39,10 @@ class ScheduleFragment : MvpAppCompatFragment() {
     }
 
     override fun onResume() {
+        Log.d(SCHEDULE_TITLE, "onResume")
         super.onResume()
         // クラスを全25コマ入れていく
-        setScheduleItems( userId, currentQuarter.id)
+        setScheduleItems( userId, currentQuarter.id, isEditing)
     }
 
     fun setScheduleItems(userId: Int, quarter: Int, isEditing: Boolean = false) {
@@ -80,8 +76,8 @@ class ScheduleFragment : MvpAppCompatFragment() {
                     }
                 }
                 .doOnError { e ->
-                    Log.d("onError", "userSchedule OnError ${e.message}")
-                    schedule_progress.visibility = View.GONE
+                        Log.d("onError", "userSchedule OnError ${e.message}")
+                        schedule_progress.visibility = View.GONE
                 }
                 .subscribe { apiRequest ->
                     val userSchedules: List<UserSchedule> = apiRequest.results
@@ -148,13 +144,14 @@ class ScheduleFragment : MvpAppCompatFragment() {
     }
 
     companion object {
+        private const val SCHEDULE_TITLE: String = "ScheduleFragment"
         private const val RESULT_DIALOG_CODE: Int = 100
 
-        fun newInstance(page: Int): ScheduleFragment {
+        fun newInstance(page: Int): UserScheduleFragment {
             val args: Bundle = Bundle().apply {
                 putInt("page", page)
             }
-            return ScheduleFragment().apply {
+            return UserScheduleFragment().apply {
                 arguments = args
             }
         }

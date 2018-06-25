@@ -42,22 +42,21 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                 .subscribe { tabEvent ->
                     val currentTab = tabEvent.tab()
                     // まずTabのタイトルテキストを変更する
-                    if(currentTab.position == SCHEDULE_POSITION) {
-                        setToolBarTitle("時間割(第${tabItems.getScheduleFragment().currentQuarter.id + 1}クォーター)")
-                    } else {
-                        setToolBarTitle(tabItems.titles[currentTab.position])
-                    }
+                    setToolBarTitle(tabItems.titles[currentTab.position])
 
                     tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab?.position?: 0])
 //                        tabItems.selectedTab?.text = "TAB TITLE"
                     currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
 //                        currentTab.text = "SELECTED"
                     tabItems.selectedTab = currentTab
+
                     if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
                         val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id
                                 ?: throw NullPointerException()
                         tool_bar.menu.clear()
                         tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
+
+                        setToolBarTitle("時間割(第${tabItems.getScheduleFragment().currentQuarter.id + 1}クォーター)")
 
                         if(tabItems.getScheduleFragment().isEditing) { // 編集状態で別のタブに移動していたら編集状態に戻す
                             scheduleToEditMode(loginUserId, tabItems.getScheduleFragment().currentQuarter.id, tool_bar.menu.findItem(R.id.schedule_edit))
@@ -86,8 +85,6 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                         tool_bar.menu.clear()
                     }
                 }
-
-
 
         // toolbarの設定
         tool_bar.title = ""
