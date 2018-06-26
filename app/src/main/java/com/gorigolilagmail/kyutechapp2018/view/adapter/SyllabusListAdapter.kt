@@ -9,7 +9,7 @@ import com.gorigolilagmail.kyutechapp2018.view.customView.ItemListSyllabusUi
 import org.jetbrains.anko.UI
 
 class SyllabusListAdapter(private val context: Context): BaseAdapter() {
-    var items: List<Syllabus> = emptyList()
+    var items: MutableList<Syllabus> = mutableListOf()
     var userDepartment: String = ""
 
     override fun getCount(): Int = items.size

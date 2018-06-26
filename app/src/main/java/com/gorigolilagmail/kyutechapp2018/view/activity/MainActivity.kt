@@ -4,7 +4,6 @@ import android.os.Bundle
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
 import android.view.MenuItem
-import android.widget.Toast
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.client.ITabItems

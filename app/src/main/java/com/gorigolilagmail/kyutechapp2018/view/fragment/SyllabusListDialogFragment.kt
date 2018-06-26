@@ -101,11 +101,11 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                     syllabus_list.setOnItemClickListener { parent, view, position, id ->
                         val item = listAdapter.items[position]
                         createService().createUserSchedule(
-                                        UserSchedule.createJson(
-                                                userId, item.id, day, period,
-                                                quarter, "", 0, 0
-                                        )
+                                UserSchedule.createJson(
+                                        userId, item.id, day, period,
+                                        quarter, "", 0, 0
                                 )
+                        )
                                 .subscribeOn(Schedulers.newThread())
                                 .observeOn(AndroidSchedulers.mainThread())
                                 .doOnError { Log.d("UserSchedulePostError", "${it.message}") }
@@ -140,13 +140,9 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
                 }
                 .subscribe { apiRequest ->
                     nextUrl = apiRequest.next?: ""
-                    listAdapter.items = apiRequest.results
+                    listAdapter.items.plusAssign(apiRequest.results)
                     listAdapter.notifyDataSetChanged()
-
-                    if(apiRequest.next.isNullOrEmpty())
-                        Toast.makeText(context, "一番古いお知らせ${apiRequest.results.size}件です", Toast.LENGTH_SHORT).show()
-                    else
-                        Toast.makeText(context, "次のお知らせ${apiRequest.results.size}件を取得しました", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "追加で授業情報${apiRequest.results.size}件を取得しました", Toast.LENGTH_SHORT).show()
                 }
     }
 

@@ -156,8 +156,4 @@ class UserScheduleFragment : MvpAppCompatFragment() {
             }
         }
     }
-
-
-
-
-}// Required empty public constructor
+}
