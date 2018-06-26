@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.DialogFragment
-import android.support.v4.app.Fragment
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +16,12 @@ import com.gorigolilagmail.kyutechapp2018.client.LoginClient
 import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
 import com.gorigolilagmail.kyutechapp2018.model.Syllabus
 import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
+import com.gorigolilagmail.kyutechapp2018.presenter.ImplSyllabusListDialogFragmentPresenter
+import com.gorigolilagmail.kyutechapp2018.presenter.SyllabusListDialogFragmentPresenter
 import com.gorigolilagmail.kyutechapp2018.view.adapter.SyllabusListAdapter
+import com.jakewharton.rxbinding2.widget.AbsListViewScrollEvent
 import com.jakewharton.rxbinding2.widget.RxAbsListView
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_syllabus_list.*
@@ -26,13 +29,19 @@ import kotlinx.android.synthetic.main.fragment_syllabus_list.*
 interface MvpSyllabusListDialogFramgnetView {
     fun showProgress()
     fun dismissProgress()
+    fun showSyllabusListContainer()
+    fun dismissSyllabusListContainer()
+    fun dismissView()
+    fun showToast(msg: String)
+    fun setAdapter2list(adapter: SyllabusListAdapter)
+    fun submitResult(isPosted: Boolean)
+    fun getObservableAbsListViewScrollEvent(): Observable<AbsListViewScrollEvent>
 }
-
 
 class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgnetView {
 
-    val userId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
-    private var nextUrl: String = ""
+    private val presenter = SyllabusListDialogFragmentPresenter(this)
+    private val userId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +61,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
         super.onViewCreated(view, savedInstanceState)
 
         val period = arguments.getInt(PERIOD_EXTRA)
-        val day = arguments.getInt(DAY_EXTRA)
+        val dayId = arguments.getInt(DAY_EXTRA)
         val quarter = arguments.getInt(QUARTER_EXTRA)
         val currentUserScheduleId = arguments.getInt(CURRENT_SCHEDULE_ID)
         val userDepartment = arguments.getString(USER_DEPARTMENT_NAME)
@@ -61,16 +70,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
 
         if(currentUserScheduleId > 0) {
             remove_btn.setOnClickListener { // 削除ボタンが押された時の挙動
-                createService().deleteUserSchedule(currentUserScheduleId)
-                        .subscribeOn(Schedulers.newThread())
-                        .observeOn(AndroidSchedulers.mainThread())
-                        .subscribe { response ->
-                            if(response.isSuccessful) {
-                                submitResult(true)
-                            }
-                            else { Toast.makeText(context, "削除に失敗しました", Toast.LENGTH_SHORT).show() }
-                            dismiss()
-                        }
+                presenter.onClickDeleteButton(currentUserScheduleId)
             }
         } else {
             remove_btn.visibility = View.GONE
@@ -79,74 +79,18 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
         val listAdapter = SyllabusListAdapter(context)
 
         // シラバスを取得
-        createService().listSyllabusByDayAndPeriod(Syllabus.convertDayId2Str(day), period)
-                .subscribeOn(Schedulers.newThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .doOnSubscribe {
-                    syllabus_list_container.visibility = View.GONE
-                    showProgress()
-                }
-                .doOnComplete {
-                    syllabus_list_container.visibility = View.VISIBLE
-                    dismissProgress()
-                }
-                .doOnError { Log.d("error", "${it.message}") }
-                .subscribe { apiRequest ->
-                    listAdapter.items = apiRequest.results
-                    listAdapter.userDepartment = userDepartment
-                    syllabus_list.adapter = listAdapter
-                    nextUrl = apiRequest.next?: ""
+        presenter.setSyllabuses2List(listAdapter, dayId, period, userDepartment)
 
-                    // リスト表示されているシラバスが選択された時の挙動
-                    syllabus_list.setOnItemClickListener { parent, view, position, id ->
-                        val item = listAdapter.items[position]
-                        createService().createUserSchedule(
-                                UserSchedule.createJson(
-                                        userId, item.id, day, period,
-                                        quarter, "", 0, 0
-                                )
-                        )
-                                .subscribeOn(Schedulers.newThread())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .doOnError { Log.d("UserSchedulePostError", "${it.message}") }
-                                .subscribe { userSchedule ->
-                                    Log.d("PostCreated", "UserScheduleのPOST完了: ${userSchedule}")
-                                    submitResult(true)
-                                    dismiss()
-                                }
-                    }
-                }
+        // リスト表示されているシラバスが選択された時の挙動
+        syllabus_list.setOnItemClickListener { parent, view, position, id ->
+            presenter.onClickSyllabusListItem(listAdapter, position, userId, dayId, period, quarter)
+        }
 
-        scrollEvent(listAdapter)
+        presenter.onScrollSyllabusList(listAdapter)
     }
 
-    private fun scrollEvent(listAdapter: SyllabusListAdapter) {
-        // スクロールイベントを取得
-        RxAbsListView.scrollEvents(syllabus_list)
-                .subscribeOn(AndroidSchedulers.mainThread())
-                .observeOn(AndroidSchedulers.mainThread())
-                .filter { scrollEvent ->
-                    Log.d("SyllabusScrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
-                    scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount() >= scrollEvent.totalItemCount()
-                }
-                .filter{ nextUrl.isNotEmpty() }
-                .take(1)
-                .flatMap {
-                    createService().getNextSyllabusList(nextUrl)
-                            .subscribeOn(Schedulers.newThread())
-                            .observeOn(AndroidSchedulers.mainThread())
-                            .doOnSubscribe { progress_bar.visibility = View.VISIBLE }
-                            .doOnComplete { progress_bar.visibility = View.GONE }
-                }
-                .subscribe { apiRequest ->
-                    nextUrl = apiRequest.next?: ""
-                    listAdapter.items.plusAssign(apiRequest.results)
-                    listAdapter.notifyDataSetChanged()
-                    Toast.makeText(context, "追加で授業情報${apiRequest.results.size}件を取得しました", Toast.LENGTH_SHORT).show()
-                }
-    }
-
-    private fun submitResult(isPosted: Boolean) {
+    // ダイアログ上でのリクエスト結果をBoolで親Viewに返す
+    override fun submitResult(isPosted: Boolean) {
         if(targetFragment != null) {
             Intent().run {
                 putExtra("isSubmitted", isPosted)
@@ -154,6 +98,8 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
             }
         }
     }
+
+    override fun showToast(msg: String) = Toast.makeText(context, msg, Toast.LENGTH_SHORT).show()
 
     override fun showProgress() {
 //        syllabus_list_container.visibility = View.GONE
@@ -164,6 +110,21 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
 //        syllabus_list_container.visibility = View.VISIBLE
         progress_bar.visibility = View.GONE
     }
+
+    override fun showSyllabusListContainer() { syllabus_list_container.visibility = View.VISIBLE }
+
+    override fun dismissSyllabusListContainer() { syllabus_list_container.visibility = View.GONE }
+
+    override fun setAdapter2list(adapter: SyllabusListAdapter) {
+        syllabus_list.adapter = adapter
+    }
+
+    override fun dismissView() { dismiss() }
+
+    override fun getObservableAbsListViewScrollEvent(): Observable<AbsListViewScrollEvent> =
+            RxAbsListView.scrollEvents(syllabus_list)
+            .subscribeOn(AndroidSchedulers.mainThread())
+            .observeOn(AndroidSchedulers.mainThread())
 
 
     companion object {
