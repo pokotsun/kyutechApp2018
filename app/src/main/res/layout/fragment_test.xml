@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:gravity="center"/>
 
-    <com.gorigolilagmail.kyutechapp2018.view.customView.CircularTextView
+    <com.planningdevgmail.kyutechapp2018.view.customView.CircularTextView
         android:id="@+id/circularTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
