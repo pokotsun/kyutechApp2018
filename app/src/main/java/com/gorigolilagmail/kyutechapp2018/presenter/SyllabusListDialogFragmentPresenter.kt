@@ -105,6 +105,4 @@ class SyllabusListDialogFragmentPresenter(private val view: MvpSyllabusListDialo
                     view.showToast("追加で授業情報${apiRequest.results.size}件を取得しました")
                 }
     }
-
-
 }

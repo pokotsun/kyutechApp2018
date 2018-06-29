@@ -10,12 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-
 import com.gorigolilagmail.kyutechapp2018.R
 import com.gorigolilagmail.kyutechapp2018.client.LoginClient
-import com.gorigolilagmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
-import com.gorigolilagmail.kyutechapp2018.model.Syllabus
-import com.gorigolilagmail.kyutechapp2018.model.UserSchedule
 import com.gorigolilagmail.kyutechapp2018.presenter.ImplSyllabusListDialogFragmentPresenter
 import com.gorigolilagmail.kyutechapp2018.presenter.SyllabusListDialogFragmentPresenter
 import com.gorigolilagmail.kyutechapp2018.view.adapter.SyllabusListAdapter
@@ -23,7 +19,6 @@ import com.jakewharton.rxbinding2.widget.AbsListViewScrollEvent
 import com.jakewharton.rxbinding2.widget.RxAbsListView
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.fragment_syllabus_list.*
 
 interface MvpSyllabusListDialogFramgnetView {
@@ -40,7 +35,7 @@ interface MvpSyllabusListDialogFramgnetView {
 
 class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgnetView {
 
-    private val presenter = SyllabusListDialogFragmentPresenter(this)
+    private val presenter: ImplSyllabusListDialogFragmentPresenter = SyllabusListDialogFragmentPresenter(this)
     private val userId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,7 +77,7 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
         presenter.setSyllabuses2List(listAdapter, dayId, period, userDepartment)
 
         // リスト表示されているシラバスが選択された時の挙動
-        syllabus_list.setOnItemClickListener { parent, view, position, id ->
+        syllabus_list.setOnItemClickListener { _, _, position, _ ->
             presenter.onClickSyllabusListItem(listAdapter, position, userId, dayId, period, quarter)
         }
 
@@ -119,7 +114,8 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
         syllabus_list.adapter = adapter
     }
 
-    override fun dismissView() { dismiss() }
+    // Dialogを閉じる
+    override fun dismissView() = dismiss()
 
     override fun getObservableAbsListViewScrollEvent(): Observable<AbsListViewScrollEvent> =
             RxAbsListView.scrollEvents(syllabus_list)

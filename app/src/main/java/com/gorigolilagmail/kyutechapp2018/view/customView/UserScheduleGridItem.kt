@@ -23,13 +23,13 @@ class UserScheduleGridItem @JvmOverloads constructor(context: Context,
                                                      isEditing: Boolean=false)
     : LinearLayout(context, attrs, defStyleAttr) {
 
-    var view: View? = null
+    private val view: View = LayoutInflater.from(context).inflate(R.layout.class_grid_item, this)
 
     init {
-        view = LayoutInflater.from(context).inflate(R.layout.class_grid_item, this)
-
         view?.find<TextView>(R.id.syllabus_name)?.text = item.syllabus.title
-        view?.find<TextView>(R.id.class_room_name)?.text = item.syllabus.targetPlace
+
+        view?.find<TextView>(R.id.class_room_name)?.text = if(item.syllabus.targetPlace.isNullOrEmpty()) "場所指定なし" else item.syllabus.targetPlace
+
         view?.find<LinearLayout>(R.id.selected_period_container)?.background = ContextCompat.getDrawable(context, item.syllabus.getScheduleKindColorId(userDepartment))
     }
 

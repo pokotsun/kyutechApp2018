@@ -92,10 +92,10 @@ data class Syllabus(
     fun getScheduleKindColorId(department: String): Int {
         val kindText = getScheduleKind(department)
         when(kindText) {
-            "必" -> return R.color.newsTopic1
-            "選必" -> return R.color.newsTopic4
-            "選" -> return R.color.newsTopic3
-            "査外" -> return R.color.newsTopic12
+            "必" -> return R.color.mustSyllabus
+            "選必" -> return R.color.selectedMustSyllabus
+            "選" -> return R.color.notMustSyllabus
+            "査外" -> return R.color.newsTopic3
             else -> return android.R.color.darker_gray
         }
     }
