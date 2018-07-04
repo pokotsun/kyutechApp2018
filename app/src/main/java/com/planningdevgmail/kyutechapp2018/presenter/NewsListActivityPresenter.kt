@@ -45,12 +45,13 @@ class NewsListActivityPresenter(private val view: NewsListMvpAppCompatActivity):
                 .subscribeOn(AndroidSchedulers.mainThread())
                 .observeOn(AndroidSchedulers.mainThread())
                 .filter { scrollEvent ->
-//                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
+                    Log.d("scrollEvents", "${scrollEvent.firstVisibleItem()}, ${scrollEvent.visibleItemCount()} ${scrollEvent.totalItemCount()}")
                     scrollEvent.firstVisibleItem() + scrollEvent.visibleItemCount() >= scrollEvent.totalItemCount()
                 }
                 .filter { nextUrl.isNotEmpty() } // next_urlが空ではないか？
                 .take(1) // いっぱいイベント拾ってしまうがとりあえずここで渋滞するので上からひとつだけ発火させる
                 .flatMap {  // データ取得のObservableに処理をつなげる
+                    nextUrl = nextUrl.replace("http://", "https://")
                     createService().getNextNewsList(nextUrl)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())
@@ -58,6 +59,10 @@ class NewsListActivityPresenter(private val view: NewsListMvpAppCompatActivity):
                             .doOnComplete { view.hideProgress() }
                 }
                 .doOnComplete { onScrolled2lastItem(adapter) }
+                .doOnError {
+                    Log.d("onScrollError", "スクロール時のエラー: ${it.message}")
+                    onScrolled2lastItem(adapter)
+                }
                 .subscribe { apiRequest ->
                     nextUrl = apiRequest.next?: ""
                     adapter.items.plusAssign(apiRequest.results)

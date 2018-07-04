@@ -7,7 +7,7 @@ apply plugin: "realm-android"
 android {
     compileSdkVersion 26
     defaultConfig {
-        applicationId "com.gorigolilagmail.kyutechapp2018"
+        applicationId "com.planningdevgmail.kyutechapp2018"
         minSdkVersion 23
         targetSdkVersion 26
         versionCode 3

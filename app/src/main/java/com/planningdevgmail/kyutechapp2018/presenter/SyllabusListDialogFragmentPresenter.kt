@@ -92,6 +92,7 @@ class SyllabusListDialogFragmentPresenter(private val view: MvpSyllabusListDialo
                 .filter{ nextUrl.isNotEmpty() }
                 .take(1)
                 .flatMap {
+                    nextUrl = nextUrl.replace("http://", "https://")
                     createService().getNextSyllabusList(nextUrl)
                             .subscribeOn(Schedulers.newThread())
                             .observeOn(AndroidSchedulers.mainThread())

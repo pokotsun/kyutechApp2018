@@ -21,8 +21,6 @@ interface MainMvpView: MvpView {
 
 class MainActivity : MvpAppCompatActivity(), MainMvpView {
 
-    private val presenter: MainActivityPresenter = MainActivityPresenter()
-
     private val tabItems: ITabItems = TabItems()
 
     override fun onCreate(savedInstanceState: Bundle?) {
