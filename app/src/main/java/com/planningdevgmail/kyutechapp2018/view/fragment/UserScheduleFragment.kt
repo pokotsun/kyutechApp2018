@@ -29,8 +29,9 @@ class UserScheduleFragment : MvpAppCompatFragment() {
 
     var isEditing: Boolean = false
 
-    private val userId: Int = LoginClient.getCurrentUserInfo()?.id ?: throw NullPointerException()
-    private val userDepartment: String = LoginClient.getCurrentUserInfo()?.getDepartmentName()?: throw NullPointerException()
+    private val userId: Int = LoginClient.getCurrentUserInfo()?.id?: throw NullPointerException()
+    private val userDepartmentName: String = LoginClient.getCurrentUserInfo()?.getDepartmentName()?: throw NullPointerException()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -110,7 +111,7 @@ class UserScheduleFragment : MvpAppCompatFragment() {
     }
 
     private fun setScheduleItem(userSchedule: UserSchedule, isBlank: Boolean =false, isEditing: Boolean=false) {
-        val item = UserScheduleGridItem(context, item = userSchedule, userDepartment=userDepartment)
+        val item = UserScheduleGridItem(context, item = userSchedule, userDepartment=userDepartmentName)
         item.layoutParams = GridLayout.LayoutParams().apply {
             columnSpec = GridLayout.spec(userSchedule.day, GridLayout.FILL, 1f)
             rowSpec = GridLayout.spec(userSchedule.period, GridLayout.FILL, 1f)
@@ -120,7 +121,7 @@ class UserScheduleFragment : MvpAppCompatFragment() {
             item.setOnClickListener {
                 userSchedule.run {
                     Log.d("selectedQuarter", "$quarter")
-                    showSyllabusListDialog(period, day, quarter, userSchedule.id, userDepartment)
+                    showSyllabusListDialog(period, day, quarter, userSchedule.id, userDepartmentName)
                 }
             }
         } else { // 編集中じゃない -> 閲覧中の時
@@ -145,11 +146,14 @@ class UserScheduleFragment : MvpAppCompatFragment() {
 
     companion object {
         private const val SCHEDULE_TITLE: String = "ScheduleFragment"
+        private const val USER_ID_EXTRA: String = "userId"
+        private const val USER_DEPARTMENT_EXTRA: String = "userDepartment"
         private const val RESULT_DIALOG_CODE: Int = 100
 
-        fun newInstance(page: Int): UserScheduleFragment {
+        fun newInstance(userId: Int, userDepartment: String): UserScheduleFragment {
             val args: Bundle = Bundle().apply {
-                putInt("page", page)
+                putInt(USER_ID_EXTRA, userId)
+                putString(USER_DEPARTMENT_EXTRA, userDepartment)
             }
             return UserScheduleFragment().apply {
                 arguments = args

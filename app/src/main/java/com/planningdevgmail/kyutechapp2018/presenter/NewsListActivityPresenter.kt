@@ -7,6 +7,7 @@ import com.planningdevgmail.kyutechapp2018.view.activity.NewsListMvpAppCompatAct
 import com.planningdevgmail.kyutechapp2018.view.adapter.NewsListAdapter
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
+import java.net.SocketTimeoutException
 
 interface ImplNewsListActivityPresenter {
     fun setNews2list(adapter: NewsListAdapter, newsHeadingCode: Int)
@@ -22,9 +23,19 @@ class NewsListActivityPresenter(private val view: NewsListMvpAppCompatActivity):
         createService().listNewsByNewsHeadingCode(newsHeadingCode)
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
+                .retry { count, throwable ->
+                    // 2回まで無条件にリトライする
+                    count < 3
+                }
                 .doOnSubscribe { view.showProgress() }
                 .doOnComplete { view.hideProgress() }
-                .doOnError { view.hideProgress() }
+                .doOnError {
+                    try {
+                        view.hideProgress()
+                    } catch(e: SocketTimeoutException) {
+                        view.showShortSnackbarWithoutView("通信にエラーが生じました.\n 一度前の画面に戻ってからもう一度お願いします.")
+                    }
+                }
                 .subscribe { apiRequest ->
                     nextUrl = apiRequest.next?: ""
                     val newsList = apiRequest.results

@@ -23,7 +23,8 @@ interface ITabItems {
 
 class TabItems: ITabItems {
 
-    private var scheduleFragment = UserScheduleFragment.newInstance(1)
+    private var scheduleFragment = UserScheduleFragment.newInstance(
+            0, "ダミー")
 
     override val fragments: Array<Fragment> = arrayOf(
             NewsHeadingListFragment.newInstance(0), getScheduleFragment(),
@@ -48,7 +49,9 @@ class TabItems: ITabItems {
     override fun getScheduleFragment(): UserScheduleFragment = try {
         scheduleFragment
     } catch(e: NullPointerException) {
-        scheduleFragment = UserScheduleFragment.newInstance(3)
+        scheduleFragment = UserScheduleFragment.newInstance(
+                0, "ダミー"
+        )
         scheduleFragment
     }
 }

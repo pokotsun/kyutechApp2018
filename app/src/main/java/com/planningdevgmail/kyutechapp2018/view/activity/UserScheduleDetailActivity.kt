@@ -10,13 +10,10 @@ import android.support.design.widget.Snackbar
 import android.support.v4.widget.NestedScrollView
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.view.MotionEvent
 import android.view.View
-import android.view.ViewGroup
 import android.view.WindowManager
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
-import android.widget.Toast
 import com.planningdevgmail.kyutechapp2018.R
 import com.planningdevgmail.kyutechapp2018.client.LoginClient
 import com.planningdevgmail.kyutechapp2018.client.RetrofitServiceGenerator.createService
@@ -25,7 +22,6 @@ import com.planningdevgmail.kyutechapp2018.model.UserSchedule
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user_schedule_detail.*
-import org.jetbrains.anko.backgroundColor
 
 class UserScheduleDetailActivity : MvpAppCompatActivity() {
 

@@ -8,7 +8,6 @@ import com.planningdevgmail.kyutechapp2018.R
 import com.planningdevgmail.kyutechapp2018.client.LoginClient
 import com.planningdevgmail.kyutechapp2018.client.ITabItems
 import com.planningdevgmail.kyutechapp2018.client.TabItems
-import com.planningdevgmail.kyutechapp2018.presenter.MainActivityPresenter
 import com.planningdevgmail.kyutechapp2018.view.adapter.TabAdapter
 import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
 import io.reactivex.android.schedulers.AndroidSchedulers
@@ -20,6 +19,7 @@ interface MainMvpView: MvpView {
 }
 
 class MainActivity : MvpAppCompatActivity(), MainMvpView {
+
 
     private val tabItems: ITabItems = TabItems()
 

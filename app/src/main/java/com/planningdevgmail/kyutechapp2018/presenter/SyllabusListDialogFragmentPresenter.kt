@@ -54,7 +54,13 @@ class SyllabusListDialogFragmentPresenter(private val view: MvpSyllabusListDialo
                     view.showSyllabusListContainer()
                     view.dismissProgress()
                 }
-                .doOnError { Log.d("error", "${it.message}") }
+                .doOnError {
+                    try {Log.d("error", "${it.message}")}
+                    catch(e: java.lang.IllegalStateException) {
+                        view.showToast("エラーが発生しました。もう一度お試しください")
+                        view.dismissView()
+                    }
+                }
                 .subscribe { apiRequest ->
                     listAdapter.items = apiRequest.results
                     listAdapter.userDepartment = userDepartment
