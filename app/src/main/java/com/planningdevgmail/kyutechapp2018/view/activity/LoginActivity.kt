@@ -1,12 +1,10 @@
 package com.planningdevgmail.kyutechapp2018.view.activity
 
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.Toast
 import com.planningdevgmail.kyutechapp2018.R
 import com.planningdevgmail.kyutechapp2018.client.LoginClient
 import com.planningdevgmail.kyutechapp2018.presenter.LoginActivityPresenter

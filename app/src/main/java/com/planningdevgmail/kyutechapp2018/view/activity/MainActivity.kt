@@ -20,12 +20,16 @@ interface MainMvpView: MvpView {
 
 class MainActivity : MvpAppCompatActivity(), MainMvpView {
 
-
-    private val tabItems: ITabItems = TabItems()
+    private val tabItems: ITabItems by lazy {
+        LoginClient.init(applicationContext)
+        TabItems()
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        LoginClient.init(applicationContext)
 
         val adapter = TabAdapter(supportFragmentManager, tabItems.fragments)
         view_pager.adapter = adapter
