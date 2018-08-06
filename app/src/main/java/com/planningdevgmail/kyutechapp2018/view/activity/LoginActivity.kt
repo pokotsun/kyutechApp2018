@@ -25,7 +25,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
         setContentView(R.layout.activity_login)
 
         LoginClient.init(applicationContext)
-
+        
         if(LoginClient.isSignedUp()) { // ログイン済みであれば
             goToMainActivity(msgShown=false)
         }
