@@ -70,6 +70,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
         sign_up_progress.visibility = View.GONE
     }
 
+    // MainActivityに移動する
     override fun goToMainActivity(msg: String, msgShown: Boolean) {
         Intent(this, MainActivity::class.java).run {
             if(msgShown) {
@@ -81,13 +82,13 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
     }
 
 
-
+    // ログイン済みかどうかの確認をする
     override fun isSignedUp(): Boolean = LoginClient.isSignedUp()
 
+    // 学科選択spinnerのポジションを学科IDに変換する
     private fun convertToDepartmentId(position: Int): Int = 200 + position
 
     companion object {
-
         val schoolYears: Array<String> = arrayOf(
                 "1年生", "2年生", "3年生", "4年生"
         )

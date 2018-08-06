@@ -10,13 +10,16 @@ import com.planningdevgmail.kyutechapp2018.client.ITabItems
 import com.planningdevgmail.kyutechapp2018.client.TabItems
 import com.planningdevgmail.kyutechapp2018.view.adapter.TabAdapter
 import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
+import com.jakewharton.rxbinding2.support.design.widget.TabLayoutSelectionEvent
 import com.planningdevgmail.kyutechapp2018.view.fragment.UserScheduleFragment
+import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
 interface MainMvpView: MvpView {
     fun setToolBarTitle(title: String)
     fun setToolBarBackground(colorId: Int)
+    fun getRxTabEvent(): Observable<TabLayoutSelectionEvent>
 }
 
 class MainActivity : MvpAppCompatActivity(), MainMvpView {
@@ -38,11 +41,12 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
         initializeTabIcons() // タブアイコンの初期化処理
 
         // Tab情報取得
-        RxTabLayout.selectionEvents(tab_layout)
+        getRxTabEvent()
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { tabEvent ->
                     val selectedTab = tabItems.selectedTab
                     val currentTab = tabEvent.tab()
+
                     // まずTabのタイトルテキストを変更する
                     setToolBarTitle(tabItems.titles[currentTab.position])
 
@@ -55,6 +59,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
 
                         val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id
                                 ?: throw NullPointerException()
+
                         tool_bar.menu.clear()
                         tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
 
@@ -64,23 +69,9 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                             scheduleToEditMode(loginUserId, scheduleFragment.currentQuarter.id, tool_bar.menu.findItem(R.id.schedule_edit))
                         }
 
+                        // ツールバーのメニューアイテムが押された時の挙動
                         tool_bar.setOnMenuItemClickListener { item ->
-                            when (item.itemId) {
-                                R.id.schedule_edit -> { // 編集ボタンが押された時
-                                    toolBarEditBtnToggle(loginUserId, scheduleFragment.currentQuarter.id)
-                                }
-                                else -> { // クオーターの変更の場合
-                                    val quarter: Int = when (item.itemId) {
-                                        R.id.first_quarter -> 0
-                                        R.id.second_quarter -> 1
-                                        R.id.third_quarter -> 2
-                                        else -> 3
-                                    }
-                                    setToolBarTitle("時間割(第${quarter + 1}クォーター)")
-                                    scheduleFragment.setScheduleItems(loginUserId, quarter, isEditing= scheduleFragment.isEditing)
-                                }
-                            }
-                            true
+                            onClickUserScheduleMenuItem(item, loginUserId, scheduleFragment)
                         }
                     } else { // 時間割画面でなかったら
                         tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.kyutech_main_color))
@@ -100,15 +91,39 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
 
     // 編集ボタンが今どの状態にあるかで表示する内容を変更し、編集中か閲覧中かの状態をBoolで返す
     private fun toolBarEditBtnToggle(loginUserId: Int, quarter: Int): Boolean {
+        val scheduleFragment = tabItems.getScheduleFragment()
         val item: MenuItem = tool_bar.menu.findItem(R.id.schedule_edit)
-        val isEditing: Boolean = tabItems.getScheduleFragment().isEditing
-        if(isEditing) {
+        val isEditing: Boolean = scheduleFragment.isEditing
+        if(isEditing) { // 編集状態のため閲覧モードにする
             scheduleToBrowseMode(loginUserId, quarter, item)
-        } else { // 編集状態にする
+        } else { // 閲覧中のため編集モードにする
             scheduleToEditMode(loginUserId, quarter, item)
         }
-        tabItems.getScheduleFragment().isEditing = isEditing.not()
-        return tabItems.getScheduleFragment().isEditing
+        scheduleFragment.isEditing = isEditing.not()
+        return scheduleFragment.isEditing
+    }
+
+    // UserScheduleフラグメントにおいてツールバーのメニューアイテムが押された時の挙動
+    private fun onClickUserScheduleMenuItem(
+            item: MenuItem,
+            loginUserId: Int,
+            scheduleFragment: UserScheduleFragment): Boolean {
+        when (item.itemId) {
+            R.id.schedule_edit -> { // 編集ボタンが押された時
+                toolBarEditBtnToggle(loginUserId, scheduleFragment.currentQuarter.id)
+            }
+            else -> { // クオーターの変更の場合
+                val quarter: Int = when (item.itemId) {
+                    R.id.first_quarter -> 0
+                    R.id.second_quarter -> 1
+                    R.id.third_quarter -> 2
+                    else -> 3
+                }
+                setToolBarTitle("時間割(第${quarter + 1}クォーター)")
+                scheduleFragment.setScheduleItems(loginUserId, quarter, isEditing= scheduleFragment.isEditing)
+            }
+        }
+        return true
     }
 
     private fun scheduleToEditMode(loginUserId: Int, quarter: Int, item: MenuItem) {
@@ -131,6 +146,8 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
     // Toolbarの背景色を変更する
     override fun setToolBarBackground(colorId: Int) { tool_bar.setBackgroundColor(ContextCompat.getColor(this, colorId)) }
 
+    // タブイベントをObservableで取得
+    override fun getRxTabEvent(): Observable<TabLayoutSelectionEvent> = RxTabLayout.selectionEvents(tab_layout)
 
     // タブのアイコンを初期化
     private fun initializeTabIcons() {

@@ -34,7 +34,7 @@ class TabItems: ITabItems {
             R.mipmap.bus_gray, R.mipmap.setting_gray
     )
 
-    override val titles: Array<String> = arrayOf("お知らせ", "時間割(第1クォーター)", "バス情報", "その他")
+    override val titles: Array<String> = arrayOf("掲示板", "時間割(第1クォーター)", "バス情報", "その他")
 
     override val selectedIcons: Array<Int> = arrayOf(
             R.mipmap.news_blue, R.mipmap.schedule_blue,

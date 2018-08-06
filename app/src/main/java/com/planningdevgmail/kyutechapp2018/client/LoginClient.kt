@@ -30,6 +30,7 @@ object LoginClient {
         }
     }
 
+    // RealmをCloseする(Activityが終わった時にだいたい使われる)
     fun close() {
         realm?.close()
         realm = null
@@ -48,10 +49,11 @@ object LoginClient {
         User(realmUser.id, realmUser.schoolYear, realmUser.department)
     }
 
+    // 現在Realmに保存されているユーザーデータを全てLogにプリントする
     fun printAllUser() {
         val loginUsers = realm?.where(RealmUser::class.java)?.findAll()
         for((i,k) in loginUsers!!.withIndex()) {
-            Log.d("login_users[$i]", k.toString())
+            Log.d("loginUsers[$i]", k.toString())
         }
     }
 
