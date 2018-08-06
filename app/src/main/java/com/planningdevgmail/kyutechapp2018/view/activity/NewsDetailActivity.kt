@@ -53,6 +53,7 @@ class NewsDetailActivity : AppCompatActivity() {
         }
     }
 
+    // Toolbarを初期化する
     private fun initToolBar(ui: NewsDetailActivityUI) {
         setSupportActionBar(ui.toolBar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)

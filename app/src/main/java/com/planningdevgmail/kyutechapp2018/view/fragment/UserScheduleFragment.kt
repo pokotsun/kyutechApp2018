@@ -150,6 +150,7 @@ class UserScheduleFragment : MvpAppCompatFragment() {
         private const val USER_DEPARTMENT_EXTRA: String = "userDepartment"
         private const val RESULT_DIALOG_CODE: Int = 100
 
+        @JvmStatic
         fun newInstance(): UserScheduleFragment {
             val args: Bundle = Bundle().apply {
 //                putInt(USER_ID_EXTRA, userId)

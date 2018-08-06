@@ -47,12 +47,15 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                     val selectedTab = tabItems.selectedTab
                     val currentTab = tabEvent.tab()
 
-                    // まずTabのタイトルテキストを変更する
+                    // Tabのタイトルテキストを変更する
                     setToolBarTitle(tabItems.titles[currentTab.position])
 
-                    selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[selectedTab?.position?: 0])
+                    // 選択中のタブのアイコンだけ色をつけるようにする
+                    selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[selectedTab?.position
+                            ?: 0])
                     currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
                     tabItems.selectedTab = currentTab
+
 
                     if(currentTab.position == TabItems.SCHEDULE_POSITION) { // 時間割画面が選択された場合
                         val scheduleFragment: UserScheduleFragment = tabItems.getScheduleFragment()
@@ -73,6 +76,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                         tool_bar.setOnMenuItemClickListener { item ->
                             onClickUserScheduleMenuItem(item, loginUserId, scheduleFragment)
                         }
+
                     } else { // 時間割画面でなかったら
                         tool_bar.setBackgroundColor(ContextCompat.getColor(this@MainActivity, R.color.kyutech_main_color))
                         tool_bar.menu.clear()

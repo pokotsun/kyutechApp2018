@@ -14,6 +14,10 @@ import android.widget.Toast
 import com.planningdevgmail.kyutechapp2018.R
 import kotlinx.android.synthetic.main.fragment_setting.*
 
+/*
+    設定画面
+ */
+
 class SettingFragment : MvpAppCompatFragment() {
     private val settingItems =
             arrayOf("ユーザー情報更新", "P&Dについて", "このアプリについて", "ご不満・ご要望フォーム",
