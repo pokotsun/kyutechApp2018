@@ -10,6 +10,7 @@ import com.planningdevgmail.kyutechapp2018.client.ITabItems
 import com.planningdevgmail.kyutechapp2018.client.TabItems
 import com.planningdevgmail.kyutechapp2018.view.adapter.TabAdapter
 import com.jakewharton.rxbinding2.support.design.widget.RxTabLayout
+import com.planningdevgmail.kyutechapp2018.view.fragment.UserScheduleFragment
 import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_main.*
 
@@ -21,7 +22,6 @@ interface MainMvpView: MvpView {
 class MainActivity : MvpAppCompatActivity(), MainMvpView {
 
     private val tabItems: ITabItems by lazy {
-        LoginClient.init(applicationContext)
         TabItems()
     }
 
@@ -41,32 +41,33 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
         RxTabLayout.selectionEvents(tab_layout)
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe { tabEvent ->
+                    val selectedTab = tabItems.selectedTab
                     val currentTab = tabEvent.tab()
                     // まずTabのタイトルテキストを変更する
                     setToolBarTitle(tabItems.titles[currentTab.position])
 
-                    tabItems.selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[tabItems.selectedTab?.position?: 0])
-//                        tabItems.selectedTab?.text = "TAB TITLE"
+                    selectedTab?.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.icons[selectedTab?.position?: 0])
                     currentTab.icon = ContextCompat.getDrawable(this@MainActivity, tabItems.selectedIcons[currentTab.position])
-//                        currentTab.text = "SELECTED"
                     tabItems.selectedTab = currentTab
 
-                    if(currentTab.position == SCHEDULE_POSITION) { // 時間割画面が選択された場合
+                    if(currentTab.position == TabItems.SCHEDULE_POSITION) { // 時間割画面が選択された場合
+                        val scheduleFragment: UserScheduleFragment = tabItems.getScheduleFragment()
+
                         val loginUserId: Int = LoginClient.getCurrentUserInfo()?.id
                                 ?: throw NullPointerException()
                         tool_bar.menu.clear()
                         tool_bar.inflateMenu(R.menu.menu_schedule_fragment)
 
-                        setToolBarTitle("時間割(第${tabItems.getScheduleFragment().currentQuarter.id + 1}クォーター)")
+                        setToolBarTitle("時間割(第${scheduleFragment.currentQuarter.id + 1}クォーター)")
 
-                        if(tabItems.getScheduleFragment().isEditing) { // 編集状態で別のタブに移動していたら編集状態に戻す
-                            scheduleToEditMode(loginUserId, tabItems.getScheduleFragment().currentQuarter.id, tool_bar.menu.findItem(R.id.schedule_edit))
+                        if(scheduleFragment.isEditing) { // 編集状態で別のタブに移動していたら編集状態に戻す
+                            scheduleToEditMode(loginUserId, scheduleFragment.currentQuarter.id, tool_bar.menu.findItem(R.id.schedule_edit))
                         }
 
                         tool_bar.setOnMenuItemClickListener { item ->
                             when (item.itemId) {
                                 R.id.schedule_edit -> { // 編集ボタンが押された時
-                                    toolBarEditBtnToggle(loginUserId, tabItems.getScheduleFragment().currentQuarter.id)
+                                    toolBarEditBtnToggle(loginUserId, scheduleFragment.currentQuarter.id)
                                 }
                                 else -> { // クオーターの変更の場合
                                     val quarter: Int = when (item.itemId) {
@@ -76,7 +77,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
                                         else -> 3
                                     }
                                     setToolBarTitle("時間割(第${quarter + 1}クォーター)")
-                                    tabItems.getScheduleFragment().setScheduleItems(loginUserId, quarter, isEditing=tabItems.getScheduleFragment().isEditing)
+                                    scheduleFragment.setScheduleItems(loginUserId, quarter, isEditing= scheduleFragment.isEditing)
                                 }
                             }
                             true
@@ -90,6 +91,11 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
         // toolbarの設定
         tool_bar.title = ""
         setSupportActionBar(tool_bar)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        LoginClient.close() // RealmをClose
     }
 
     // 編集ボタンが今どの状態にあるかで表示する内容を変更し、編集中か閲覧中かの状態をBoolで返す
@@ -135,8 +141,5 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView {
         }
     }
 
-    companion object {
-        private const val SCHEDULE_POSITION = 1
-    }
 }
 

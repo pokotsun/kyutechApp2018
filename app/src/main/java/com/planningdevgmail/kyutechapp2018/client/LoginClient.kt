@@ -30,6 +30,11 @@ object LoginClient {
         }
     }
 
+    fun close() {
+        realm?.close()
+        realm = null
+    }
+
     // データを全削除
     fun signOut() = realm?.executeTransaction { realm ->
         realm.deleteAll()

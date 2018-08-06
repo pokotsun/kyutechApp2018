@@ -3,6 +3,7 @@ package com.planningdevgmail.kyutechapp2018.client
 import android.support.design.widget.TabLayout
 import android.support.v4.app.Fragment
 import com.planningdevgmail.kyutechapp2018.R
+import com.planningdevgmail.kyutechapp2018.model.UserSchedule
 import com.planningdevgmail.kyutechapp2018.view.fragment.NewsHeadingListFragment
 import com.planningdevgmail.kyutechapp2018.view.fragment.SchoolBusFragment
 import com.planningdevgmail.kyutechapp2018.view.fragment.SettingFragment
@@ -23,11 +24,8 @@ interface ITabItems {
 
 class TabItems: ITabItems {
 
-    private var scheduleFragment = UserScheduleFragment.newInstance(
-            0, "ダミー")
-
     override val fragments: Array<Fragment> = arrayOf(
-            NewsHeadingListFragment.newInstance(0), getScheduleFragment(),
+            NewsHeadingListFragment.newInstance(0), UserScheduleFragment.newInstance(),
             SchoolBusFragment.newInstance(), SettingFragment.newInstance()
     )
 
@@ -46,12 +44,14 @@ class TabItems: ITabItems {
     override var selectedTab: TabLayout.Tab? = null
 
     // TabにセットされているScheduleFragmentにアクセスするためのもの
-    override fun getScheduleFragment(): UserScheduleFragment = try {
-        scheduleFragment
-    } catch(e: NullPointerException) {
-        scheduleFragment = UserScheduleFragment.newInstance(
-                0, "ダミー"
-        )
-        scheduleFragment
+    override fun getScheduleFragment(): UserScheduleFragment =
+            fragments[SCHEDULE_POSITION] as? UserScheduleFragment?: throw NullPointerException("onTabItemでScheduleFragmentが得られない")
+
+
+    companion object {
+        const val NEWS_POSITION = 0
+        const val SCHEDULE_POSITION: Int = 1
+        const val BUS_SCHEDULE_POSITION: Int = 2
+        const val CONFIG_POSITION: Int = 3
     }
 }
