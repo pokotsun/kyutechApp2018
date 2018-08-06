@@ -14,7 +14,6 @@ import javax.net.ssl.*
 
 
 object RetrofitServiceGenerator {
-    // emosi.herokuapp.comで指定したところに設定
     // Retrofitの設定
     private fun createRetrofit(): Retrofit = Retrofit.Builder()
             .baseUrl("https://kyutechapp2018.planningdev.com/")
