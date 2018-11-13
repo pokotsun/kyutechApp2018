@@ -90,7 +90,7 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
 
     companion object {
         val schoolYears: Array<String> = arrayOf(
-                "1年生", "2年生", "3年生", "4年生"
+                "学部1年", "学部2年", "学部3年", "4年生", "修士1年", "修士2年"
         )
 
         val departments: Array<String> = arrayOf(
@@ -100,7 +100,13 @@ class LoginActivity : MvpAppCompatActivity(), LoginMvpView {
                 "電子情報工学科", "電子情報工学科（編入）",
                 "システム創成情報工学科", "システム創成情報工学科（編入）",
                 "機械情報工学科", "機械情報工学科（編入）",
-                "生命情報工学科", "生命情報工学科（編入）"
+                "生命情報工学科", "生命情報工学科（編入）",
+                "情報創成工学専門分野",
+                "知能情報工学専門分野",
+                "電子情報工学専門分野",
+                "システム創成情報工学専門分野",
+                "生命情報工学専門分野",
+                "機械情報工学専門分野"
         )
     }
 }

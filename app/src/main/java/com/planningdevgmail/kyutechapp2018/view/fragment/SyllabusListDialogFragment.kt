@@ -124,11 +124,11 @@ class SyllabusListDialogFragment : DialogFragment(), MvpSyllabusListDialogFramgn
 
 
     companion object {
-        private val PERIOD_EXTRA: String = "period"
-        private val DAY_EXTRA: String = "day"
-        private val QUARTER_EXTRA: String = "quarter"
-        private val CURRENT_SCHEDULE_ID: String = "current_user_schedule_id"
-        private val USER_DEPARTMENT_NAME: String = "user_department_name"
+        private const val PERIOD_EXTRA: String = "period"
+        private const val DAY_EXTRA: String = "day"
+        private const val QUARTER_EXTRA: String = "quarter"
+        private const val CURRENT_SCHEDULE_ID: String = "current_user_schedule_id"
+        private const val USER_DEPARTMENT_NAME: String = "user_department_name"
 
 
         @JvmStatic

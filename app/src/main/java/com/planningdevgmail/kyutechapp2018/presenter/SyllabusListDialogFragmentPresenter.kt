@@ -36,8 +36,8 @@ class SyllabusListDialogFragmentPresenter(private val view: MvpSyllabusListDialo
                     }
                     else {
                         view.showToast("削除に失敗しました")
-                        view.dismissView()
                     }
+                    view.dismissView()
                 }
     }
 

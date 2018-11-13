@@ -16,8 +16,10 @@ class LoginActivityPresenter(private val view: LoginMvpView): Presenter {
         createService().createUser(User.createJson(schoolYear, department))
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(
-                        { user -> // リクエストが成功した場合
+                .doOnError {  t -> // POSTでエラーが生じた場合
+                    Log.d("denied", "UserPostDenied, ${t.message}\n body: ${t.stackTrace}")
+                }
+                .subscribe { user -> // リクエストが成功した場合
                             Log.d("accepted", "user:$user")
                             // TODO ここのuserを渡すのをどうにかしたい
                             LoginClient.signUp(user)
@@ -27,10 +29,8 @@ class LoginActivityPresenter(private val view: LoginMvpView): Presenter {
                             } else { // ユーザー登録ができていなければ
                                 view.showToast("ユーザー登録が正常に行えませんでした")
                             }
-                        },
-                        { t -> // POSTでエラーが生じた場合
-                            Log.d("denied", "UserPostDenied, ${t.message}\n body: ${t.stackTrace}")
                         }
-                )
+
+
     }
 }
