@@ -32,11 +32,11 @@ class SchoolBusFragment : Fragment() {
                 scrollView {
                     verticalLayout {
                         // Bus情報の画像を入れていく
-                        imageView(R.mipmap.schoolbus_time_schedule) {
+                        imageView(R.mipmap.schoolbus_time_schedule2019) {
                             adjustViewBounds = true
                         }.lparams(matchParent, wrapContent)
 
-                        imageView(R.mipmap.schoolbus_schedule_30) {
+                        imageView(R.mipmap.schoolbus_schedule2019_30) {
                             adjustViewBounds = true
                         }.lparams(matchParent, wrapContent)
 
