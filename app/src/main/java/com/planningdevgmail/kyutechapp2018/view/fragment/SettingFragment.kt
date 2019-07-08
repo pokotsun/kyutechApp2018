@@ -21,6 +21,7 @@ import kotlinx.android.synthetic.main.fragment_setting.*
 class SettingFragment : MvpAppCompatFragment() {
     private val settingItems =
             arrayOf("ユーザー情報更新", "P&Dについて", "このアプリについて", "ご不満・ご要望フォーム",
+                    "ご不満・ご要望フォームへの回答",
                     "九工大飯塚キャンパスHP", "九工大シラバス", "九工大moodle")
     
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -50,6 +51,7 @@ class SettingFragment : MvpAppCompatFragment() {
                     showShortSnackBar("申し訳ありません. 準備中です.", view)
                 }
                 DEMAND_FORM -> goToBrowser("https://docs.google.com/forms/d/e/1FAIpQLSeBqDZ8OTsuOjFnniTIxSrNq6phAZ22dt95bCC1w-lV6VPZ9Q/viewform")
+                ANSWER_OF_DEMAND -> goToBrowser("https://kyutechapp2018.planningdev.com/user-impression/")
                 KYUTECH_CAMPUS_HP -> goToBrowser("https://www.iizuka.kyutech.ac.jp/")
                 SYLLABUS_HP -> goToBrowser("https://edragon-syllabus.jimu.kyutech.ac.jp/guest/syllabuses")
                 MOODLE_HP -> goToBrowser("https://ict-i.el.kyutech.ac.jp/")
@@ -67,9 +69,10 @@ class SettingFragment : MvpAppCompatFragment() {
         private const val ABOUT_P_AND_D: Int = 1
         private const val ABOUT_THIS_APP: Int = 2
         private const val DEMAND_FORM: Int = 3
-        private const val KYUTECH_CAMPUS_HP: Int = 4
-        private const val SYLLABUS_HP: Int = 5
-        private const val MOODLE_HP: Int = 6
+        private const val ANSWER_OF_DEMAND: Int = 4
+        private const val KYUTECH_CAMPUS_HP: Int = 5
+        private const val SYLLABUS_HP: Int = 6
+        private const val MOODLE_HP: Int = 7
 
         private const val RESULT_CODE: Int = 1000
 
